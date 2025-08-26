@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/tools"
@@ -34,9 +35,12 @@ func main() {
 	// ---------------------------------------------------------
 	ctx := context.Background()
 
-	baseURL := helpers.GetEnvOrDefault("MODEL_RUNNER_BASE_URL", "http://localhost:12434/engines/llama.cpp/v1")
-	dungeonModel := helpers.GetEnvOrDefault("DUNGEON_MODEL", "ai/qwen2.5:1.5B-F16")
+	fmt.Println("🤖 Initializing Dungeon Agent...", os.Getenv("MODEL_RUNNER_BASE_URL"), "+++")
 
+	baseURL := helpers.GetEnvOrDefault("MODEL_RUNNER_BASE_URL", "http://localhost:12434/engines/llama.cpp/v1")
+	fmt.Println("🔵🌍 Model Runner Base URL:", baseURL)
+	dungeonModel := helpers.GetEnvOrDefault("DUNGEON_MODEL", "ai/qwen2.5:1.5B-F16")
+	fmt.Println("🌍 Dungeon Model:", dungeonModel)
 	// Initialize OpenAI client
 	client := openai.NewClient(
 		option.WithBaseURL(baseURL),
@@ -206,6 +210,10 @@ func main() {
 	// Move in the dungeon
 	moveIntoTheDungeonToolInstance := tools.GetMoveIntoTheDungeonTool()
 	s.AddTool(moveIntoTheDungeonToolInstance, tools.MoveByDirectionToolHandler(&currentPlayer, &dungeon, dungeonAgent))
+
+	// Get Current Room Info
+	getCurrentRoomInfoToolInstance := tools.GetCurrentRoomInformationTool()
+	s.AddTool(getCurrentRoomInfoToolInstance, tools.GetCurrentRoomInformationToolHandler(&currentPlayer, &dungeon))
 
 	// ---------------------------------------------------------
 	// Start the HTTP server

@@ -49,19 +49,16 @@ services:
         The output is the name and description of the room.
         Speak only in English, avoid Chinese ideogram.
         Ensure the name and the description are fantasy-themed.
-
-
+    models:
+      dungeon-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: DUNGEON_MODEL
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-
-    models:
-      dungeon-model:
-        endpoint_var: MODEL_RUNNER_BASE_URL
-        model_var: DUNGEON_MODEL
 
 
 
