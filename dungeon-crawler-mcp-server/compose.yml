@@ -1,0 +1,14 @@
+services:
+
+  mcp-dungeon-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 9090:6060
+    environment:
+      MCP_HTTP_PORT: 6060
+    volumes:
+      - ./dungeon/data/dungeon.yaml:/app/dungeon/data/dungeon.yaml:ro
+
+

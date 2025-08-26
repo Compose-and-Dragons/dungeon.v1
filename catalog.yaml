@@ -1,0 +1,6 @@
+registry:
+  mcp-dungeon:
+    remote:
+      url: "http://mcp-dungeon:6060/mcp"
+      transport_type: http
+  

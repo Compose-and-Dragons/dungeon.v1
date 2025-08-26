@@ -1,0 +1,72 @@
+services:
+
+  mcp-gateway:
+    # mcp-gateway secures your MCP servers
+    image: docker/mcp-gateway:latest
+    ports:
+      - 9011:9011
+    command:
+      - --port=9011
+      - --transport=streaming
+      - --verbose
+      - --catalog=/mcp/catalog.yaml
+      - --servers=mcp-dungeon
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./catalog.yaml:/mcp/catalog.yaml
+
+    depends_on:
+      mcp-dungeon:
+        condition: service_healthy
+  
+  mcp-dungeon:
+    build:
+      context: dungeon-crawler-mcp-server
+      dockerfile: Dockerfile
+    environment:
+      MCP_HTTP_PORT: 6060
+      DUNGEON_NAME: The Labyrinth of Compose-and-Dragons
+      DUNGEON_DESCRIPTION: A sprawling underground maze filled with monsters, traps, and treasure.
+      DUNGEON_WIDTH: 3
+      DUNGEON_HEIGHT: 3
+      DUNGEON_ENTRANCE_X: 0
+      DUNGEON_ENTRANCE_Y: 0
+      DUNGEON_EXIT_X: 2
+      DUNGEON_EXIT_Y: 2
+
+      DUNGEON_MODEL_TEMPERATURE: 0.7
+
+      DUNGEON_AGENT_NAME: dungeon-agent
+      DUNGEON_AGENT_SYSTEM_INSTRUCTION: |
+        # IDENTITY and PURPOSE
+        You are an expert NPC generator for games like D&D 5th edition. 
+        You have freedom to be creative to get the best possible output.
+
+        # GENERATION INSTRUCTIONS
+        When generating NPCs, you must follow these rules:
+        Your job is to generate a name and description of a room in a fantasy setting.
+        The output is the name and description of the room.
+        Speak only in English, avoid Chinese ideogram.
+        Ensure the name and the description are fantasy-themed.
+
+
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    models:
+      dungeon-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: DUNGEON_MODEL
+
+
+
+models:
+  dungeon-model:
+    model: ai/qwen2.5:1.5B-F16   
+  monsters-model:
+    model: ai/qwen2.5:1.5B-F16 
