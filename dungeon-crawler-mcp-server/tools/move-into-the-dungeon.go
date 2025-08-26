@@ -25,6 +25,19 @@ func GetMoveIntoTheDungeonTool() mcp.Tool {
 
 }
 
+func GetMovePlayerTool() mcp.Tool {
+
+	movePlayer := mcp.NewTool("move_player",
+		mcp.WithDescription(`Move the player in the dungeon by specifying a cardinal direction. This is the primary navigation tool for exploring rooms. Usage: "move player north" or "go east".`),
+		mcp.WithString("direction",
+			mcp.Required(),
+			mcp.Description("Cardinal direction to move the player. MUST be exactly one of these values: 'north', 'south', 'east', 'west' (lowercase only)"),
+		),
+	)
+	return movePlayer
+
+}
+
 // TODO:
 /*
 - generate room name and description with a model
@@ -74,6 +87,9 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 		player.Position.X = newX
 		player.Position.Y = newY
+
+		// Update player's current room ID => useful to get current room info
+		player.RoomID = fmt.Sprintf("room_%d_%d", newX, newY)
 
 		roomID := fmt.Sprintf("room_%d_%d", newX, newY)
 		var currentRoom *types.Room
