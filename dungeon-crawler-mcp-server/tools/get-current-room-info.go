@@ -45,7 +45,7 @@ func GetCurrentRoomInformationToolHandler(player *types.Player, dungeon *types.D
 		}
 
 		// Mark room as visited
-		currentRoom.Visited = true
+		//currentRoom.Visited = true
 
 		roomJSON, err := json.MarshalIndent(*currentRoom, "", "  ")
 		if err != nil {
