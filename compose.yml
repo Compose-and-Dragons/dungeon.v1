@@ -30,14 +30,14 @@ services:
       # ---------------------------------------------------------
       # Dungeon settings
       # ---------------------------------------------------------
-      DUNGEON_NAME: The Labyrinth of Compose-and-Dragons
+      DUNGEON_NAME: The square dungeon of Compose-and-Dragons
       DUNGEON_DESCRIPTION: A sprawling underground maze filled with monsters, traps, and treasure.
-      DUNGEON_WIDTH: 3
-      DUNGEON_HEIGHT: 3
+      DUNGEON_WIDTH: 4
+      DUNGEON_HEIGHT: 4
       DUNGEON_ENTRANCE_X: 0
       DUNGEON_ENTRANCE_Y: 0
-      DUNGEON_EXIT_X: 2
-      DUNGEON_EXIT_Y: 2
+      DUNGEON_EXIT_X: 3
+      DUNGEON_EXIT_Y: 3
 
       # ---------------------------------------------------------
       # Dungeon agent settings
