@@ -217,6 +217,10 @@ func main() {
 	getCurrentRoomInfoToolInstance := tools.GetCurrentRoomInformationTool()
 	s.AddTool(getCurrentRoomInfoToolInstance, tools.GetCurrentRoomInformationToolHandler(&currentPlayer, &dungeon))
 
+	// Get Dungeon Map
+	getDungeonMapToolInstance := tools.GetDungeonMapTool()
+	s.AddTool(getDungeonMapToolInstance, tools.GetDungeonMapToolHandler(&currentPlayer, &dungeon))
+
 	// ---------------------------------------------------------
 	// Start the HTTP server
 	// ---------------------------------------------------------

@@ -39,7 +39,7 @@ func main() {
 		panic(fmt.Errorf("failed to create MCP client: %v", err))
 	}
 
-	ui.Println(ui.Purple, "MCP Client initialized successfully")
+	ui.Println(ui.Orange, "MCP Client initialized successfully")
 	toolsIndex := mcpClient.OpenAITools()
 	for _, tool := range toolsIndex {
 		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
