@@ -176,10 +176,11 @@ func main() {
 			X: entranceX,
 			Y: entranceY,
 		},
-		Visited:     false,
-		HasMonster:  false,
-		HasNPC:      false,
-		HasTreasure: false,
+		Visited:               false,
+		HasMonster:            false,
+		HasNonPlayerCharacter: false,
+		HasTreasure:           false,
+		HasMagicPotion: 	  false,
 	}
 	dungeon.Rooms = append(dungeon.Rooms, entranceRoom)
 
@@ -207,7 +208,7 @@ func main() {
 	// Move in the dungeon (two variants with same handler)
 	moveIntoTheDungeonToolInstance := tools.GetMoveIntoTheDungeonTool()
 	s.AddTool(moveIntoTheDungeonToolInstance, tools.MoveByDirectionToolHandler(&currentPlayer, &dungeon, dungeonAgent))
-	
+
 	movePlayerToolInstance := tools.GetMovePlayerTool()
 	s.AddTool(movePlayerToolInstance, tools.MoveByDirectionToolHandler(&currentPlayer, &dungeon, dungeonAgent))
 

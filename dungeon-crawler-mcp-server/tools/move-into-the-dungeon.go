@@ -6,6 +6,7 @@ import (
 	"dungeon-mcp-server/types"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
@@ -148,14 +149,123 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// 	IsExit:      newX == dungeon.ExitCoords.X && newY == dungeon.ExitCoords.Y,
 			// }
 
+			// Add NPCs, monsters, and items based on probabilities of appearance
+
+			// ---------------------------------------------------------
+			// BEGIN: Create NPC 🧙‍♂️
+			// ---------------------------------------------------------
+			// QUESTION: comment un tool peut déclencher un autre tool ?
+			// NOTE: sinon cela dit qu'il y a un NPC dans la pièce
+			// et le joueur peut utiliser le tool "talk_to_npc" pour interagir avec lui
+
+			var hasNonPlayerCharacter bool
+			var nonPlayerCharacter types.NonPlayerCharacter
+
+			merchantRoom := helpers.GetEnvOrDefault("MERCHANT_ROOM", "room_1_1")
+			guardRoom := helpers.GetEnvOrDefault("GUARD_ROOM", "room_0_2")
+			sorcererRoom := helpers.GetEnvOrDefault("SORCERER_ROOM", "room_2_0")
+			healerRoom := helpers.GetEnvOrDefault("HEALER_ROOM", "room_2_2")
+
+			switch roomID {
+			case merchantRoom:
+				hasNonPlayerCharacter = true
+				nonPlayerCharacter = types.NonPlayerCharacter{
+					Type:     types.Merchant,
+					Name:     helpers.GetEnvOrDefault("MERCHANT_NAME", "[default]Gorim the Merchant"),
+					Race:     helpers.GetEnvOrDefault("MERCHANT_RACE", "Dwarf"),
+					Position: types.Coordinates{X: newX, Y: newY},
+					RoomID:   roomID,
+				}
+
+			case guardRoom:
+				hasNonPlayerCharacter = true
+				nonPlayerCharacter = types.NonPlayerCharacter{
+					Type:     types.Guard,
+					Name:     helpers.GetEnvOrDefault("GUARD_NAME", "[default]Lyria the Guard"),
+					Race:     helpers.GetEnvOrDefault("GUARD_RACE", "Elf"),
+					Position: types.Coordinates{X: newX, Y: newY},
+					RoomID:   roomID,
+				}
+
+			case sorcererRoom:
+				hasNonPlayerCharacter = true
+				nonPlayerCharacter = types.NonPlayerCharacter{
+					Type:     types.Sorcerer,
+					Name:     helpers.GetEnvOrDefault("SORCERER_NAME", "[default]Eldrin the Sorcerer"),
+					Race:     helpers.GetEnvOrDefault("SORCERER_RACE", "Human"),					
+					Position: types.Coordinates{X: newX, Y: newY},
+					RoomID:   roomID,
+				}
+
+			case healerRoom:
+				hasNonPlayerCharacter = true
+				nonPlayerCharacter = types.NonPlayerCharacter{
+					Type:     types.Healer,
+					Name:     helpers.GetEnvOrDefault("HEALER_NAME", "[default]Mira the Healer"),
+					Race:     helpers.GetEnvOrDefault("HEALER_RACE", "Half-Elf"),					
+					Position: types.Coordinates{X: newX, Y: newY},
+					RoomID:   roomID,
+				}
+
+			default:
+				hasNonPlayerCharacter = false
+				nonPlayerCharacter = types.NonPlayerCharacter{}
+			}
+
+			// ---------------------------------------------------------
+			// END: Create NPC
+			// ---------------------------------------------------------
+
+			// ---------------------------------------------------------
+			// BEGIN: Create Monster 👹
+			// ---------------------------------------------------------
+			monsterProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("MONSTER_PROBABILITY", "0.25"))
+
+			// 100 x monsterProbability % of chance to have a monster in the room
+			// except if there is already a NPC in the room
+			if rand.Float64() < monsterProbability && !hasNonPlayerCharacter {
+				// TODO: create a monster with a model
+			}
+
+			// ---------------------------------------------------------
+			// END: Create Monster
+			// ---------------------------------------------------------
+
+			// ---------------------------------------------------------
+			// BEGIN: Create Gold coins, potions, and items ⭐️
+			// ---------------------------------------------------------
+			itemProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("ITEM_PROBABILITY", "0.20"))
+
+			// 100 x itemProbability % of chance to have an item in the room
+			var hasTreasure, hasMagicPotion bool
+			var regenerationHealth, goldCoins int
+			if rand.Float64() < itemProbability {
+				if rand.Float32() < 0.5 {
+					hasTreasure = true
+					goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
+				} else {
+					hasMagicPotion = true
+					regenerationHealth = rand.Intn(20) + 5 // between 5 and 24 health points
+				}
+			}
+
+			// ---------------------------------------------------------
+			// END: Create Gold coins, potions, and items
+			// ---------------------------------------------------------
 			newRoom := types.Room{
-				ID:          roomID,
-				Name:        roomResponse.Name,
-				Description: roomResponse.Description,
-				Coordinates: types.Coordinates{X: newX, Y: newY},
-				Visited:     true,
-				IsEntrance:  newX == dungeon.EntranceCoords.X && newY == dungeon.EntranceCoords.Y,
-				IsExit:      newX == dungeon.ExitCoords.X && newY == dungeon.ExitCoords.Y,
+				ID:                    roomID,
+				Name:                  roomResponse.Name,
+				Description:           roomResponse.Description,
+				Coordinates:           types.Coordinates{X: newX, Y: newY},
+				Visited:               true,
+				IsEntrance:            newX == dungeon.EntranceCoords.X && newY == dungeon.EntranceCoords.Y,
+				IsExit:                newX == dungeon.ExitCoords.X && newY == dungeon.ExitCoords.Y,
+				HasTreasure:           hasTreasure,
+				GoldCoins:             goldCoins,
+				HasMagicPotion:        hasMagicPotion,
+				RegenerationHealth:    regenerationHealth,
+				HasNonPlayerCharacter: hasNonPlayerCharacter,
+				NonPlayerCharacter:    &nonPlayerCharacter,
 			}
 
 			dungeon.Rooms = append(dungeon.Rooms, newRoom)

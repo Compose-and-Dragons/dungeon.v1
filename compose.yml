@@ -26,6 +26,10 @@ services:
       dockerfile: Dockerfile
     environment:
       MCP_HTTP_PORT: 6060
+
+      # ---------------------------------------------------------
+      # Dungeon settings
+      # ---------------------------------------------------------
       DUNGEON_NAME: The Labyrinth of Compose-and-Dragons
       DUNGEON_DESCRIPTION: A sprawling underground maze filled with monsters, traps, and treasure.
       DUNGEON_WIDTH: 3
@@ -35,6 +39,9 @@ services:
       DUNGEON_EXIT_X: 2
       DUNGEON_EXIT_Y: 2
 
+      # ---------------------------------------------------------
+      # Dungeon agent settings
+      # ---------------------------------------------------------
       DUNGEON_MODEL_TEMPERATURE: 0.7
 
       DUNGEON_AGENT_NAME: dungeon-agent
@@ -49,6 +56,38 @@ services:
         The output is the name and description of the room.
         Speak only in English, avoid Chinese ideogram.
         Ensure the name and the description are fantasy-themed.
+
+      # if the dungeon is too empty, increase these probabilities
+      # if the dungeon is small, increase these probabilities
+      ITEM_PROBABILITY: 0.20
+      MONSTER_PROBABILITY: 0.25
+
+      # ---------------------------------------------------------
+      # Non-Player Character (NPC) settings
+      # ---------------------------------------------------------
+      # roomID := fmt.Sprintf("room_%d_%d", newX, newY)
+      MERCHANT_ROOM: room_1_1
+      # provisory merchant name and race
+      MERCHANT_NAME: Galdor the Trader
+      MERCHANT_RACE: Dwarf
+
+      GUARD_ROOM: room_0_2
+      # provisory guard name and race
+      GUARD_NAME: Thrain the Watchful
+      GUARD_RACE: Elf
+
+      SORCERER_ROOM: room_2_0
+      # provisory sorcerer name and race
+      SORCERER_NAME: Elara the Wise
+      SORCERER_RACE: Human
+
+      HEALER_ROOM: room_2_1
+      # provisory healer name and race
+      HEALER_NAME: Liora the Kind
+      HEALER_RACE: Half-Elf
+
+
+
     models:
       dungeon-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
