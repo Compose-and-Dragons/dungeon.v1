@@ -130,10 +130,10 @@ func main() {
 	// ---------------------------------------------------------
 	// BEGIN: Generate the entrance room with the dungeon agent
 	// ---------------------------------------------------------
-	dungeonAgentSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
+	dungeonAgentRoomSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_ROOM_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 
 	response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
-		openai.SystemMessage(dungeonAgentSystemInstruction),
+		openai.SystemMessage(dungeonAgentRoomSystemInstruction),
 		openai.UserMessage("Create an dungeon entrance room with a name and a short description."),
 	})
 

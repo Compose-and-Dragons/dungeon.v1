@@ -19,13 +19,13 @@ type NonPlayerCharacter struct {
 	RoomID   string      `json:"room_id"`
 }
 
-// var AllNPCTypes = []NPCType{
-// 	Merchant,
-// 	Guard,
-// 	Sorcerer,
-// 	Healer,
-// }
+// type Race string
 
-// func NPCTypeCount() int {
-// 	return len(AllNPCTypes)
-// }
+// const (
+// 	Human   Race = "human"
+// 	Elf     Race = "elf"
+// 	HalfElf Race = "half-elf"
+// 	Dwarf   Race = "dwarf"
+// 	Wizard  Race = "magician"
+// 	Nothing Race = "nothing"
+// )

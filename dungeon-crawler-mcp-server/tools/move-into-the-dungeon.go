@@ -108,10 +108,10 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 			// BEGIN: Generate the room with the dungeon agent
 			// ---------------------------------------------------------
-			dungeonAgentSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
+			dungeonAgentRoomSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_ROOM_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 
 			response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
-				openai.SystemMessage(dungeonAgentSystemInstruction),
+				openai.SystemMessage(dungeonAgentRoomSystemInstruction),
 				openai.UserMessage("Create a new dungeon room with a name and a short description."),
 			})
 
@@ -221,6 +221,8 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 			monsterProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("MONSTER_PROBABILITY", "0.25"))
 
+			// NOTE: 
+
 			// 100 x monsterProbability % of chance to have a monster in the room
 			// except if there is already a NPC in the room
 			if rand.Float64() < monsterProbability && !hasNonPlayerCharacter {
@@ -240,7 +242,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			var hasTreasure, hasMagicPotion bool
 			var regenerationHealth, goldCoins int
 			if rand.Float64() < itemProbability {
-				if rand.Float32() < 0.5 {
+				if rand.Float64() < 0.5 {
 					hasTreasure = true
 					goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
 				} else {

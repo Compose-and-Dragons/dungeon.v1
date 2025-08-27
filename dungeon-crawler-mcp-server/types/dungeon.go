@@ -8,12 +8,6 @@ type Dungeon struct {
 	Rooms          []Room      `json:"rooms"`
 	EntranceCoords Coordinates `json:"entrance_coords"`
 	ExitCoords     Coordinates `json:"exit_coords"`
-
-	// Number of NPCs placed in the dungeon
-	//NumNPCs int `json:"num_npcs"`
-
-	// Track which NPC types have been placed
-	//PlacedNPCs map[NPCType]bool
 }
 
 type Coordinates struct {

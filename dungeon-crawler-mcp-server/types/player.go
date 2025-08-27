@@ -7,8 +7,10 @@ type Player struct {
 	Race  string `json:"race"`
 	Position Coordinates `json:"position"`
 	RoomID string `json:"room_id"`
-	Inventory []string `json:"inventory"`
+	//Inventory []string `json:"inventory"`
 	Health    int      `json:"health"`
 	Strength  int      `json:"strength"`
+	Experience int      `json:"experience"`
+	GoldCoins int      `json:"gold_coins"`
 }
 
