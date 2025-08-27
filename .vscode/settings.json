@@ -24,7 +24,7 @@
             "other": "off"
         }
     },
-    "markdown.preview.fontSize": 14,
+    "markdown.preview.fontSize": 16,
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor"
     },
