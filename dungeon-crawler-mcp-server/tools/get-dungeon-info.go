@@ -16,11 +16,23 @@ func GetDungeonInformationTool() mcp.Tool {
 
 func GetDungeonInformationToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		dungeonJSON, err := json.MarshalIndent(*dungeon, "", "  ")
+		
+		
+		// Create a temporary copy structure with the player information
+
+		var mcpResponse struct {
+			Player  types.Player  `json:"player"`
+			Dungeon types.Dungeon `json:"dungeon"`
+		}
+
+		mcpResponse.Player = *player
+		mcpResponse.Dungeon = *dungeon
+		
+		dungeonAndPlzyerInformationJSON, err := json.MarshalIndent(mcpResponse, "", "  ")
 		if err != nil {
 			return nil, err
 		}
 
-		return mcp.NewToolResultText(string(dungeonJSON)), nil
+		return mcp.NewToolResultText(string(dungeonAndPlzyerInformationJSON)), nil
 	}
 }

@@ -101,7 +101,8 @@ func main() {
 		// }
 
 		thinkingCtrl := ui.NewThinkingController()
-		thinkingCtrl.Start(ui.Blue, "Tools detection.....")
+		//thinkingCtrl.Start(ui.Blue, "Tools detection.....")
+		thinkingCtrl.Start(ui.Cyan, "Tools detection.....")
 
 		// Create executeFunction with MCP client option
 		// Tool execution callback
@@ -132,8 +133,9 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 
 		thinkingCtrl.Pause()
 		//choice := ui.GetConfirmation(ui.Gray, "Do you want to execute this function?", true)
-		choice := ui.GetChoice(ui.Gray, "Do you want to execute this function? (y)es (n)o (a)bort", []string{"y",
-			"n", "a"}, "y")
+		//choice := ui.GetChoice(ui.Gray, "Do you want to execute this function? (y)es (n)o (a)bort", []string{"y", "n", "a"}, "y")
+		choice := ui.GetChoice(ui.Yellow, "Do you want to execute this function? (y)es (n)o (a)bort", []string{"y", "n", "a"}, "y")
+
 		thinkingCtrl.Resume()
 
 		switch choice {
@@ -183,15 +185,15 @@ func prettyPrintFirstToolCallResult(results []string) {
 	// results[0] is like {"result": "text"}
 	// we want to extract the text value using JSON unmarshalling
 	var resultMap map[string]string
-	
+
 	// Debug: print raw result
 	fmt.Printf("Raw result: %q\n", results[0])
-	
+
 	cleanedResult := strings.ReplaceAll(results[0], "\n", "\\n")
-	
+
 	// Debug: print cleaned result
 	fmt.Printf("Cleaned result: %q\n", cleanedResult)
-	
+
 	err := json.Unmarshal([]byte(cleanedResult), &resultMap)
 	if err != nil {
 		fmt.Println("Error unmarshalling result:", err)

@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"dungeon-mcp-server/data"
 	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/tools"
 	"dungeon-mcp-server/types"
@@ -46,25 +47,25 @@ func main() {
 
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MODEL_TEMPERATURE", "0.7"))
 
-	schema := map[string]any{
-		"type": "object",
-		"properties": map[string]any{
-			"name": map[string]any{
-				"type": "string",
-			},
-			"description": map[string]any{
-				"type": "string",
-			},
-		},
-		"required": []string{"name", "description"},
-	}
+	// schema := map[string]any{
+	// 	"type": "object",
+	// 	"properties": map[string]any{
+	// 		"name": map[string]any{
+	// 			"type": "string",
+	// 		},
+	// 		"description": map[string]any{
+	// 			"type": "string",
+	// 		},
+	// 	},
+	// 	"required": []string{"name", "description"},
+	// }
 
-	schemaParam := openai.ResponseFormatJSONSchemaJSONSchemaParam{
-		Name:        "room_info",
-		Description: openai.String("name and description of the room"),
-		Schema:      schema,
-		Strict:      openai.Bool(true),
-	}
+	// schemaParam := openai.ResponseFormatJSONSchemaJSONSchemaParam{
+	// 	Name:        "room_info",
+	// 	Description: openai.String("name and description of the room"),
+	// 	Schema:      schema,
+	// 	Strict:      openai.Bool(true),
+	// }
 
 	dungeonAgent, err := mu.NewAgent(ctx, "dungeon-agent",
 		mu.WithClient(client),
@@ -73,7 +74,7 @@ func main() {
 			Temperature: openai.Opt(temperature),
 			ResponseFormat: openai.ChatCompletionNewParamsResponseFormatUnion{
 				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
-					JSONSchema: schemaParam,
+					JSONSchema: data.GetRoomSchema(),
 				},
 			},
 		}),
@@ -130,10 +131,10 @@ func main() {
 	// ---------------------------------------------------------
 	// BEGIN: Generate the entrance room with the dungeon agent
 	// ---------------------------------------------------------
-	dungeonAgentSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
+	dungeonAgentRoomSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_ROOM_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 
 	response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
-		openai.SystemMessage(dungeonAgentSystemInstruction),
+		openai.SystemMessage(dungeonAgentRoomSystemInstruction),
 		openai.UserMessage("Create an dungeon entrance room with a name and a short description."),
 	})
 
@@ -176,10 +177,11 @@ func main() {
 			X: entranceX,
 			Y: entranceY,
 		},
-		Visited:     false,
-		HasMonster:  false,
-		HasNPC:      false,
-		HasTreasure: false,
+		Visited:               true,
+		HasMonster:            false,
+		HasNonPlayerCharacter: false,
+		HasTreasure:           false,
+		HasMagicPotion: 	  false,
 	}
 	dungeon.Rooms = append(dungeon.Rooms, entranceRoom)
 
@@ -207,7 +209,7 @@ func main() {
 	// Move in the dungeon (two variants with same handler)
 	moveIntoTheDungeonToolInstance := tools.GetMoveIntoTheDungeonTool()
 	s.AddTool(moveIntoTheDungeonToolInstance, tools.MoveByDirectionToolHandler(&currentPlayer, &dungeon, dungeonAgent))
-	
+
 	movePlayerToolInstance := tools.GetMovePlayerTool()
 	s.AddTool(movePlayerToolInstance, tools.MoveByDirectionToolHandler(&currentPlayer, &dungeon, dungeonAgent))
 
