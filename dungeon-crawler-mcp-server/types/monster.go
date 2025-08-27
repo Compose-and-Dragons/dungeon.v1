@@ -22,6 +22,8 @@ type Monster struct {
 	Description string `json:"description"`
 	Health     int    `json:"health"`
 	Strength   int    `json:"strength"`
+	Position Coordinates `json:"position"`
+	RoomID   string      `json:"room_id"`
 	// RoomID     string `json:"room_id"`
 	// Position   Coordinates `json:"position"`
 	// Experience int    `json:"experience"`

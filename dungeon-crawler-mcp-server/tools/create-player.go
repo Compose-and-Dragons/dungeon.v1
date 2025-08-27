@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/types"
+
 	"github.com/mark3labs/mcp-go/mcp"
 )
-
 
 func CreatePlayerTool() mcp.Tool {
 	return mcp.NewTool("create_player",
@@ -42,7 +43,7 @@ func CreatePlayerToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 		race := args["race"].(string)
 
 		fmt.Println("👋:", name, class, race)
-		
+
 		*player = types.Player{
 			Name:  name,
 			Class: class,
@@ -52,7 +53,11 @@ func CreatePlayerToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 				X: dungeon.EntranceCoords.X,
 				Y: dungeon.EntranceCoords.Y,
 			},
-			RoomID:    fmt.Sprintf("room_%d_%d", dungeon.EntranceCoords.X, dungeon.EntranceCoords.Y),
+			RoomID:     fmt.Sprintf("room_%d_%d", dungeon.EntranceCoords.X, dungeon.EntranceCoords.Y),
+			Health:     helpers.StringToInt(helpers.GetEnvOrDefault("PLAYER_INITIAL_HEALTH", "100")),
+			Strength:   helpers.StringToInt(helpers.GetEnvOrDefault("PLAYER_INITIAL_STRENGTH", "10")),
+			Experience: helpers.StringToInt(helpers.GetEnvOrDefault("PLAYER_INITIAL_EXPERIENCE", "0")),
+			GoldCoins:  helpers.StringToInt(helpers.GetEnvOrDefault("PLAYER_INITIAL_GOLD_COINS", "0")),
 		}
 		playerJSON, err := json.MarshalIndent(*player, "", "  ")
 		if err != nil {

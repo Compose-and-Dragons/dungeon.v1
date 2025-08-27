@@ -73,7 +73,9 @@ services:
       # if the dungeon is too empty, increase these probabilities
       # if the dungeon is small, increase these probabilities
       ITEM_PROBABILITY: 0.20
-      MONSTER_PROBABILITY: 0.25
+      #MONSTER_PROBABILITY: 0.25
+      MONSTER_PROBABILITY: 0.5
+
 
       # ---------------------------------------------------------
       # Non-Player Character (NPC) settings
@@ -98,6 +100,14 @@ services:
       # provisory healer name and race
       HEALER_NAME: Liora the Kind
       HEALER_RACE: Half-Elf
+
+      # ---------------------------------------------------------
+      # Player settings
+      # ---------------------------------------------------------
+      PLAYER_INITIAL_HEALTH: 100
+      PLAYER_INITIAL_STRENGTH: 10
+      PLAYER_INITIAL_EXPERIENCE: 0
+      PLAYER_INITIAL_GOLD_COINS: 0
 
     models:
       dungeon-model:

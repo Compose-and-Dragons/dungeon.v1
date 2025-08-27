@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"dungeon-mcp-server/data"
 	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/tools"
 	"dungeon-mcp-server/types"
@@ -46,25 +47,25 @@ func main() {
 
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MODEL_TEMPERATURE", "0.7"))
 
-	schema := map[string]any{
-		"type": "object",
-		"properties": map[string]any{
-			"name": map[string]any{
-				"type": "string",
-			},
-			"description": map[string]any{
-				"type": "string",
-			},
-		},
-		"required": []string{"name", "description"},
-	}
+	// schema := map[string]any{
+	// 	"type": "object",
+	// 	"properties": map[string]any{
+	// 		"name": map[string]any{
+	// 			"type": "string",
+	// 		},
+	// 		"description": map[string]any{
+	// 			"type": "string",
+	// 		},
+	// 	},
+	// 	"required": []string{"name", "description"},
+	// }
 
-	schemaParam := openai.ResponseFormatJSONSchemaJSONSchemaParam{
-		Name:        "room_info",
-		Description: openai.String("name and description of the room"),
-		Schema:      schema,
-		Strict:      openai.Bool(true),
-	}
+	// schemaParam := openai.ResponseFormatJSONSchemaJSONSchemaParam{
+	// 	Name:        "room_info",
+	// 	Description: openai.String("name and description of the room"),
+	// 	Schema:      schema,
+	// 	Strict:      openai.Bool(true),
+	// }
 
 	dungeonAgent, err := mu.NewAgent(ctx, "dungeon-agent",
 		mu.WithClient(client),
@@ -73,7 +74,7 @@ func main() {
 			Temperature: openai.Opt(temperature),
 			ResponseFormat: openai.ChatCompletionNewParamsResponseFormatUnion{
 				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
-					JSONSchema: schemaParam,
+					JSONSchema: data.GetRoomSchema(),
 				},
 			},
 		}),
@@ -176,7 +177,7 @@ func main() {
 			X: entranceX,
 			Y: entranceY,
 		},
-		Visited:               false,
+		Visited:               true,
 		HasMonster:            false,
 		HasNonPlayerCharacter: false,
 		HasTreasure:           false,
