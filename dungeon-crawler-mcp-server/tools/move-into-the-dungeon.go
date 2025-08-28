@@ -48,7 +48,7 @@ func GetMovePlayerTool() mcp.Tool {
 
 */
 
-func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, dungeonAgent *mu.Agent) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, dungeonAgent mu.Agent) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		if player.Name == "Unknown" {
@@ -111,11 +111,12 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 			dungeonAgentRoomSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_ROOM_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 			// Set the response format to use the room schema
-			dungeonAgent.Params.ResponseFormat = openai.ChatCompletionNewParamsResponseFormatUnion{
+			dungeonAgent.SetResponseFormat(openai.ChatCompletionNewParamsResponseFormatUnion{
 				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
 					JSONSchema: data.GetRoomSchema(),
 				},
-			}
+			})
+
 			// TODO: use a stream completion to display it into the logs
 			response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
 				openai.SystemMessage(dungeonAgentRoomSystemInstruction),
@@ -237,11 +238,12 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 			dungeonAgentMonsterSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_MONSTER_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 			// Set the response format to use the room schema
-			dungeonAgent.Params.ResponseFormat = openai.ChatCompletionNewParamsResponseFormatUnion{
+			
+			dungeonAgent.SetResponseFormat(openai.ChatCompletionNewParamsResponseFormatUnion{
 				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
 					JSONSchema: data.GetMonsterSchema(),
 				},
-			}
+			})
 
 			// NOTE:
 			// TODO: create a monster with a model
