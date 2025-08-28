@@ -1,6 +1,6 @@
 # Dungeon v1
 
-`.vscode` directory is mandatory. Some settings and extensions are used to improve the display of documents and source code and to facilitate the presentation.
+`.vscode` directory is **mandatory**. Some settings and extensions are used to improve the display of documents and source code and to facilitate the presentation.
 
 > This is a one player dungeon game using.
 
