@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"talk-to-the-dm/agents"
 
+	"github.com/micro-agent/micro-agent-go/agent/msg"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/tools"
 	"github.com/micro-agent/micro-agent-go/agent/ui"
@@ -15,7 +17,11 @@ import (
 
 	"github.com/openai/openai-go/v2"
 	"github.com/openai/openai-go/v2/option"
+	"github.com/openai/openai-go/v2/shared"
 )
+
+var agentsTeam map[string]mu.Agent
+var selectedAgent mu.Agent
 
 func main() {
 
@@ -40,12 +46,41 @@ func main() {
 	}
 
 	ui.Println(ui.Orange, "MCP Client initialized successfully")
+
+	// ---------------------------------------------------------
+	// TOOLS CATALOG: get the list of tools from the [MCP] client
+	// ---------------------------------------------------------
 	toolsIndex := mcpClient.OpenAITools()
 	for _, tool := range toolsIndex {
 		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
 	}
 
-	toolAgent, err := mu.NewAgent(ctx, "Bob",
+	// ---------------------------------------------------------
+	// TOOLS: adding tools to the mcp tools index
+	// ---------------------------------------------------------
+	speakToAnAgentTool := openai.ChatCompletionFunctionTool(shared.FunctionDefinitionParam{
+		Name:        "speak_to_somebody",
+		Description: openai.String("Speak to somebody by name"),
+		Parameters: shared.FunctionParameters{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"name": map[string]string{
+					"type":        "string",
+					"description": "The name of the person to speak to",
+				},
+			},
+			"required": []string{"name"},
+		},
+	})
+
+	toolsIndex = append(toolsIndex, speakToAnAgentTool)
+
+	// ---------------------------------------------------------
+	// AGENT: This is the Dungeon Master agent using tools
+	// ---------------------------------------------------------
+	dungeonMasterToolsAgentName := getEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
+
+	dungeonMasterToolsAgent, err := mu.NewAgent(ctx, dungeonMasterToolsAgentName,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
 			Model:       dungeonMasterModel,
@@ -61,68 +96,160 @@ func main() {
 		panic(err)
 	}
 
-	messages := []openai.ChatCompletionMessageParamUnion{
-		openai.SystemMessage(`
-			Your name is "Sam the Dungeon Master".
-			You are a friendly and helpful Dungeon Master for a Dungeons & Dragons game.
-			You will guide the player through a fantasy adventure, describing scenes, challenges, and characters.
-			You will use tools to manage the game state, such as creating a player, starting a quest, and rolling dice.
-			You will always describe the game world in vivid detail and engage the player with interesting scenarios.
-			You will keep track of the player's stats, inventory, and progress through the adventure.
-			You will respond to the player's actions and decisions, adapting the story accordingly.
-			You will use a conversational and immersive style, making the player feel like they are part of the adventure.
-			You will avoid breaking character and stay in the role of the Dungeon Master at all times.
-			You will ensure the game is fun and exciting for the player.
-			You will end each response with a question or prompt to encourage the player to take action.
-			Always refer to the player by their name.
-		`),
+	// SYSTEM MESSAGE:
+	instructions := fmt.Sprintf(`Your name is "%s the Dungeon Master".`, dungeonMasterToolsAgentName) + "\n" + getEnvOrDefault("DUNGEON_MASTER_SYSTEM_INSTRUCTIONS", dungeonMasterToolsAgentName)
+	dungeonMasterSystemInstructions := openai.SystemMessage(instructions)
+
+	// note used but could be useful later
+	conversationalMemory := []openai.ChatCompletionMessageParamUnion{
+		dungeonMasterSystemInstructions,
 	}
 
-	for {
-		content, _ := ui.SimplePrompt("🤖 (/bye to exit)>", "Type your command here...")
+	// ---------------------------------------------------------
+	// AGENT: This is the Ghost agent
+	// ---------------------------------------------------------
+	// REMARK: Ghost agent is for testing only.
+	ghostAgentName := "Casper"
+	ghostAgent := agents.NewGhostAgent(ghostAgentName)
 
-		if content.Input == "/bye" {
+	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
+	idGhostAgent := strings.ToLower(ghostAgentName)
+
+	// ---------------------------------------------------------
+	// AGENTS: Creating the agents team of the dungeon
+	// ---------------------------------------------------------
+	agentsTeam = map[string]mu.Agent{
+		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
+		idGhostAgent:              ghostAgent,
+	}
+	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
+
+	for {
+		var promptText string
+		if selectedAgent.GetName() == dungeonMasterToolsAgentName {
+			// Dungeon Master prompt
+			promptText = "🤖 (/bye to exit) [" + selectedAgent.GetName() + "]>"
+		} else {
+			// Non Player Character prompt
+			promptText = "🙂 (/bye to exit /dm to go back to the DM) [" + selectedAgent.GetName() + "]>"
+		}
+
+		// PROMPT:
+		content, _ := ui.SimplePrompt(promptText, "Type your command here...")
+
+		// USER MESSAGE:
+		userMessage := openai.UserMessage(content.Input)
+
+		// ---------------------------------------------------------
+		// Bye [COMMAND]
+		// ---------------------------------------------------------
+		if strings.HasPrefix(content.Input, "/bye") {
 			fmt.Println("👋 Goodbye! Thanks for playing!")
 			break
 		}
 
-		userMessage := openai.UserMessage(content.Input)
-		messages = append(messages, userMessage)
+		// ---------------------------------------------------------
+		// Back to the Dungeon Master [COMMAND]
+		// ---------------------------------------------------------
+		if strings.HasPrefix(content.Input, "/back-to-dm") || strings.HasPrefix(content.Input, "/dm") || strings.HasPrefix(content.Input, "/dungeonmaster") && selectedAgent.GetName() != dungeonMasterToolsAgentName {
+			selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
+			ui.Println(ui.Pink, "👋 You are back to the Dungeon Master:", selectedAgent.GetName())
+			continue
+			/*
+				In Go, the continue keyword in a loop immediately jumps to the next iteration of the loop, skipping the rest
+				of the code in the current iteration.
 
-		// Stream callback for real-time content display
-		// streamCallback := func(thinkingCtrl *ui.ThinkingController) func(string) error {
-		// 	return func(content string) error {
-		// 		if thinkingCtrl.IsStarted() {
-		// 			thinkingCtrl.Stop()
-		// 		}
-		// 		ui.Print(ui.Green, content)
-		// 		return nil
-		// 	}
-		// }
-
-		thinkingCtrl := ui.NewThinkingController()
-		//thinkingCtrl.Start(ui.Blue, "Tools detection.....")
-		thinkingCtrl.Start(ui.Cyan, "Tools detection.....")
-
-		// Create executeFunction with MCP client option
-		// Tool execution callback
-		executeFn := executeFunction(mcpClient, thinkingCtrl)
-
-		_, toolCallsResults, assistantMessage, err := toolAgent.DetectToolCalls(messages, executeFn)
-		if err != nil {
-			panic(err)
+				Specifically:
+				- In a for loop, continue returns to the beginning of the loop for the next iteration
+				- Code after continue in the same iteration is not executed
+				- The loop condition is evaluated normally
+			*/
 		}
 
-		thinkingCtrl.Stop()
+		// ---------------------------------------------------------
+		// For DEBUG: [COMMAND] to print messages history
+		// ---------------------------------------------------------
+		if strings.HasPrefix(content.Input, "/messages") {
 
-		//prettyPrintFirstToolCallResult(toolCallsResults)
-		displayFirstToolCallResult(toolCallsResults)
+			fmt.Println("📝 Messages history / Conversational memory:")
+			for i, message := range conversationalMemory {
+				printableMessage, err := msg.MessageToMap(message)
+				if err != nil {
+					fmt.Printf("Error converting message to map: %v\n", err)
+					continue
+				}
+				fmt.Println("-", i, printableMessage)
+			}
+			continue
+		}
 
-		ui.Println(ui.Green, assistantMessage)
-		//fmt.Println(assistantMessage)
-		fmt.Println()
+		conversationalMemory = append(conversationalMemory, userMessage)
+
+		switch selectedAgent.GetName() {
+		// ---------------------------------------------------------
+		// AGENT: Dungeon master [COMPLETION] with [TOOLS]
+		// ---------------------------------------------------------
+		case dungeonMasterToolsAgentName:
+			ui.Println(ui.Yellow, "<", selectedAgent.GetName(), "speaking...>")
+
+			thinkingCtrl := ui.NewThinkingController()
+			//thinkingCtrl.Start(ui.Blue, "Tools detection.....")
+			thinkingCtrl.Start(ui.Cyan, "Tools detection.....")
+
+			// Create executeFunction with MCP client option
+			// Tool execution callback
+			executeFn := executeFunction(mcpClient, thinkingCtrl)
+
+			dungeonMasterMessages := []openai.ChatCompletionMessageParamUnion{
+				dungeonMasterSystemInstructions,
+				userMessage,
+			}
+			// QUESTION: should I keep the last message?
+
+			// TOOLS DETECTION:
+			_, toolCallsResults, assistantMessage, err := selectedAgent.DetectToolCalls(dungeonMasterMessages, executeFn)
+			if err != nil {
+				panic(err)
+			}
+
+			thinkingCtrl.Stop()
+
+			if len(toolCallsResults) > 0 {
+				displayFirstToolCallResult(toolCallsResults)
+			}
+
+			// ASSISTANT MESSAGE:
+			ui.Println(ui.Green, assistantMessage)
+			fmt.Println()
+
+			conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
+
+		// ---------------------------------------------------------
+		// AGENT:: Ghost agent for [TESTING] only
+		// ---------------------------------------------------------
+		case ghostAgentName:
+			ui.Println(ui.Orange, "<", selectedAgent.GetName(), "speaking...>")
+
+			ghostAgentMessages := []openai.ChatCompletionMessageParamUnion{
+				openai.SystemMessage("You are a friendly and helpful ghost."),
+				openai.UserMessage(content.Input),
+			}
+			_, err := selectedAgent.RunStream(ghostAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			fmt.Println()
+			fmt.Println()
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+		default:
+			ui.Printf(ui.Cyan, "\n🤖 %s is thinking...\n", selectedAgent.GetName())
+		}
 	}
-
 }
 
 func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingController) func(string, string) (string, error) {
@@ -131,11 +258,9 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 
 		fmt.Printf("🟢 %s with arguments: %s\n", functionName, arguments)
 
+		// WAITING: for [CONFIRMATION] function is detected, function execution confirmation
 		thinkingCtrl.Pause()
-		//choice := ui.GetConfirmation(ui.Gray, "Do you want to execute this function?", true)
-		//choice := ui.GetChoice(ui.Gray, "Do you want to execute this function? (y)es (n)o (a)bort", []string{"y", "n", "a"}, "y")
 		choice := ui.GetChoice(ui.Yellow, "Do you want to execute this function? (y)es (n)o (a)bort", []string{"y", "n", "a"}, "y")
-
 		thinkingCtrl.Resume()
 
 		switch choice {
@@ -145,30 +270,55 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 			return `{"result": "Function not executed"}`,
 				&mu.ExitToolCallsLoopError{Message: "Tool execution aborted by user"}
 
-		default:
+		default: // [YES] if the user confirms (yes)
 
-			// If MCP client is available, use it to execute the tool
-			if mcpClient != nil {
-				ctx := context.Background()
-				result, err := mcpClient.CallTool(ctx, functionName, arguments)
+			switch functionName {
+			// ---------------------------------------------------------
+			// non MCP TOOL CALLS: implementations
+			// ---------------------------------------------------------
+			case "speak_to_somebody":
+				argumentsStructured := struct {
+					Name string `json:"name"`
+				}{}
+				err := json.Unmarshal([]byte(arguments), &argumentsStructured)
 				if err != nil {
-					return "", fmt.Errorf("MCP tool execution failed: %v", err)
+					return "", fmt.Errorf("failed to parse arguments: %v", err)
 				}
-				// resultContent = toolResponse.Content[0].(mcp.TextContent).Text
-				// Convert MCP result to JSON string
-				if len(result.Content) > 0 {
-					// Take the first content item and return its text
-					resultContent := result.Content[0].(mcp.TextContent).Text
-					//fmt.Printf("✅ Tool executed successfully, result: %s\n", resultContent)
-					fmt.Println("✅ Tool executed successfully")
-					//return fmt.Sprintf(`{"result": "%s"}`, resultContent), nil
-					// ✋ could be JSON or not
-					return resultContent, nil
 
+				checkIfTheAgentExistInTheTeam := agentsTeam[strings.ToLower(argumentsStructured.Name)]
+
+				if checkIfTheAgentExistInTheTeam == nil {
+					return fmt.Sprintf(`{"result": "😕 There is no NPC named %s"}`, argumentsStructured.Name), nil
+				} else {
+					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
 				}
-				return `{"result": "Tool executed successfully but returned no content"}`, nil
+				// Use the /dm command to go back to the Dungeon Master
+				return fmt.Sprintf(`{"result": "😃 You speak to %s. They greet you warmly and are eager to assist you on your quest."}`, arguments), nil
+
+			// ---------------------------------------------------------
+			// [MCP] TOOL CALLS: implementation
+			// ---------------------------------------------------------
+			default:
+				// If MCP client is available, use it to execute the tool
+				if mcpClient != nil {
+					ctx := context.Background()
+					result, err := mcpClient.CallTool(ctx, functionName, arguments)
+					if err != nil {
+						return "", fmt.Errorf("MCP tool execution failed: %v", err)
+					}
+					if len(result.Content) > 0 {
+						// Take the first content item and return its text
+						resultContent := result.Content[0].(mcp.TextContent).Text
+						fmt.Println("✅ Tool executed successfully")
+						// ✋ could be JSON or not
+						return resultContent, nil
+
+					}
+					return `{"result": "Tool executed successfully but returned no content"}`, nil
+				}
+				return `{"result": "Function not executed"}`, nil
 			}
-			return `{"result": "Function not executed"}`, nil
+
 		}
 	}
 }
@@ -178,33 +328,6 @@ func getEnvOrDefault(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
-}
-
-func prettyPrintFirstToolCallResult(results []string) {
-	fmt.Println(strings.Repeat("-", 50))
-	// results[0] is like {"result": "text"}
-	// we want to extract the text value using JSON unmarshalling
-	var resultMap map[string]string
-
-	// Debug: print raw result
-	fmt.Printf("Raw result: %q\n", results[0])
-
-	cleanedResult := strings.ReplaceAll(results[0], "\n", "\\n")
-
-	// Debug: print cleaned result
-	fmt.Printf("Cleaned result: %q\n", cleanedResult)
-
-	err := json.Unmarshal([]byte(cleanedResult), &resultMap)
-	if err != nil {
-		fmt.Println("Error unmarshalling result:", err)
-	} else {
-		if result, ok := resultMap["result"]; ok {
-			fmt.Println(result)
-		} else {
-			fmt.Println("Error: result field not found in tool result")
-		}
-	}
-	fmt.Println(strings.Repeat("-", 50))
 }
 
 func displayFirstToolCallResult(results []string) {
