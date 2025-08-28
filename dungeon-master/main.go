@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
+	"talk-to-the-dm/agents"
 
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/tools"
@@ -45,7 +45,10 @@ func main() {
 		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
 	}
 
-	toolAgent, err := mu.NewAgent(ctx, "Bob",
+	toolsAgentName := getEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
+
+	// NOTE: This is the Dungeon Master agent using tools
+	toolAgent, err := mu.NewAgent(ctx, toolsAgentName,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
 			Model:       dungeonMasterModel,
@@ -62,8 +65,8 @@ func main() {
 	}
 
 	messages := []openai.ChatCompletionMessageParamUnion{
-		openai.SystemMessage(`
-			Your name is "Sam the Dungeon Master".
+		openai.SystemMessage(fmt.Sprintf(`
+			Your name is "%s the Dungeon Master".
 			You are a friendly and helpful Dungeon Master for a Dungeons & Dragons game.
 			You will guide the player through a fantasy adventure, describing scenes, challenges, and characters.
 			You will use tools to manage the game state, such as creating a player, starting a quest, and rolling dice.
@@ -75,11 +78,26 @@ func main() {
 			You will ensure the game is fun and exciting for the player.
 			You will end each response with a question or prompt to encourage the player to take action.
 			Always refer to the player by their name.
-		`),
+		`, toolsAgentName)),
 	}
 
+
+	// IMPORTANT: Ghost agent is for testing only.
+	ghostAgentName := "Casper"
+	ghostAgent := agents.NewGhostAgent(ghostAgentName)
+
+	idToolsAgent := strings.ToLower(toolsAgentName)
+	idGhostAgent := strings.ToLower(ghostAgentName)
+
+	// NOTE: this is the agents team
+	agents := map[string]mu.Agent{
+		idToolsAgent: toolAgent,
+		idGhostAgent: ghostAgent,
+	}
+	selectedAgent := agents[idToolsAgent]
+
 	for {
-		content, _ := ui.SimplePrompt("🤖 (/bye to exit)>", "Type your command here...")
+		content, _ := ui.SimplePrompt("🤖 (/bye to exit) ["+selectedAgent.GetName()+"]>", "Type your command here...")
 
 		if content.Input == "/bye" {
 			fmt.Println("👋 Goodbye! Thanks for playing!")
@@ -108,14 +126,13 @@ func main() {
 		// Tool execution callback
 		executeFn := executeFunction(mcpClient, thinkingCtrl)
 
-		_, toolCallsResults, assistantMessage, err := toolAgent.DetectToolCalls(messages, executeFn)
+		_, toolCallsResults, assistantMessage, err := selectedAgent.DetectToolCalls(messages, executeFn)
 		if err != nil {
 			panic(err)
 		}
 
 		thinkingCtrl.Stop()
 
-		//prettyPrintFirstToolCallResult(toolCallsResults)
 		displayFirstToolCallResult(toolCallsResults)
 
 		ui.Println(ui.Green, assistantMessage)
@@ -178,33 +195,6 @@ func getEnvOrDefault(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
-}
-
-func prettyPrintFirstToolCallResult(results []string) {
-	fmt.Println(strings.Repeat("-", 50))
-	// results[0] is like {"result": "text"}
-	// we want to extract the text value using JSON unmarshalling
-	var resultMap map[string]string
-
-	// Debug: print raw result
-	fmt.Printf("Raw result: %q\n", results[0])
-
-	cleanedResult := strings.ReplaceAll(results[0], "\n", "\\n")
-
-	// Debug: print cleaned result
-	fmt.Printf("Cleaned result: %q\n", cleanedResult)
-
-	err := json.Unmarshal([]byte(cleanedResult), &resultMap)
-	if err != nil {
-		fmt.Println("Error unmarshalling result:", err)
-	} else {
-		if result, ok := resultMap["result"]; ok {
-			fmt.Println(result)
-		} else {
-			fmt.Println("Error: result field not found in tool result")
-		}
-	}
-	fmt.Println(strings.Repeat("-", 50))
 }
 
 func displayFirstToolCallResult(results []string) {
