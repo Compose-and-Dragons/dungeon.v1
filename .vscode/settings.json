@@ -70,6 +70,22 @@
             "isWholeLine": false
         },
         {
+            "text": "REMARK:",
+            "color": "#2A2828",
+            "backgroundColor": "#D8D4D4",
+            "border": "1px solid #D8D4D4",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
+            "text": "ANSWER:",
+            "color": "#000000",
+            "backgroundColor": "#07BF2C",
+            "border": "1px solid #07BF2C",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+        {
             "text": "DEBUG:",
             "color": "#ffffff",
             "backgroundColor": "#ff0000",
@@ -230,6 +246,14 @@
             "isWholeLine": false
         },
         {
+            "text": "[TOOLS]",
+            "color": "#ffffff",
+            "backgroundColor": "#D10E89",
+            "border": "1px solid #D10E89",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
             "text": "AGENT:",
             "color": "#ffffff",
             "backgroundColor": "#360ABC",
@@ -240,8 +264,8 @@
         {
             "text": "AGENTS:",
             "color": "#ffffff",
-            "backgroundColor": "#360ABC",
-            "border": "1px solid #360ABC",
+            "backgroundColor": "#9680D5",
+            "border": "1px solid #9680D5",
             "borderRadius": "3px",
             "isWholeLine": false
         },
@@ -253,6 +277,30 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },
+        {
+            "text": "[COMPLETION]",
+            "color": "#000000",
+            "backgroundColor": "#17D1EA",
+            "border": "1px solid #17D1EA",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[COMMAND]",
+            "color": "#07E32C",
+            "backgroundColor": "#18191A",
+            "border": "1px solid #18191A",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[TESTING]",
+            "color": "#000000",
+            "backgroundColor": "#24DA0C",
+            "border": "1px solid #24DA0C",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                
         {
             "text": "TOOLS CATALOG:",
             "color": "#ffffff",
@@ -270,6 +318,14 @@
             "isWholeLine": false
         },
         {
+            "text": "[MCP]",
+            "color": "#ffffff",
+            "backgroundColor": "#7305D2",
+            "border": "1px solid #7305D2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
             "text": "TOOL CALLS:",
             "color": "#ffffff",
             "backgroundColor": "#E3141B",
@@ -277,54 +333,7 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },
-        {
-            "text": "TOOL 1:",
-            "color": "#ffffff",
-            "backgroundColor": "#27A34F",
-            "border": "1px solid #27A34F",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
-        {
-            "text": "TOOL 2:",
-            "color": "#ffffff",
-            "backgroundColor": "#2887C2",
-            "border": "1px solid #2887C2",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
-        {
-            "text": "TOOL 3:",
-            "color": "#ffffff",
-            "backgroundColor": "#3330C4",
-            "border": "1px solid #3330C4",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
-        {
-            "text": "TOOL 4:",
-            "color": "#ffffff",
-            "backgroundColor": "#7D30C4",
-            "border": "1px solid #7D30C4",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
-        {
-            "text": "TOOL 5:",
-            "color": "#ffffff",
-            "backgroundColor": "#BA30C4",
-            "border": "1px solid #BA30C4",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
-        {
-            "text": "TOOL 6:",
-            "color": "#ffffff",
-            "backgroundColor": "#B91F5F",
-            "border": "1px solid #B91F5F",
-            "borderRadius": "3px",
-            "isWholeLine": false
-        },
+
         {
             "text": "PROMPT:",
             "color": "#ffffff",
@@ -348,7 +357,7 @@
             "border": "1px solid #EA5B03",
             "borderRadius": "3px",
             "isWholeLine": false
-        },
+        },        
         {
             "text": "ASSISTANT MESSAGE:",
             "color": "#ffffff",
@@ -397,5 +406,29 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },
+        {
+            "text": "WAITING:",
+            "color": "#ffffff",
+            "backgroundColor": "#EA5B03",
+            "border": "1px solid #EA5B03",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },    
+        {
+            "text": "[CONFIRMATION]",
+            "color": "#000000",
+            "backgroundColor": "#24DA0C",
+            "border": "1px solid #24DA0C",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },      
+        {
+            "text": "[YES]",
+            "color": "#FFFFFF",
+            "backgroundColor": "#199E08",
+            "border": "1px solid #199E08",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
     ]
 }

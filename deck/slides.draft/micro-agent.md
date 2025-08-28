@@ -33,7 +33,7 @@ chatAgent, err := mu.NewAgent(ctx, "Bob",
 
 ---
 
-## Messages amd Completion Request
+## Messages and Completion Request
 
 ```golang
 response, err := chatAgent.Run([]openai.ChatCompletionMessageParamUnion{
