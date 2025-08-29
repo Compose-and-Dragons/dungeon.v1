@@ -42,7 +42,7 @@
 
     },
     "[go]": {
-        "editor.fontSize": 14,
+        "editor.fontSize": 12,
     },
     "todohighlight.keywords": [
         {
@@ -253,6 +253,22 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },   
+        {
+            "text": "[RAG]",
+            "color": "#ffffff",
+            "backgroundColor": "#056C8C",
+            "border": "1px solid #056C8C",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+         {
+            "text": "SIMILARITY SEARCH:",
+            "color": "#ffffff",
+            "backgroundColor": "#2887C2",
+            "border": "1px solid #2887C2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                  
         {
             "text": "TALK TO:",
             "color": "#ffffff",

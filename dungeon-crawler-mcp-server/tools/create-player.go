@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/types"
 
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 )
 
 func CreatePlayerTool() mcp.Tool {

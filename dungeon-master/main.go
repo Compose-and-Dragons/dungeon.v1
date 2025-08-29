@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"dungeon-master/agents"
-	"dungeon-master/helpers"
 	"encoding/json"
 	"fmt"
 	"strings"
 
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/msg"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/tools"
@@ -35,6 +35,9 @@ func main() {
 	fmt.Println("🌍 MCP Host:", mcpHost)
 	fmt.Println("🌍 Dungeon Master Model:", dungeonMasterModel)
 
+	similaritySearchLimit := helpers.StringToFloat(helpers.GetEnvOrDefault("SIMILARITY_LIMIT", "0.5"))
+	similaritySearchMaxResults := helpers.StringToInt(helpers.GetEnvOrDefault("SIMILARITY_MAX_RESULTS", "2"))
+
 	client := openai.NewClient(
 		option.WithBaseURL(llmURL),
 		option.WithAPIKey(""),
@@ -51,9 +54,6 @@ func main() {
 	// TOOLS CATALOG: get the list of tools from the [MCP] client
 	// ---------------------------------------------------------
 	toolsIndex := mcpClient.OpenAITools()
-	for _, tool := range toolsIndex {
-		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
-	}
 
 	// ---------------------------------------------------------
 	// TOOLS: adding tools to the mcp tools index
@@ -74,6 +74,8 @@ func main() {
 	})
 
 	toolsIndex = append(toolsIndex, speakToAnAgentTool)
+
+	displayToolsIndex(toolsIndex)
 
 	// ---------------------------------------------------------
 	// AGENT: This is the Dungeon Master agent using tools
@@ -119,24 +121,27 @@ func main() {
 	guardAgent := agents.GetGuardAgent(ctx, client)
 
 	// ---------------------------------------------------------
+	// AGENT: This is the Sorcerer agent
+	// ---------------------------------------------------------
+	sorcererAgent := agents.GetSorcererAgent(ctx, client)
+
+	// ---------------------------------------------------------
 	// AGENTS: Creating the agents team of the dungeon
 	// ---------------------------------------------------------
 	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
 	idGhostAgent := strings.ToLower(ghostAgentName)
 	idGuardAgent := strings.ToLower(guardAgent.GetName())
+	idSorcererAgent := strings.ToLower(sorcererAgent.GetName())
 
 	agentsTeam = map[string]mu.Agent{
 		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
 		idGhostAgent:              ghostAgent,
 		idGuardAgent:              guardAgent,
+		idSorcererAgent:           sorcererAgent,
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
-	// Display the agents team
-	for agentId, agent := range agentsTeam {
-		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s\n", agentId, agent.GetName())
-	}
-	
+	displayAgentsTeam()
 
 	for {
 		var promptText string
@@ -198,6 +203,19 @@ func main() {
 		}
 
 		conversationalMemory = append(conversationalMemory, userMessage)
+
+		// ---------------------------------------------------------
+		// Get the AGENTS team list
+		// ---------------------------------------------------------
+		if strings.HasPrefix(content.Input, "/agents") {
+			displayAgentsTeam()
+			continue
+		}
+
+		if strings.HasPrefix(content.Input, "/tools") {
+			displayToolsIndex(toolsIndex)
+			continue
+		}
 
 		switch selectedAgent.GetName() {
 		// ---------------------------------------------------------
@@ -261,26 +279,109 @@ func main() {
 			fmt.Println()
 
 		// ---------------------------------------------------------
-		// TALK TO: AGENT:: Guard agent
-		// ---------------------------------------------------------			
+		// TALK TO: AGENT:: Guard agent + [RAG]
+		// ---------------------------------------------------------
 		case guardAgent.GetName():
 			ui.Println(ui.Brown, "<", selectedAgent.GetName(), "speaking...>")
 
-			guardAgentMessages := []openai.ChatCompletionMessageParamUnion{
-				openai.UserMessage(content.Input),
+			var guardAgentMessages []openai.ChatCompletionMessageParamUnion
+
+			// ---------------------------------------------------------
+			// [RAG] SIMILARITY SEARCH:
+			// ---------------------------------------------------------
+			fmt.Printf("🔍 Searching for similar chunks to '%s'\n", content.Input)
+
+			var similaritiesMessage string
+
+			similarities, err := agents.SearchSimilarities(ctx, &client, guardAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			if err != nil {
+				fmt.Println("🔴 Error searching for similarities:", err)
+			} else {
+				if len(similarities) > 0 {
+					similaritiesMessage = "Here is some context that might be useful:\n"
+					for _, similarity := range similarities {
+						similaritiesMessage += fmt.Sprintf("- %s\n", similarity.Prompt)
+					}
+					guardAgentMessages = []openai.ChatCompletionMessageParamUnion{
+						openai.SystemMessage(similaritiesMessage),
+						openai.UserMessage(content.Input),
+					}
+				} else {
+					fmt.Println("📝 No similarities found.")
+					guardAgentMessages = []openai.ChatCompletionMessageParamUnion{
+						openai.UserMessage(content.Input),
+					}					
+				}
 			}
-			answer, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
+
+			// NOTE: RunStreams adds the messages to the agent's memory
+			_, err = selectedAgent.RunStream(guardAgentMessages, func(content string) error {
 				fmt.Print(content)
 				return nil
 			})
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
-			} else {
-				// MEMORY: the guard remembers the conversation
-				selectedAgent.SetMessages(append(selectedAgent.GetMessages(), openai.AssistantMessage(answer)))
 			}
 
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				msg.DisplayHistory(selectedAgent)
+			}
+
+			fmt.Println()
+			fmt.Println()
+
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: Sorcerer agent + [RAG]
+		// ---------------------------------------------------------
+		case sorcererAgent.GetName():
+			ui.Println(ui.Purple, "<", selectedAgent.GetName(), "speaking...>")
+
+			var sorcererAgentMessages []openai.ChatCompletionMessageParamUnion
+
+			// ---------------------------------------------------------
+			// [RAG] SIMILARITY SEARCH:
+			// ---------------------------------------------------------
+			fmt.Printf("🔍 Searching for similar chunks to '%s'\n", content.Input)
+
+			var similaritiesMessage string
+
+			similarities, err := agents.SearchSimilarities(ctx, &client, sorcererAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			if err != nil {
+				fmt.Println("🔴 Error searching for similarities:", err)
+			} else {
+				if len(similarities) > 0 {
+					similaritiesMessage = "Here is some context that might be useful:\n"
+					for _, similarity := range similarities {
+						similaritiesMessage += fmt.Sprintf("- %s\n", similarity.Prompt)
+					}
+					sorcererAgentMessages = []openai.ChatCompletionMessageParamUnion{
+						openai.SystemMessage(similaritiesMessage),
+						openai.UserMessage(content.Input),
+					}
+				} else {
+					fmt.Println("📝 No similarities found.")
+					sorcererAgentMessages = []openai.ChatCompletionMessageParamUnion{
+						openai.UserMessage(content.Input),
+					}					
+				}
+			}
+
+			// NOTE: RunStreams adds the messages to the agent's memory
+			_, err = selectedAgent.RunStream(sorcererAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				msg.DisplayHistory(selectedAgent)
+			}
 
 			fmt.Println()
 			fmt.Println()
@@ -316,6 +417,7 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 			// non MCP TOOL CALLS: implementations
 			// ---------------------------------------------------------
 			case "speak_to_somebody":
+
 				argumentsStructured := struct {
 					Name string `json:"name"`
 				}{}
@@ -360,6 +462,20 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 
 		}
 	}
+}
+
+func displayToolsIndex(toolsIndex []openai.ChatCompletionToolUnionParam) {
+	for _, tool := range toolsIndex {
+		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
+	}
+	fmt.Println()
+}
+
+func displayAgentsTeam() {
+	for agentId, agent := range agentsTeam {
+		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
+	}
+	fmt.Println()
 }
 
 func displayFirstToolCallResult(results []string) {

@@ -3,13 +3,13 @@ package tools
 import (
 	"context"
 	"dungeon-mcp-server/data"
-	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/types"
 	"encoding/json"
 	"fmt"
 	"math/rand"
 
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/openai/openai-go/v2"
 )
@@ -238,7 +238,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 			dungeonAgentMonsterSystemInstruction := helpers.GetEnvOrDefault("DUNGEON_AGENT_MONSTER_SYSTEM_INSTRUCTION", "You are a Dungeon Master. You create rooms in a dungeon. Each room has a name and a short description.")
 			// Set the response format to use the room schema
-			
+
 			dungeonAgent.SetResponseFormat(openai.ChatCompletionNewParamsResponseFormatUnion{
 				OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
 					JSONSchema: data.GetMonsterSchema(),

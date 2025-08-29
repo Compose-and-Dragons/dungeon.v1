@@ -12,29 +12,29 @@ import (
 )
 
 var (
-	guardAgentInstance mu.Agent
-	guardAgentOnce     sync.Once
+	sorcererAgentInstance mu.Agent
+	sorcererAgentOnce     sync.Once
 )
 
-// GetGuardAgent returns the singleton instance of the guard agent
-func GetGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
-	guardAgentOnce.Do(func() {
-		guardAgentInstance = createGuardAgent(ctx, client)
+// GetSorcererAgent returns the singleton instance of the sorcerer agent
+func GetSorcererAgent(ctx context.Context, client openai.Client) mu.Agent {
+	sorcererAgentOnce.Do(func() {
+		sorcererAgentInstance = createSorcererAgent(ctx, client)
 	})
-	return guardAgentInstance
+	return sorcererAgentInstance
 }
 
 // Huey, Dewey, and Louie
-func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
+func createSorcererAgent(ctx context.Context, client openai.Client) mu.Agent {
 
-	name := helpers.GetEnvOrDefault("GUARD_NAME", "Huey")
-	model := helpers.GetEnvOrDefault("GUARD_MODEL", "ai/qwen2.5:1.5B-F16")
-	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("GUARD_MODEL_TEMPERATURE", "0.0"))
+	name := helpers.GetEnvOrDefault("SORCERER_NAME", "Dewey")
+	model := helpers.GetEnvOrDefault("SORCERER_MODEL", "ai/qwen2.5:1.5B-F16")
+	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("SORCERER_MODEL_TEMPERATURE", "0.0"))
 
 	// [RAG]  Initialize the vector store for the agent
-	errEmbedding := GenerateEmbeddings(ctx, &client, name, helpers.GetEnvOrDefault("GUARD_CONTEXT_PATH", ""))
+	errEmbedding := GenerateEmbeddings(ctx, &client, name, helpers.GetEnvOrDefault("SORCERER_CONTEXT_PATH", ""))
 	if errEmbedding != nil {
-		fmt.Println("🔶 Error generating embeddings for guard agent:", errEmbedding)
+		fmt.Println("🔶 Error generating embeddings for sorcerer agent:", errEmbedding)
 	}
 
 	// ---------------------------------------------------------
@@ -42,10 +42,10 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	// ---------------------------------------------------------
 	var systemInstructions openai.ChatCompletionMessageParamUnion
 
-	systemInstructionsContentPath := helpers.GetEnvOrDefault("GUARD_SYSTEM_INSTRUCTIONS_PATH", "")
+	systemInstructionsContentPath := helpers.GetEnvOrDefault("SORCERER_SYSTEM_INSTRUCTIONS_PATH", "")
 	if systemInstructionsContentPath == "" {
-		fmt.Println("🔶 No GUARD_SYSTEM_INSTRUCTIONS_PATH provided, using default instructions.")
-		//systemInstructions = openai.SystemMessage("You are an elf guard in a fantasy world.")
+		fmt.Println("🔶 No SORCERER_SYSTEM_INSTRUCTIONS_PATH provided, using default instructions.")
+		//systemInstructions = openai.SystemMessage("You are a wise and powerful sorcerer in a fantasy world.")
 	}
 
 	// Read the content of the file at systemInstructionsContentPath
@@ -53,7 +53,7 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 
 	if err != nil {
 		fmt.Println("🔶 Error reading the file, using default instructions:", err)
-		systemInstructions = openai.SystemMessage("You are an elf guard in a fantasy world.")
+		systemInstructions = openai.SystemMessage("You are a wise and powerful sorcerer in a fantasy world.")
 	} else {
 		systemInstructions = openai.SystemMessage(systemInstructionsContent)
 	}
@@ -74,4 +74,5 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	}
 
 	return chatAgent
+
 }

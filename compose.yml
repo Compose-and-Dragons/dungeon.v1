@@ -159,25 +159,30 @@ services:
         Always refer to the player by their name.
 
       # ---------------------------------------------------------
+      # Similarity search settings
+      # ---------------------------------------------------------
+      SIMILARITY_LIMIT: 0.55
+      SIMILARITY_MAX_RESULTS: 2
+
+      # ---------------------------------------------------------
       # Guard settings
       # ---------------------------------------------------------
       #NON_PLAYER_CHARACTER_MODEL: ai/qwen2.5:1.5B-F16
       GUARD_MODEL_TEMPERATURE: 0.7
       GUARD_NAME: Thrain
       GUARD_RACE: Elf
-      GUARD_SYSTEM_INSTRUCTIONS: |
-        You are Thrain the Watchful, an Elf guard stationed in a fantasy dungeon.
-        You are vigilant and protective, always on the lookout for intruders or threats.
-        You take your duty seriously and are committed to maintaining order and safety within the dungeon.
-        You are knowledgeable about the layout of the dungeon and can provide information about its various rooms and inhabitants.
-        You are friendly but firm, willing to assist adventurers who show respect and good intentions.
-        You will respond to questions and interactions in a manner consistent with your role as a guard.
-        You will avoid breaking character and stay in the role of Thrain the Watchful at all times.
-        You will ensure that your responses are immersive and engaging, contributing to the overall atmosphere of the dungeon.
-        You will end each response with a question or prompt to encourage further interaction.
-        Always refer to the player by their name.
-      GUARD_CONTEXT: |
-        TODO
+      GUARD_SYSTEM_INSTRUCTIONS_PATH: ./data/guard_system_instructions.md
+      GUARD_CONTEXT_PATH: ./data/guard_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Sorcerer settings
+      # ---------------------------------------------------------
+      #SORCERER_MODEL: hf.co/menlo/lucy-gguf:q8_0
+      SORCERER_MODEL_TEMPERATURE: 0.7
+      SORCERER_NAME: Elara
+      SORCERER_RACE: Human  
+      SORCERER_SYSTEM_INSTRUCTIONS_PATH: ./data/sorcerer_system_instructions.md
+      SORCERER_CONTEXT_PATH: ./data/sorcerer_background_and_personality.md
 
     models:
       dungeon-master-model:
@@ -187,6 +192,18 @@ services:
       non-player-character-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: NON_PLAYER_CHARACTER_MODEL
+
+      guard-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: GUARD_MODEL
+
+      sorcerer_model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: SORCERER_MODEL
+
+      embedding-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
 
     depends_on:
       mcp-gateway:
@@ -200,5 +217,12 @@ models:
   #   model: ai/qwen2.5:1.5B-F16 
   non-player-character-model:
     model: ai/qwen2.5:1.5B-F16
+  guard-model:
+    model: ai/qwen2.5:1.5B-F16
+  sorcerer_model:
+    model: hf.co/menlo/lucy-gguf:q8_0
   dungeon-master-model:
     model: hf.co/menlo/jan-nano-gguf:q4_k_m
+
+  embedding-model:
+    model: ai/mxbai-embed-large:latest
