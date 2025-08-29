@@ -195,6 +195,10 @@ services:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: SORCERER_MODEL
 
+      embedding-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+
     depends_on:
       mcp-gateway:
         condition: service_started
@@ -213,3 +217,6 @@ models:
     model: hf.co/menlo/lucy-gguf:q8_0
   dungeon-master-model:
     model: hf.co/menlo/jan-nano-gguf:q4_k_m
+
+  embedding-model:
+    model: ai/mxbai-embed-large:latest

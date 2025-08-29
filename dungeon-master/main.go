@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/msg"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/tools"
 	"github.com/micro-agent/micro-agent-go/agent/ui"
-	"github.com/micro-agent/micro-agent-go/agent/helpers"
 
 	"github.com/mark3labs/mcp-go/mcp"
 
@@ -22,7 +22,6 @@ import (
 
 var agentsTeam map[string]mu.Agent
 var selectedAgent mu.Agent
-var debugAgentMessages bool = false
 
 func main() {
 
@@ -52,9 +51,6 @@ func main() {
 	// TOOLS CATALOG: get the list of tools from the [MCP] client
 	// ---------------------------------------------------------
 	toolsIndex := mcpClient.OpenAITools()
-	for _, tool := range toolsIndex {
-		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
-	}
 
 	// ---------------------------------------------------------
 	// TOOLS: adding tools to the mcp tools index
@@ -75,6 +71,8 @@ func main() {
 	})
 
 	toolsIndex = append(toolsIndex, speakToAnAgentTool)
+
+	displayToolsIndex(toolsIndex)
 
 	// ---------------------------------------------------------
 	// AGENT: This is the Dungeon Master agent using tools
@@ -140,10 +138,7 @@ func main() {
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
-	// Display the agents team
-	for agentId, agent := range agentsTeam {
-		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
-	}
+	displayAgentsTeam()
 
 	for {
 		var promptText string
@@ -210,10 +205,12 @@ func main() {
 		// Get the AGENTS team list
 		// ---------------------------------------------------------
 		if strings.HasPrefix(content.Input, "/agents") {
-			// Display the agents team
-			for agentId, agent := range agentsTeam {
-				ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
-			}
+			displayAgentsTeam()
+			continue
+		}
+
+		if strings.HasPrefix(content.Input, "/tools") {
+			displayToolsIndex(toolsIndex)
 			continue
 		}
 
@@ -293,7 +290,6 @@ func main() {
 			// ---------------------------------------------------------
 			// This is a work in progress 🚧
 			// ---------------------------------------------------------
-
 
 			// NOTE: RunStreams adds the messages to the agent's memory
 			_, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
@@ -423,6 +419,20 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 
 		}
 	}
+}
+
+func displayToolsIndex(toolsIndex []openai.ChatCompletionToolUnionParam) {
+	for _, tool := range toolsIndex {
+		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
+	}
+	fmt.Println()
+}
+
+func displayAgentsTeam() {
+	for agentId, agent := range agentsTeam {
+		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
+	}
+	fmt.Println()
 }
 
 func displayFirstToolCallResult(results []string) {

@@ -7,10 +7,10 @@ import (
 
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
-	"github.com/micro-agent/micro-agent-go/agent/rag"
 
 	"github.com/openai/openai-go/v2"
 )
+
 var (
 	guardAgentInstance mu.Agent
 	guardAgentOnce     sync.Once
@@ -26,9 +26,16 @@ func GetGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 
 // Huey, Dewey, and Louie
 func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
+
 	name := helpers.GetEnvOrDefault("GUARD_NAME", "Huey")
 	model := helpers.GetEnvOrDefault("GUARD_MODEL", "ai/qwen2.5:1.5B-F16")
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("GUARD_MODEL_TEMPERATURE", "0.0"))
+
+	// [RAG]  Initialize the vector store for the agent
+	errEmbedding := GenerateEmbeddings(ctx, &client, name, helpers.GetEnvOrDefault("GUARD_CONTEXT_PATH", ""))
+	if errEmbedding != nil {
+		fmt.Println("🔶 Error generating embeddings for guard agent:", errEmbedding)
+	}
 
 	// ---------------------------------------------------------
 	// System Instructions
@@ -38,7 +45,7 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	systemInstructionsContentPath := helpers.GetEnvOrDefault("GUARD_SYSTEM_INSTRUCTIONS_PATH", "")
 	if systemInstructionsContentPath == "" {
 		fmt.Println("🔶 No GUARD_SYSTEM_INSTRUCTIONS_PATH provided, using default instructions.")
-		systemInstructions = openai.SystemMessage("You are an elf guard in a fantasy world.")
+		//systemInstructions = openai.SystemMessage("You are an elf guard in a fantasy world.")
 	}
 
 	// Read the content of the file at systemInstructionsContentPath
@@ -51,34 +58,6 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 		systemInstructions = openai.SystemMessage(systemInstructionsContent)
 	}
 
-	// ---------------------------------------------------------
-	// Context Instructions
-	// ---------------------------------------------------------
-	// TODO: create embeddings from contextInstructionsContent
-	// ---------------------------------------------------------
-	var contextInstructions openai.ChatCompletionMessageParamUnion
-
-	contextInstructionsContentPath := helpers.GetEnvOrDefault("GUARD_CONTEXT_PATH", "")
-	if contextInstructionsContentPath == "" {
-		fmt.Println("🔶 No GUARD_CONTEXT_PATH provided, using default instructions.")
-		contextInstructions = openai.SystemMessage("You are in a fantasy world.")
-	}
-
-	// Read the content of the file at contextInstructionsContentPath
-	contextInstructionsContent, err := helpers.ReadTextFile(contextInstructionsContentPath)
-	if err != nil {
-		fmt.Println("🔶 Error reading the file, using default instructions:", err)
-		contextInstructions = openai.SystemMessage("You are in a fantasy world.")
-	} else {
-		contextInstructions = openai.SystemMessage(contextInstructionsContent)
-	}
-
-	chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
-
-	for i, chunk := range chunks {
-		fmt.Println("🔷 Chunk", i, ":", chunk)
-	}
-
 	chatAgent, err := mu.NewAgent(ctx, name,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
@@ -86,7 +65,6 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 			Temperature: openai.Opt(temperature),
 			Messages: []openai.ChatCompletionMessageParamUnion{
 				systemInstructions,
-				contextInstructions,
 			},
 		}),
 	)
