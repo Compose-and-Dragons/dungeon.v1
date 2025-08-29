@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"dungeon-master/agents"
+	"dungeon-master/helpers"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
-	"talk-to-the-dm/agents"
 
 	"github.com/micro-agent/micro-agent-go/agent/msg"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
@@ -27,9 +27,9 @@ func main() {
 
 	ctx := context.Background()
 
-	llmURL := getEnvOrDefault("LLM_URL", "http://localhost:12434/engines/llama.cpp/v1")
-	mcpHost := getEnvOrDefault("MCP_HOST", "http://localhost:9011/mcp")
-	dungeonMasterModel := getEnvOrDefault("DUNGEON_MASTER_MODEL", "hf.co/menlo/jan-nano-gguf:q4_k_m")
+	llmURL := helpers.GetEnvOrDefault("MODEL_RUNNER_BASE_URL", "http://localhost:12434/engines/llama.cpp/v1")
+	mcpHost := helpers.GetEnvOrDefault("MCP_HOST", "http://localhost:9011/mcp")
+	dungeonMasterModel := helpers.GetEnvOrDefault("DUNGEON_MASTER_MODEL", "hf.co/menlo/jan-nano-gguf:q4_k_m")
 
 	fmt.Println("🌍 LLM URL:", llmURL)
 	fmt.Println("🌍 MCP Host:", mcpHost)
@@ -78,7 +78,7 @@ func main() {
 	// ---------------------------------------------------------
 	// AGENT: This is the Dungeon Master agent using tools
 	// ---------------------------------------------------------
-	dungeonMasterToolsAgentName := getEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
+	dungeonMasterToolsAgentName := helpers.GetEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
 
 	dungeonMasterToolsAgent, err := mu.NewAgent(ctx, dungeonMasterToolsAgentName,
 		mu.WithClient(client),
@@ -97,7 +97,7 @@ func main() {
 	}
 
 	// SYSTEM MESSAGE:
-	instructions := fmt.Sprintf(`Your name is "%s the Dungeon Master".`, dungeonMasterToolsAgentName) + "\n" + getEnvOrDefault("DUNGEON_MASTER_SYSTEM_INSTRUCTIONS", dungeonMasterToolsAgentName)
+	instructions := fmt.Sprintf(`Your name is "%s the Dungeon Master".`, dungeonMasterToolsAgentName) + "\n" + helpers.GetEnvOrDefault("DUNGEON_MASTER_SYSTEM_INSTRUCTIONS", dungeonMasterToolsAgentName)
 	dungeonMasterSystemInstructions := openai.SystemMessage(instructions)
 
 	// note used but could be useful later
@@ -109,20 +109,34 @@ func main() {
 	// AGENT: This is the Ghost agent
 	// ---------------------------------------------------------
 	// REMARK: Ghost agent is for testing only.
+	// IMPORTANT: keep the name simple in only one word
 	ghostAgentName := "Casper"
 	ghostAgent := agents.NewGhostAgent(ghostAgentName)
 
-	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
-	idGhostAgent := strings.ToLower(ghostAgentName)
+	// ---------------------------------------------------------
+	// AGENT: This is the Guard agent
+	// ---------------------------------------------------------
+	guardAgent := agents.GetGuardAgent(ctx, client)
 
 	// ---------------------------------------------------------
 	// AGENTS: Creating the agents team of the dungeon
 	// ---------------------------------------------------------
+	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
+	idGhostAgent := strings.ToLower(ghostAgentName)
+	idGuardAgent := strings.ToLower(guardAgent.GetName())
+
 	agentsTeam = map[string]mu.Agent{
 		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
 		idGhostAgent:              ghostAgent,
+		idGuardAgent:              guardAgent,
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
+
+	// Display the agents team
+	for agentId, agent := range agentsTeam {
+		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s\n", agentId, agent.GetName())
+	}
+	
 
 	for {
 		var promptText string
@@ -187,7 +201,7 @@ func main() {
 
 		switch selectedAgent.GetName() {
 		// ---------------------------------------------------------
-		// AGENT: Dungeon master [COMPLETION] with [TOOLS]
+		// TALK TO: AGENT: Dungeon master [COMPLETION] with [TOOLS]
 		// ---------------------------------------------------------
 		case dungeonMasterToolsAgentName:
 			ui.Println(ui.Yellow, "<", selectedAgent.GetName(), "speaking...>")
@@ -225,7 +239,7 @@ func main() {
 			conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
 
 		// ---------------------------------------------------------
-		// AGENT:: Ghost agent for [TESTING] only
+		// TALK TO: AGENT:: Ghost agent for [TESTING] only
 		// ---------------------------------------------------------
 		case ghostAgentName:
 			ui.Println(ui.Orange, "<", selectedAgent.GetName(), "speaking...>")
@@ -239,12 +253,37 @@ func main() {
 				return nil
 			})
 
-			fmt.Println()
-			fmt.Println()
-
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
 			}
+
+			fmt.Println()
+			fmt.Println()
+
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: Guard agent
+		// ---------------------------------------------------------			
+		case guardAgent.GetName():
+			ui.Println(ui.Brown, "<", selectedAgent.GetName(), "speaking...>")
+
+			guardAgentMessages := []openai.ChatCompletionMessageParamUnion{
+				openai.UserMessage(content.Input),
+			}
+			answer, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			} else {
+				// MEMORY: the guard remembers the conversation
+				selectedAgent.SetMessages(append(selectedAgent.GetMessages(), openai.AssistantMessage(answer)))
+			}
+
+
+			fmt.Println()
+			fmt.Println()
 
 		default:
 			ui.Printf(ui.Cyan, "\n🤖 %s is thinking...\n", selectedAgent.GetName())
@@ -321,13 +360,6 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 
 		}
 	}
-}
-
-func getEnvOrDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
 }
 
 func displayFirstToolCallResult(results []string) {

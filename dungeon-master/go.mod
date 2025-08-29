@@ -1,4 +1,4 @@
-module talk-to-the-dm
+module dungeon-master
 
 go 1.24.4
 

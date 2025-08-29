@@ -1,5 +1,5 @@
 #!/bin/bash
-export LLM_URL="http://localhost:12434/engines/llama.cpp/v1"
+export MODEL_RUNNER_BASE_URL="http://localhost:12434/engines/llama.cpp/v1"
 export MCP_HOST=http://localhost:9011/mcp
 export DUNGEON_MASTER_MODEL="hf.co/menlo/jan-nano-gguf:q4_k_m"
 # The tool agent
@@ -20,6 +20,10 @@ Always refer to the player by their name.
 EOM
 
 export DUNGEON_MASTER_SYSTEM_INSTRUCTIONS="$SYSTEM_INSTRUCTIONS"
+
+export GUARD_NAME="Thrain the Watchful"
+export NON_PLAYER_CHARACTER_MODEL="ai/qwen2.5:1.5B-F16"
+export GUARD_RACE="Elf"
 
 
 go run main.go

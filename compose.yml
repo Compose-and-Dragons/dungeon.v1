@@ -1,5 +1,9 @@
 services:
-
+  # ---------------------------------------------------------
+  # Usage:
+  # docker compose up --build -d
+  # docker compose logs -f mcp-dungeon
+  # ---------------------------------------------------------
   mcp-gateway:
     # mcp-gateway secures your MCP servers
     image: docker/mcp-gateway:latest
@@ -42,6 +46,7 @@ services:
       # ---------------------------------------------------------
       # Dungeon agent settings
       # ---------------------------------------------------------
+      # ✋ This agent generates rooms and monsters using a language model
       DUNGEON_MODEL_TEMPERATURE: 0.7
 
       DUNGEON_AGENT_NAME: dungeon-agent
@@ -76,29 +81,28 @@ services:
       #MONSTER_PROBABILITY: 0.25
       MONSTER_PROBABILITY: 0.5
 
-
       # ---------------------------------------------------------
-      # Non-Player Character (NPC) settings
+      # Non-Player Characters (NPC) settings
       # ---------------------------------------------------------
       # roomID := fmt.Sprintf("room_%d_%d", newX, newY)
       MERCHANT_ROOM: room_1_1
       # provisory merchant name and race
-      MERCHANT_NAME: Galdor the Trader
+      MERCHANT_NAME: Galdor
       MERCHANT_RACE: Dwarf
 
       GUARD_ROOM: room_0_2
       # provisory guard name and race
-      GUARD_NAME: Thrain the Watchful
+      GUARD_NAME: Thrain
       GUARD_RACE: Elf
 
       SORCERER_ROOM: room_2_0
       # provisory sorcerer name and race
-      SORCERER_NAME: Elara the Wise
+      SORCERER_NAME: Elara
       SORCERER_RACE: Human
 
       HEALER_ROOM: room_2_1
       # provisory healer name and race
-      HEALER_NAME: Liora the Kind
+      HEALER_NAME: Liora
       HEALER_RACE: Half-Elf
 
       # ---------------------------------------------------------
@@ -113,6 +117,7 @@ services:
       dungeon-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: DUNGEON_MODEL
+      
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6060/health"]
       interval: 30s
@@ -120,6 +125,72 @@ services:
       retries: 3
       start_period: 40s
 
+  # ---------------------------------------------------------
+  # Usage:
+  # docker attach $(docker compose ps -q dungeon-master)
+  # ---------------------------------------------------------
+  dungeon-master:
+    build:
+      context: dungeon-master
+      dockerfile: Dockerfile
+
+    tty: true          # Enable TTY
+    stdin_open: true   # Keep stdin open
+    
+    environment:
+      MCP_HOST: http://mcp-gateway:9011/mcp
+      TERM: xterm-256color
+      # ---------------------------------------------------------
+      # Dungeon Master settings
+      # ---------------------------------------------------------
+      #DUNGEON_MASTER_MODEL: hf.co/menlo/jan-nano-gguf:q4_k_m
+      DUNGEON_MASTER_NAME: Zephyr
+      DUNGEON_MASTER_SYSTEM_INSTRUCTIONS: |
+        You are a friendly and helpful Dungeon Master for a Dungeons & Dragons game.
+        You will guide the player through a fantasy adventure, describing scenes, challenges, and characters.
+        You will use tools to manage the game state, such as creating a player, starting a quest, and rolling dice.
+        You will always describe the game world in vivid detail and engage the player with interesting scenarios.
+        You will keep track of the player's stats, inventory, and progress through the adventure.
+        You will respond to the player's actions and decisions, adapting the story accordingly.
+        You will use a conversational and immersive style, making the player feel like they are part of the adventure.
+        You will avoid breaking character and stay in the role of the Dungeon Master at all times.
+        You will ensure the game is fun and exciting for the player.
+        You will end each response with a question or prompt to encourage the player to take action.
+        Always refer to the player by their name.
+
+      # ---------------------------------------------------------
+      # Guard settings
+      # ---------------------------------------------------------
+      #NON_PLAYER_CHARACTER_MODEL: ai/qwen2.5:1.5B-F16
+      GUARD_MODEL_TEMPERATURE: 0.7
+      GUARD_NAME: Thrain
+      GUARD_RACE: Elf
+      GUARD_SYSTEM_INSTRUCTIONS: |
+        You are Thrain the Watchful, an Elf guard stationed in a fantasy dungeon.
+        You are vigilant and protective, always on the lookout for intruders or threats.
+        You take your duty seriously and are committed to maintaining order and safety within the dungeon.
+        You are knowledgeable about the layout of the dungeon and can provide information about its various rooms and inhabitants.
+        You are friendly but firm, willing to assist adventurers who show respect and good intentions.
+        You will respond to questions and interactions in a manner consistent with your role as a guard.
+        You will avoid breaking character and stay in the role of Thrain the Watchful at all times.
+        You will ensure that your responses are immersive and engaging, contributing to the overall atmosphere of the dungeon.
+        You will end each response with a question or prompt to encourage further interaction.
+        Always refer to the player by their name.
+      GUARD_CONTEXT: |
+        TODO
+
+    models:
+      dungeon-master-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: DUNGEON_MASTER_MODEL
+
+      non-player-character-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: NON_PLAYER_CHARACTER_MODEL
+
+    depends_on:
+      mcp-gateway:
+        condition: service_started
 
 
 models:
