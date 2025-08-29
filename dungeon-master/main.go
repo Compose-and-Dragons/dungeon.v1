@@ -217,7 +217,6 @@ func main() {
 			continue
 		}
 
-		
 		switch selectedAgent.GetName() {
 		// ---------------------------------------------------------
 		// TALK TO: AGENT: Dungeon master [COMPLETION] with [TOOLS]
@@ -280,7 +279,7 @@ func main() {
 			fmt.Println()
 
 		// ---------------------------------------------------------
-		// TALK TO: AGENT:: Guard agent
+		// TALK TO: AGENT:: Guard agent + [RAG]
 		// ---------------------------------------------------------
 		case guardAgent.GetName():
 			ui.Println(ui.Brown, "<", selectedAgent.GetName(), "speaking...>")
@@ -288,6 +287,13 @@ func main() {
 			guardAgentMessages := []openai.ChatCompletionMessageParamUnion{
 				openai.UserMessage(content.Input),
 			}
+
+			// ---------------------------------------------------------
+			// [RAG] similarity search here later TODO:
+			// ---------------------------------------------------------
+			// This is a work in progress 🚧
+			// ---------------------------------------------------------
+
 
 			// NOTE: RunStreams adds the messages to the agent's memory
 			_, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
@@ -323,6 +329,7 @@ func main() {
 			// This is a work in progress 🚧
 			// ---------------------------------------------------------
 
+			// NOTE: RunStreams adds the messages to the agent's memory
 			_, err := selectedAgent.RunStream(sorcererAgentMessages, func(content string) error {
 				fmt.Print(content)
 				return nil

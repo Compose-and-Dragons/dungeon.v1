@@ -10,9 +10,6 @@ import (
 	"github.com/openai/openai-go/v2"
 )
 
-// TODO:
-// - use another model (reasoning model), try with Lucy
-// - add rag data
 
 var (
 	sorcererAgentInstance mu.Agent
@@ -58,6 +55,8 @@ func createSorcererAgent(ctx context.Context, client openai.Client) mu.Agent {
 	// ---------------------------------------------------------
 	// Context Instructions
 	// ---------------------------------------------------------
+	// TODO: create embeddings from contextInstructionsContent
+	// ---------------------------------------------------------	
 	var contextInstructions openai.ChatCompletionMessageParamUnion
 
 	contextInstructionsContentPath := helpers.GetEnvOrDefault("SORCERER_CONTEXT_PATH", "")
