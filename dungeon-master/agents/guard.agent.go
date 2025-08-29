@@ -3,6 +3,7 @@ package agents
 import (
 	"context"
 	"dungeon-master/helpers"
+	"fmt"
 	"sync"
 
 	"github.com/micro-agent/micro-agent-go/agent/mu"
@@ -28,10 +29,14 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	model := helpers.GetEnvOrDefault("NON_PLAYER_CHARACTER_MODEL", "ai/qwen2.5:1.5B-F16")
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("NON_PLAYER_CHARACTER_TEMPERATURE", "0.0"))
 
-
 	systemInstructions := openai.SystemMessage(helpers.GetEnvOrDefault(
-		"GUARD_SYSTEM_INSTRUCTIONS", 
+		"GUARD_SYSTEM_INSTRUCTIONS",
 		`You are a guard at the entrance of a medieval castle.`,
+	))
+
+	contextInstructions := openai.SystemMessage(helpers.GetEnvOrDefault(
+		"GUARD_CONTEXT",
+		`TODO`,
 	))
 
 	chatAgent, err := mu.NewAgent(ctx, name,
@@ -39,12 +44,14 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 		mu.WithParams(openai.ChatCompletionNewParams{
 			Model:       model,
 			Temperature: openai.Opt(temperature),
-			Messages:    []openai.ChatCompletionMessageParamUnion{
+			Messages: []openai.ChatCompletionMessageParamUnion{
 				systemInstructions,
+				contextInstructions,
 			},
 		}),
 	)
 	if err != nil {
+		fmt.Println("🔶 Error creating sorcerer agent, creating ghost agent instead:", err)
 		return NewGhostAgent("[Ghost] " + name)
 	}
 

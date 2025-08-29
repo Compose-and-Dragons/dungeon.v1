@@ -22,6 +22,7 @@ import (
 
 var agentsTeam map[string]mu.Agent
 var selectedAgent mu.Agent
+var debugAgentMessages bool = false
 
 func main() {
 
@@ -119,24 +120,30 @@ func main() {
 	guardAgent := agents.GetGuardAgent(ctx, client)
 
 	// ---------------------------------------------------------
+	// AGENT: This is the Sorcerer agent
+	// ---------------------------------------------------------
+	sorcererAgent := agents.GetSorcererAgent(ctx, client)
+
+	// ---------------------------------------------------------
 	// AGENTS: Creating the agents team of the dungeon
 	// ---------------------------------------------------------
 	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
 	idGhostAgent := strings.ToLower(ghostAgentName)
 	idGuardAgent := strings.ToLower(guardAgent.GetName())
+	idSorcererAgent := strings.ToLower(sorcererAgent.GetName())
 
 	agentsTeam = map[string]mu.Agent{
 		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
 		idGhostAgent:              ghostAgent,
 		idGuardAgent:              guardAgent,
+		idSorcererAgent:           sorcererAgent,
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
 	// Display the agents team
 	for agentId, agent := range agentsTeam {
-		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s\n", agentId, agent.GetName())
+		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
 	}
-	
 
 	for {
 		var promptText string
@@ -199,6 +206,18 @@ func main() {
 
 		conversationalMemory = append(conversationalMemory, userMessage)
 
+		// ---------------------------------------------------------
+		// Get the AGENTS team list
+		// ---------------------------------------------------------
+		if strings.HasPrefix(content.Input, "/agents") {
+			// Display the agents team
+			for agentId, agent := range agentsTeam {
+				ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
+			}
+			continue
+		}
+
+		
 		switch selectedAgent.GetName() {
 		// ---------------------------------------------------------
 		// TALK TO: AGENT: Dungeon master [COMPLETION] with [TOOLS]
@@ -262,25 +281,61 @@ func main() {
 
 		// ---------------------------------------------------------
 		// TALK TO: AGENT:: Guard agent
-		// ---------------------------------------------------------			
+		// ---------------------------------------------------------
 		case guardAgent.GetName():
 			ui.Println(ui.Brown, "<", selectedAgent.GetName(), "speaking...>")
 
 			guardAgentMessages := []openai.ChatCompletionMessageParamUnion{
 				openai.UserMessage(content.Input),
 			}
-			answer, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
+
+			// NOTE: RunStreams adds the messages to the agent's memory
+			_, err := selectedAgent.RunStream(guardAgentMessages, func(content string) error {
 				fmt.Print(content)
 				return nil
 			})
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
-			} else {
-				// MEMORY: the guard remembers the conversation
-				selectedAgent.SetMessages(append(selectedAgent.GetMessages(), openai.AssistantMessage(answer)))
 			}
 
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				helpers.DisplayHistory(selectedAgent)
+			}
+
+			fmt.Println()
+			fmt.Println()
+
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: Sorcerer agent + [RAG]
+		// ---------------------------------------------------------
+		case sorcererAgent.GetName():
+			ui.Println(ui.Purple, "<", selectedAgent.GetName(), "speaking...>")
+
+			sorcererAgentMessages := []openai.ChatCompletionMessageParamUnion{
+				openai.UserMessage(content.Input),
+			}
+
+			// ---------------------------------------------------------
+			// [RAG] similarity search here later TODO:
+			// ---------------------------------------------------------
+			// This is a work in progress 🚧
+			// ---------------------------------------------------------
+
+			_, err := selectedAgent.RunStream(sorcererAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				helpers.DisplayHistory(selectedAgent)
+			}
 
 			fmt.Println()
 			fmt.Println()
@@ -316,6 +371,7 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 			// non MCP TOOL CALLS: implementations
 			// ---------------------------------------------------------
 			case "speak_to_somebody":
+
 				argumentsStructured := struct {
 					Name string `json:"name"`
 				}{}

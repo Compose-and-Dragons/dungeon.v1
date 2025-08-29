@@ -176,8 +176,21 @@ services:
         You will ensure that your responses are immersive and engaging, contributing to the overall atmosphere of the dungeon.
         You will end each response with a question or prompt to encourage further interaction.
         Always refer to the player by their name.
+        ALWAYS START YOUR RESPONSE WITH "[Thrain the Watchful is speaking]"
+      # TODO: add context...
       GUARD_CONTEXT: |
-        TODO
+        Do what you want...
+
+      # ---------------------------------------------------------
+      # Sorcerer settings
+      # ---------------------------------------------------------
+      #SORCERER_MODEL: hf.co/menlo/lucy-gguf:q8_0
+      SORCERER_MODEL_TEMPERATURE: 0.7
+      SORCERER_NAME: Elara
+      SORCERER_RACE: Human  
+      SORCERER_SYSTEM_INSTRUCTIONS_PATH: /data/sorcerer_system_instructions.md
+      SORCERER_CONTEXT_PATH: /data/sorcerer_context.md
+      SORCERER_BACKGROUND_PATH: /data/sorcerer_background_and_personality.md
 
     models:
       dungeon-master-model:
@@ -187,6 +200,10 @@ services:
       non-player-character-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: NON_PLAYER_CHARACTER_MODEL
+
+      sorcerer_model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: SORCERER_MODEL
 
     depends_on:
       mcp-gateway:
@@ -200,5 +217,7 @@ models:
   #   model: ai/qwen2.5:1.5B-F16 
   non-player-character-model:
     model: ai/qwen2.5:1.5B-F16
+  sorcerer_model:
+    model: hf.co/menlo/lucy-gguf:q8_0
   dungeon-master-model:
     model: hf.co/menlo/jan-nano-gguf:q4_k_m

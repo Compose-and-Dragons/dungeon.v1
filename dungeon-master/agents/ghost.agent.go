@@ -111,6 +111,18 @@ func (g *GhostAgent) SetResponseFormat(format openai.ChatCompletionNewParamsResp
 	g.responseFormat = format
 }
 
+// GetModel implements mu.Agent.
+func (g *GhostAgent) GetModel() string {
+	return "ghost-model"
+}
+
+// SetModel implements mu.Agent.
+func (g *GhostAgent) SetModel(model string) {
+	// No-op for ghost agent
+}	
+
+
+
 // NewFakeAgent creates a new fake agent instance
 func NewGhostAgent(name string) mu.Agent {
 	return &GhostAgent{

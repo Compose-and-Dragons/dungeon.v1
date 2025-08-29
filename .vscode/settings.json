@@ -254,6 +254,14 @@
             "isWholeLine": false
         },   
         {
+            "text": "[RAG]",
+            "color": "#ffffff",
+            "backgroundColor": "#056C8C",
+            "border": "1px solid #056C8C",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },           
+        {
             "text": "TALK TO:",
             "color": "#ffffff",
             "backgroundColor": "#93034D",
