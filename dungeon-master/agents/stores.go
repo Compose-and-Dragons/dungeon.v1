@@ -13,7 +13,7 @@ import (
 	"github.com/openai/openai-go/v2"
 )
 
-var agentsStores = make(map[string]rag.MemoryVectorStore)
+var AgentsStores = make(map[string]rag.MemoryVectorStore)
 
 // GenerateEmbeddings reads a context file, splits it into chunks, generates embeddings,
 // and stores them in the vector store for the specified agent
@@ -33,7 +33,7 @@ func GenerateEmbeddings(ctx context.Context, client *openai.Client, name string,
 		),
 	)
 	if err != nil {
-		fmt.Println("🔶 Error creating embedding agent, creating ghost agent instead:", err)
+		fmt.Println("🔶 Error creating embedding agent", err)
 		return err
 	}
 
@@ -52,10 +52,10 @@ func GenerateEmbeddings(ctx context.Context, client *openai.Client, name string,
 	}
 
 	// [RAG] Initialize the vector store for the agent
-	agentsStores[name] = rag.MemoryVectorStore{
+	AgentsStores[name] = rag.MemoryVectorStore{
 		Records: make(map[string]rag.VectorRecord),
 	}
-	store := agentsStores[name]
+	store := AgentsStores[name]
 
 	chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
 
@@ -81,5 +81,47 @@ func GenerateEmbeddings(ctx context.Context, client *openai.Client, name string,
 	fmt.Println()
 
 	return nil
+}
+
+// SearchSimilarities searches for similar content in the agent's vector store
+// based on the input question and returns the top N similar records
+func SearchSimilarities(ctx context.Context, client *openai.Client, agentName string, input string, threshold float64, topN int) ([]rag.VectorRecord, error) {
+	store := AgentsStores[agentName]
+
+	embeddingAgent, err := mu.NewAgent(ctx, "vector-agent",
+		mu.WithClient(*client),
+		mu.WithEmbeddingParams(
+			openai.EmbeddingNewParams{
+				Model: helpers.GetEnvOrDefault("EMBEDDING_MODEL", "ai/mxbai-embed-large:latest"),
+			},
+		),
+	)
+	if err != nil {
+		fmt.Println("🔶 Error creating embedding agent", err)
+		return nil, err
+	}
+
+	fmt.Println(strings.Repeat("-", 80))
+	questionEmbeddingVector, err := embeddingAgent.GenerateEmbeddingVector(input)
+	if err != nil {
+		return nil, err
+	}
+
+	questionRecord := rag.VectorRecord{Embedding: questionEmbeddingVector}
+
+	similarities, err := store.SearchTopNSimilarities(questionRecord, threshold, topN)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("📝 Similarities found:", len(similarities))
+
+	for _, similarity := range similarities {
+		fmt.Println("✅ CosineSimilarity:", similarity.CosineSimilarity, "Chunk:", similarity.Prompt)
+	}
+
+	fmt.Println(strings.Repeat("-", 80))
+
+	return similarities, nil
 }
 

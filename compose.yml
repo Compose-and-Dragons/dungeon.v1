@@ -159,6 +159,12 @@ services:
         Always refer to the player by their name.
 
       # ---------------------------------------------------------
+      # Similarity search settings
+      # ---------------------------------------------------------
+      SIMILARITY_LIMIT: 0.55
+      SIMILARITY_MAX_RESULTS: 2
+
+      # ---------------------------------------------------------
       # Guard settings
       # ---------------------------------------------------------
       #NON_PLAYER_CHARACTER_MODEL: ai/qwen2.5:1.5B-F16
