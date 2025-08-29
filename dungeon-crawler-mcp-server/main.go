@@ -8,12 +8,13 @@ import (
 	"net/http"
 
 	"dungeon-mcp-server/data"
-	"dungeon-mcp-server/helpers"
 	"dungeon-mcp-server/tools"
 	"dungeon-mcp-server/types"
 
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
+
 	"github.com/openai/openai-go/v2"
 	"github.com/openai/openai-go/v2/option"
 	// imported as openai

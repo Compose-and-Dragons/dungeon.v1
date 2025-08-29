@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"dungeon-master/agents"
-	"dungeon-master/helpers"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -12,6 +11,7 @@ import (
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/tools"
 	"github.com/micro-agent/micro-agent-go/agent/ui"
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 
 	"github.com/mark3labs/mcp-go/mcp"
 
@@ -307,7 +307,7 @@ func main() {
 
 			// DEBUG: display the messages history
 			if strings.HasPrefix(content.Input, "/debug") {
-				helpers.DisplayHistory(selectedAgent)
+				msg.DisplayHistory(selectedAgent)
 			}
 
 			fmt.Println()
@@ -341,7 +341,7 @@ func main() {
 
 			// DEBUG: display the messages history
 			if strings.HasPrefix(content.Input, "/debug") {
-				helpers.DisplayHistory(selectedAgent)
+				msg.DisplayHistory(selectedAgent)
 			}
 
 			fmt.Println()

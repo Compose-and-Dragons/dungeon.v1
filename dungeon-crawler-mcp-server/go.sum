@@ -34,6 +34,8 @@ github.com/micro-agent/micro-agent-go v0.0.6 h1:+kHACeSPMgZaszOWh5uMng1PbRCd89pH
 github.com/micro-agent/micro-agent-go v0.0.6/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
 github.com/micro-agent/micro-agent-go v0.0.7 h1:bZWvCkdPjgi8gwnKaPh/ZV2d/7SX6qKj6MjBtxINUSc=
 github.com/micro-agent/micro-agent-go v0.0.7/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
+github.com/micro-agent/micro-agent-go v0.0.8 h1:JR1c0vi1d49Gcw2Ml7QYn4oxUOtVxhb+6wJn+2RxYp8=
+github.com/micro-agent/micro-agent-go v0.0.8/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
 github.com/openai/openai-go/v2 v2.1.1 h1:/RMA/V3D+yF/Cc4jHXFt6lkqSOWRf5roRi+DvZaDYQI=
 github.com/openai/openai-go/v2 v2.1.1/go.mod h1:sIUkR+Cu/PMUVkSKhkk742PRURkQOCFhiwJ7eRSBqmk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -2,14 +2,15 @@ package agents
 
 import (
 	"context"
-	"dungeon-master/helpers"
 	"fmt"
 	"sync"
 
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
+	"github.com/micro-agent/micro-agent-go/agent/rag"
+
 	"github.com/openai/openai-go/v2"
 )
-
 var (
 	guardAgentInstance mu.Agent
 	guardAgentOnce     sync.Once
@@ -72,6 +73,11 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 		contextInstructions = openai.SystemMessage(contextInstructionsContent)
 	}
 
+	chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
+
+	for i, chunk := range chunks {
+		fmt.Println("🔷 Chunk", i, ":", chunk)
+	}
 
 	chatAgent, err := mu.NewAgent(ctx, name,
 		mu.WithClient(client),

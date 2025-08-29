@@ -2,14 +2,15 @@ package agents
 
 import (
 	"context"
-	"dungeon-master/helpers"
 	"fmt"
 	"sync"
 
+	"github.com/micro-agent/micro-agent-go/agent/helpers"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
+	"github.com/micro-agent/micro-agent-go/agent/rag"
+
 	"github.com/openai/openai-go/v2"
 )
-
 
 var (
 	sorcererAgentInstance mu.Agent
@@ -56,7 +57,7 @@ func createSorcererAgent(ctx context.Context, client openai.Client) mu.Agent {
 	// Context Instructions
 	// ---------------------------------------------------------
 	// TODO: create embeddings from contextInstructionsContent
-	// ---------------------------------------------------------	
+	// ---------------------------------------------------------
 	var contextInstructions openai.ChatCompletionMessageParamUnion
 
 	contextInstructionsContentPath := helpers.GetEnvOrDefault("SORCERER_CONTEXT_PATH", "")
@@ -72,6 +73,12 @@ func createSorcererAgent(ctx context.Context, client openai.Client) mu.Agent {
 		contextInstructions = openai.SystemMessage("You are in a fantasy world.")
 	} else {
 		contextInstructions = openai.SystemMessage(contextInstructionsContent)
+	}
+
+	chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
+
+	for i, chunk := range chunks {
+		fmt.Println("🔶 Chunk", i, ":", chunk)
 	}
 
 	chatAgent, err := mu.NewAgent(ctx, name,
