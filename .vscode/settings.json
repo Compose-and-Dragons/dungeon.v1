@@ -252,7 +252,15 @@
             "border": "1px solid #D10E89",
             "borderRadius": "3px",
             "isWholeLine": false
-        },        
+        },   
+        {
+            "text": "TALK TO:",
+            "color": "#ffffff",
+            "backgroundColor": "#93034D",
+            "border": "1px solid #93034D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },             
         {
             "text": "AGENT:",
             "color": "#ffffff",
@@ -282,6 +290,14 @@
             "color": "#000000",
             "backgroundColor": "#17D1EA",
             "border": "1px solid #17D1EA",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "MEMORY:",
+            "color": "#FFFFFF",
+            "backgroundColor": "#B416BD",
+            "border": "1px solid #B416BD",
             "borderRadius": "3px",
             "isWholeLine": false
         },  
