@@ -262,7 +262,7 @@ func main() {
 			thinkingCtrl.Stop()
 
 			if len(toolCallsResults) > 0 {
-				// This is the answer from the [MCP] server
+				// IMPORTANT: This is the answer from the [MCP] server
 				displayFirstToolCallResult(toolCallsResults)
 			}
 
@@ -542,7 +542,7 @@ func generatePromptMessagesWithSimilarities(ctx context.Context, client *openai.
 }
 
 func displayFirstToolCallResult(results []string) {
-	fmt.Println(strings.Repeat("-", 50))
+	fmt.Println(strings.Repeat("-", 3)+"[MCP RESPONSE]"+ strings.Repeat("-", 33))
 	fmt.Println(results[0])
 	fmt.Println(strings.Repeat("-", 50))
 }
