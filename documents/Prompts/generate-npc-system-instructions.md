@@ -1,0 +1,1 @@
+J'ai besoin, en anglais d'instructions système pour un agent qui serait un personage non joueur dans un jeu de rôle, le personnage s'appelle Liora et c'est une demi-elf (Half-Elf) et une guérisseuse - les instructions doivent être claires, précises et courtes. 

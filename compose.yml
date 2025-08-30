@@ -50,6 +50,10 @@ services:
       DUNGEON_MODEL_TEMPERATURE: 0.7
 
       DUNGEON_AGENT_NAME: dungeon-agent
+
+      # ---------------------------------------------------------
+      # Instruction for the room generation
+      # ---------------------------------------------------------
       DUNGEON_AGENT_ROOM_SYSTEM_INSTRUCTION: |
         # IDENTITY and PURPOSE
         You are an expert room generator for games like D&D 5th edition. 
@@ -62,6 +66,9 @@ services:
         Speak only in English, avoid Chinese ideogram.
         Ensure the name and the description are fantasy-themed.
 
+      # ---------------------------------------------------------
+      # Instruction for the monster generation
+      # ---------------------------------------------------------
       DUNGEON_AGENT_MONSTER_SYSTEM_INSTRUCTION: |
         # IDENTITY and PURPOSE
         You are an expert monster generator for games like D&D 5th edition. 
@@ -184,6 +191,24 @@ services:
       SORCERER_SYSTEM_INSTRUCTIONS_PATH: ./data/sorcerer_system_instructions.md
       SORCERER_CONTEXT_PATH: ./data/sorcerer_background_and_personality.md
 
+      # ---------------------------------------------------------
+      # Merchant settings
+      # ---------------------------------------------------------
+      MERCHANT_MODEL_TEMPERATURE: 0.7
+      MERCHANT_NAME: Galdor
+      MERCHANT_RACE: Dwarf
+      MERCHANT_SYSTEM_INSTRUCTIONS_PATH: ./data/merchant_system_instructions.md
+      MERCHANT_CONTEXT_PATH: ./data/merchant_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Healer settings
+      # ---------------------------------------------------------
+      HEALER_MODEL_TEMPERATURE: 0.7
+      HEALER_NAME: Liora
+      HEALER_RACE: Half-Elf
+      HEALER_SYSTEM_INSTRUCTIONS_PATH: ./data/healer_system_instructions.md
+      HEALER_CONTEXT_PATH: ./data/healer_background_and_personality.md
+
     models:
       dungeon-master-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
@@ -201,6 +226,14 @@ services:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: SORCERER_MODEL
 
+      merchant-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: MERCHANT_MODEL
+
+      healer-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: HEALER_MODEL
+
       embedding-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
         model_var: EMBEDDING_MODEL
@@ -213,16 +246,28 @@ services:
 models:
   dungeon-model:
     model: ai/qwen2.5:1.5B-F16   
+
+  dungeon-master-model:
+    model: hf.co/menlo/jan-nano-gguf:q4_k_m
+    
+  embedding-model:
+    model: ai/mxbai-embed-large:latest
+
   # monsters-model:
   #   model: ai/qwen2.5:1.5B-F16 
+
   non-player-character-model:
     model: ai/qwen2.5:1.5B-F16
+
   guard-model:
     model: ai/qwen2.5:1.5B-F16
   sorcerer_model:
     model: hf.co/menlo/lucy-gguf:q8_0
-  dungeon-master-model:
-    model: hf.co/menlo/jan-nano-gguf:q4_k_m
+  merchant-model:
+    model: ai/qwen2.5:0.5B-F16    
+  healer-model:
+    model: hf.co/allenolmo-2-0425-1b-instruct-gguf:q4_k_m
 
-  embedding-model:
-    model: ai/mxbai-embed-large:latest
+  # For the remote agent
+  boss-model:
+    model: hf.co/quantfactory/nemotron-mini-4b-instruct-gguf:q4_k_m
