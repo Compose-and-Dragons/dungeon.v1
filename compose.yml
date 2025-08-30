@@ -164,6 +164,8 @@ services:
         You will ensure the game is fun and exciting for the player.
         You will end each response with a question or prompt to encourage the player to take action.
         Always refer to the player by their name.
+        Use all the provided data to make the adventure, the rooms description... engaging and coherent.
+        The response format is done in makrdown, well structured with titles, subtitles, bullet points...
 
       # ---------------------------------------------------------
       # Similarity search settings
