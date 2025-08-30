@@ -84,7 +84,9 @@ services:
 
       # if the dungeon is too empty, increase these probabilities
       # if the dungeon is small, increase these probabilities
-      ITEM_PROBABILITY: 0.20
+      #ITEM_PROBABILITY: 0.20
+      MAGIC_POTION_PROBABILITY: 0.5
+      GOLD_COINS_PROBABILITY: 0.5
       #MONSTER_PROBABILITY: 0.25
       MONSTER_PROBABILITY: 0.5
 

@@ -11,6 +11,7 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
+	"github.com/micro-agent/micro-agent-go/agent/msg"
 	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/openai/openai-go/v2"
 )
@@ -118,11 +119,17 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 				},
 			})
 
+			// Set the messages to use the room system instruction
+			// IMPORTANT: Reset the previous messages
+			dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
+
 			// TODO: use a stream completion to display it into the logs
 			response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
 				openai.SystemMessage(dungeonAgentRoomSystemInstruction),
 				openai.UserMessage("Create a new dungeon room with a name and a short description."),
 			})
+
+			msg.DisplayHistory(dungeonAgent)
 
 			if err != nil {
 				fmt.Println("🔴 Error generating room:", err)
@@ -254,7 +261,10 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			if rand.Float64() < monsterProbability && !hasNonPlayerCharacter {
 				fmt.Println("⏳✳️✳️✳️ Creating a 👹MONSTER at coordinates:", newX, newY)
 
-				// TODO: use a stream completion to display it into the logs
+				// Set the messages to use the monster system instruction
+				// IMPORTANT: Reset the previous messages
+				dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
+
 				response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
 					openai.SystemMessage(dungeonAgentMonsterSystemInstruction),
 					openai.UserMessage("Create a new monster with a name and a short description."),
@@ -315,23 +325,23 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 			// BEGIN: Create Gold coins, potions, and items ⭐️
 			// ---------------------------------------------------------
-			itemProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("ITEM_PROBABILITY", "0.20"))
+			magicPotionProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("MAGIC_POTION_PROBABILITY", "0.20"))
+			goldCoinsProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("GOLD_COINS_PROBABILITY", "0.20"))
 
 			// 100 x itemProbability % of chance to have an item in the room
 			var hasTreasure, hasMagicPotion bool
 			var regenerationHealth, goldCoins int
-			if rand.Float64() < itemProbability {
-				if rand.Float64() < 0.5 {
-					hasTreasure = true
-					goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
-					fmt.Println("⏳✳️✳️✳️ adding ⭐️GOLD COINS [", goldCoins, "] at coordinates:", newX, newY)
 
-				} else {
-					hasMagicPotion = true
-					regenerationHealth = rand.Intn(20) + 5 // between 5 and 24 health points
-					fmt.Println("⏳✳️✳️✳️ adding 🧪POTION [", regenerationHealth, "] at coordinates:", newX, newY)
+			if rand.Float64() < magicPotionProbability {
+				hasMagicPotion = true
+				regenerationHealth = rand.Intn(20) + 5 // between 5 and 24 health points
+				fmt.Println("⏳✳️✳️✳️ adding 🧪POTION [", regenerationHealth, "] at coordinates:", newX, newY)
+			}
 
-				}
+			if rand.Float64() < goldCoinsProbability {
+				hasTreasure = true
+				goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
+				fmt.Println("⏳✳️✳️✳️ adding ⭐️GOLD COINS [", goldCoins, "] at coordinates:", newX, newY)
 			}
 
 			// ---------------------------------------------------------
@@ -367,7 +377,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 		// IMPORTANT: QUESTION: why not to generate a JSON with all the room info ?
 		response := []string{}
 		response = append(response, fmt.Sprintf("✅ Moved %s to position (%d, %d).", direction, newX, newY))
-		
+
 		if currentRoom.IsEntrance {
 			response = append(response, "🏁 You are at the dungeon entrance.")
 		}
@@ -377,7 +387,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 		response = append(response, fmt.Sprintf("🏠 Room name:%s", currentRoom.Name))
 		response = append(response, fmt.Sprintf("📝 Description:%s", currentRoom.Description))
 
-		if currentRoom.HasNonPlayerCharacter  {
+		if currentRoom.HasNonPlayerCharacter {
 			response = append(response, fmt.Sprintf("🙋 There is a %s here: %s", currentRoom.NonPlayerCharacter.Type, currentRoom.NonPlayerCharacter.Name))
 		}
 
@@ -392,7 +402,6 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 		if currentRoom.HasMagicPotion {
 			response = append(response, fmt.Sprintf("🧪 There is a magic potion here that can restore %d health points!", currentRoom.RegenerationHealth))
 		}
-
 
 		resultMessage := strings.Join(response, "\n")
 

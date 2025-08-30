@@ -19,6 +19,12 @@ func GetDungeonMapTool() mcp.Tool {
 func GetDungeonMapToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		
+		if player.Name == "Unknown" {
+			message := "✋ No player exists. Please create a player first."
+			fmt.Println(message)
+			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		}
+
 		asciiMap := generateASCIIMap(player, dungeon)
 		
 		return mcp.NewToolResultText(asciiMap), nil
