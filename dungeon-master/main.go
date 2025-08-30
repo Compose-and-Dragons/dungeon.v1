@@ -5,6 +5,7 @@ import (
 	"dungeon-master/agents"
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
@@ -261,13 +262,22 @@ func main() {
 			thinkingCtrl.Stop()
 
 			if len(toolCallsResults) > 0 {
+				// This is the answer from the [MCP] server
 				displayFirstToolCallResult(toolCallsResults)
 			}
 
 			// ASSISTANT MESSAGE:
-			ui.Println(ui.Green, assistantMessage)
+			// This is the final answer from the agent
+
+			// TODO: improve the formatting of the assistant message
+			formattedMessage := formatAssistantMessage(assistantMessage)
+			ui.Println(ui.Green, formattedMessage)
 			fmt.Println()
 
+			// ui.PrintMarkdown(formattedMessage)
+			// fmt.Println()
+
+			// not used but could be useful later
 			conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
 
 		// ---------------------------------------------------------
@@ -549,4 +559,23 @@ func displayAgentsTeam() {
 		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
 	}
 	fmt.Println()
+}
+
+func formatAssistantMessage(message string) string {
+	// Supprimer les espaces en début et fin
+	message = strings.TrimSpace(message)
+	
+	// Remplacer les multiples sauts de ligne par un double saut de ligne
+	re := regexp.MustCompile(`\n\s*\n\s*\n+`)
+	message = re.ReplaceAllString(message, "\n\n")
+	
+	// Nettoyer les espaces multiples en fin de ligne
+	re = regexp.MustCompile(`[ \t]+\n`)
+	message = re.ReplaceAllString(message, "\n")
+	
+	// S'assurer qu'il n'y a pas plus de 2 sauts de ligne consécutifs
+	re = regexp.MustCompile(`\n{3,}`)
+	message = re.ReplaceAllString(message, "\n\n")
+	
+	return message
 }

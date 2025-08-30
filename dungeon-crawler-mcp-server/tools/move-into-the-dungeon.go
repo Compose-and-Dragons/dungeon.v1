@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"strings"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
@@ -360,8 +361,40 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			currentRoom.Visited = true
 		}
 
-		resultMessage := fmt.Sprintf("✅ Moved %s to position (%d, %d)\n\n🏠 %s\n%s",
-			direction, newX, newY, currentRoom.Name, currentRoom.Description)
+		// ---------------------------------------------------------
+		// NOTE: Build the [MCP] response message
+		// ---------------------------------------------------------
+		// IMPORTANT: QUESTION: why not to generate a JSON with all the room info ?
+		response := []string{}
+		response = append(response, fmt.Sprintf("✅ Moved %s to position (%d, %d).", direction, newX, newY))
+		
+		if currentRoom.IsEntrance {
+			response = append(response, "🏁 You are at the dungeon entrance.")
+		}
+		if currentRoom.IsExit {
+			response = append(response, "🏆 You are at the dungeon exit! Find a way to escape!")
+		}
+		response = append(response, fmt.Sprintf("🏠 Room name:%s", currentRoom.Name))
+		response = append(response, fmt.Sprintf("📝 Description:%s", currentRoom.Description))
+
+		if currentRoom.HasNonPlayerCharacter  {
+			response = append(response, fmt.Sprintf("🙋 There is a %s here: %s", currentRoom.NonPlayerCharacter.Type, currentRoom.NonPlayerCharacter.Name))
+		}
+
+		if currentRoom.HasMonster {
+			response = append(response, fmt.Sprintf("👹 There is a %s here! Prepare for battle!", currentRoom.Monster.Name))
+		}
+
+		if currentRoom.HasTreasure {
+			response = append(response, fmt.Sprintf("⭐️ There is a treasure here with %d gold coins!", currentRoom.GoldCoins))
+		}
+
+		if currentRoom.HasMagicPotion {
+			response = append(response, fmt.Sprintf("🧪 There is a magic potion here that can restore %d health points!", currentRoom.RegenerationHealth))
+		}
+
+
+		resultMessage := strings.Join(response, "\n")
 
 		fmt.Println(resultMessage)
 		return mcp.NewToolResultText(resultMessage), nil
