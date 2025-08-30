@@ -168,7 +168,7 @@ services:
       # ---------------------------------------------------------
       # Similarity search settings
       # ---------------------------------------------------------
-      SIMILARITY_LIMIT: 0.55
+      SIMILARITY_LIMIT: 0.5
       SIMILARITY_MAX_RESULTS: 2
 
       # ---------------------------------------------------------
@@ -251,7 +251,8 @@ models:
     model: hf.co/menlo/jan-nano-gguf:q4_k_m
     
   embedding-model:
-    model: ai/mxbai-embed-large:latest
+    #model: ai/mxbai-embed-large:latest
+    model: ai/granite-embedding-multilingual:latest
 
   # monsters-model:
   #   model: ai/qwen2.5:1.5B-F16 
@@ -266,7 +267,8 @@ models:
   merchant-model:
     model: ai/qwen2.5:0.5B-F16    
   healer-model:
-    model: hf.co/allenolmo-2-0425-1b-instruct-gguf:q4_k_m
+    model: ai/qwen2.5:0.5B-F16
+    #model: hf.co/allenolmo-2-0425-1b-instruct-gguf:q4_k_m
 
   # For the remote agent
   boss-model:

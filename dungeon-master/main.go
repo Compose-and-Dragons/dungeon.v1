@@ -126,18 +126,32 @@ func main() {
 	sorcererAgent := agents.GetSorcererAgent(ctx, client)
 
 	// ---------------------------------------------------------
+	// AGENT: This is the Merchant agent
+	// ---------------------------------------------------------
+	merchantAgent := agents.GetMerchantAgent(ctx, client)
+
+	// ---------------------------------------------------------
+	// AGENT: This is the Healer agent
+	// ---------------------------------------------------------
+	healerAgent := agents.GetHealerAgent(ctx, client)
+
+	// ---------------------------------------------------------
 	// AGENTS: Creating the agents team of the dungeon
 	// ---------------------------------------------------------
 	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
 	idGhostAgent := strings.ToLower(ghostAgentName)
 	idGuardAgent := strings.ToLower(guardAgent.GetName())
 	idSorcererAgent := strings.ToLower(sorcererAgent.GetName())
+	idMerchantAgent := strings.ToLower(merchantAgent.GetName())
+	idHealerAgent := strings.ToLower(healerAgent.GetName())
 
 	agentsTeam = map[string]mu.Agent{
 		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
 		idGhostAgent:              ghostAgent,
 		idGuardAgent:              guardAgent,
 		idSorcererAgent:           sorcererAgent,
+		idMerchantAgent:           merchantAgent,
+		idHealerAgent:             healerAgent,
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
@@ -257,7 +271,7 @@ func main() {
 			conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
 
 		// ---------------------------------------------------------
-		// TALK TO: AGENT:: Ghost agent for [TESTING] only
+		// TALK TO: AGENT:: **GHOST** for [TESTING] only
 		// ---------------------------------------------------------
 		case ghostAgentName:
 			ui.Println(ui.Orange, "<", selectedAgent.GetName(), "speaking...>")
@@ -279,39 +293,18 @@ func main() {
 			fmt.Println()
 
 		// ---------------------------------------------------------
-		// TALK TO: AGENT:: Guard agent + [RAG]
+		// TALK TO: AGENT:: **GUARD** + [RAG]
 		// ---------------------------------------------------------
 		case guardAgent.GetName():
 			ui.Println(ui.Brown, "<", selectedAgent.GetName(), "speaking...>")
 
-			var guardAgentMessages []openai.ChatCompletionMessageParamUnion
-
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			fmt.Printf("🔍 Searching for similar chunks to '%s'\n", content.Input)
+			guardAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, guardAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
-			var similaritiesMessage string
-
-			similarities, err := agents.SearchSimilarities(ctx, &client, guardAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 			if err != nil {
-				fmt.Println("🔴 Error searching for similarities:", err)
-			} else {
-				if len(similarities) > 0 {
-					similaritiesMessage = "Here is some context that might be useful:\n"
-					for _, similarity := range similarities {
-						similaritiesMessage += fmt.Sprintf("- %s\n", similarity.Prompt)
-					}
-					guardAgentMessages = []openai.ChatCompletionMessageParamUnion{
-						openai.SystemMessage(similaritiesMessage),
-						openai.UserMessage(content.Input),
-					}
-				} else {
-					fmt.Println("📝 No similarities found.")
-					guardAgentMessages = []openai.ChatCompletionMessageParamUnion{
-						openai.UserMessage(content.Input),
-					}					
-				}
+				ui.Println(ui.Red, "Error:", err)
 			}
 
 			// NOTE: RunStreams adds the messages to the agent's memory
@@ -333,43 +326,88 @@ func main() {
 			fmt.Println()
 
 		// ---------------------------------------------------------
-		// TALK TO: AGENT:: Sorcerer agent + [RAG]
+		// TALK TO: AGENT:: **SORCERER** + [RAG]
 		// ---------------------------------------------------------
 		case sorcererAgent.GetName():
 			ui.Println(ui.Purple, "<", selectedAgent.GetName(), "speaking...>")
 
-			var sorcererAgentMessages []openai.ChatCompletionMessageParamUnion
-
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			fmt.Printf("🔍 Searching for similar chunks to '%s'\n", content.Input)
+			sorcererAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, sorcererAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
-			var similaritiesMessage string
-
-			similarities, err := agents.SearchSimilarities(ctx, &client, sorcererAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 			if err != nil {
-				fmt.Println("🔴 Error searching for similarities:", err)
-			} else {
-				if len(similarities) > 0 {
-					similaritiesMessage = "Here is some context that might be useful:\n"
-					for _, similarity := range similarities {
-						similaritiesMessage += fmt.Sprintf("- %s\n", similarity.Prompt)
-					}
-					sorcererAgentMessages = []openai.ChatCompletionMessageParamUnion{
-						openai.SystemMessage(similaritiesMessage),
-						openai.UserMessage(content.Input),
-					}
-				} else {
-					fmt.Println("📝 No similarities found.")
-					sorcererAgentMessages = []openai.ChatCompletionMessageParamUnion{
-						openai.UserMessage(content.Input),
-					}					
-				}
+				ui.Println(ui.Red, "Error:", err)
 			}
 
 			// NOTE: RunStreams adds the messages to the agent's memory
 			_, err = selectedAgent.RunStream(sorcererAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				msg.DisplayHistory(selectedAgent)
+			}
+
+			fmt.Println()
+			fmt.Println()
+
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: **MERCHANT** + [RAG]
+		// ---------------------------------------------------------
+		case merchantAgent.GetName():
+			ui.Println(ui.Cyan, "<", selectedAgent.GetName(), "speaking...>")
+
+			// ---------------------------------------------------------
+			// [RAG] SIMILARITY SEARCH:
+			// ---------------------------------------------------------
+			merchantAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, merchantAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// NOTE: RunStreams adds the messages to the agent's memory
+			_, err = selectedAgent.RunStream(merchantAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// DEBUG: display the messages history
+			if strings.HasPrefix(content.Input, "/debug") {
+				msg.DisplayHistory(selectedAgent)
+			}
+
+			fmt.Println()
+			fmt.Println()
+
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: **HEALER** + [RAG]
+		// ---------------------------------------------------------
+		case healerAgent.GetName():
+			ui.Println(ui.Magenta, "<", selectedAgent.GetName(), "speaking...>")
+
+			// ---------------------------------------------------------
+			// [RAG] SIMILARITY SEARCH:
+			// ---------------------------------------------------------
+			healerAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, healerAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			// NOTE: RunStreams adds the messages to the agent's memory
+			_, err = selectedAgent.RunStream(healerAgentMessages, func(content string) error {
 				fmt.Print(content)
 				return nil
 			})
@@ -391,6 +429,7 @@ func main() {
 		}
 	}
 }
+
 
 func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingController) func(string, string) (string, error) {
 
@@ -464,6 +503,40 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 	}
 }
 
+func generatePromptMessagesWithSimilarities(ctx context.Context, client *openai.Client, agentName, input string, similarityLimit float64, maxResults int) ([]openai.ChatCompletionMessageParamUnion, error) {
+	fmt.Printf("🔍 Searching for similar chunks to '%s'\n", input)
+
+	similarities, err := agents.SearchSimilarities(ctx, client, agentName, input, similarityLimit, maxResults)
+	if err != nil {
+		fmt.Println("🔴 Error searching for similarities:", err)
+		return []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage(input),
+		}, err
+	}
+
+	if len(similarities) > 0 {
+		similaritiesMessage := "Here is some context that might be useful:\n"
+		for _, similarity := range similarities {
+			similaritiesMessage += fmt.Sprintf("- %s\n", similarity.Prompt)
+		}
+		return []openai.ChatCompletionMessageParamUnion{
+			openai.SystemMessage(similaritiesMessage),
+			openai.UserMessage(input),
+		}, nil
+	} else {
+		fmt.Println("📝 No similarities found.")
+		return []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage(input),
+		}, nil
+	}
+}
+
+func displayFirstToolCallResult(results []string) {
+	fmt.Println(strings.Repeat("-", 50))
+	fmt.Println(results[0])
+	fmt.Println(strings.Repeat("-", 50))
+}
+
 func displayToolsIndex(toolsIndex []openai.ChatCompletionToolUnionParam) {
 	for _, tool := range toolsIndex {
 		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
@@ -476,10 +549,4 @@ func displayAgentsTeam() {
 		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
 	}
 	fmt.Println()
-}
-
-func displayFirstToolCallResult(results []string) {
-	fmt.Println(strings.Repeat("-", 50))
-	fmt.Println(results[0])
-	fmt.Println(strings.Repeat("-", 50))
 }

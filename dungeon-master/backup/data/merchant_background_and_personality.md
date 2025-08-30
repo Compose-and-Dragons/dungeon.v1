@@ -1,3 +1,7 @@
+# CHARACTER SHEET
+
+# Character Sheet: Galdor
+
 ## Kind
 Galdor is a dwarf of the dwarven race.
 

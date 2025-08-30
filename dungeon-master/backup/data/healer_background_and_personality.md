@@ -1,3 +1,7 @@
+# CHARACTER SHEET
+
+# Character Sheet: Liora
+
 ## Kind
 Liora is a half-elf of mixed elven and human heritage.
 
