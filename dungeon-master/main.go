@@ -5,7 +5,6 @@ import (
 	"dungeon-master/agents"
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
@@ -76,18 +75,20 @@ func main() {
 
 	toolsIndex = append(toolsIndex, speakToAnAgentTool)
 
-	displayToolsIndex(toolsIndex)
+	DisplayToolsIndex(toolsIndex)
 
 	// ---------------------------------------------------------
 	// AGENT: This is the Dungeon Master agent using tools
 	// ---------------------------------------------------------
 	dungeonMasterToolsAgentName := helpers.GetEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
+	dungeonMasterModeltemperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MASTER_MODEL_TEMPERATURE", "0.0"))
+
 
 	dungeonMasterToolsAgent, err := mu.NewAgent(ctx, dungeonMasterToolsAgentName,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
 			Model:       dungeonMasterModel,
-			Temperature: openai.Opt(0.0),
+			Temperature: openai.Opt(dungeonMasterModeltemperature),
 			ToolChoice: openai.ChatCompletionToolChoiceOptionUnionParam{
 				OfAuto: openai.String("auto"),
 			},
@@ -104,9 +105,9 @@ func main() {
 	dungeonMasterSystemInstructions := openai.SystemMessage(instructions)
 
 	// note used but could be useful later
-	conversationalMemory := []openai.ChatCompletionMessageParamUnion{
-		dungeonMasterSystemInstructions,
-	}
+	// conversationalMemory := []openai.ChatCompletionMessageParamUnion{
+	// 	dungeonMasterSystemInstructions,
+	// }
 
 	// ---------------------------------------------------------
 	// AGENT: This is the Ghost agent
@@ -156,7 +157,7 @@ func main() {
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
-	displayAgentsTeam()
+	DisplayAgentsTeam()
 
 	for {
 		var promptText string
@@ -203,32 +204,37 @@ func main() {
 		// ---------------------------------------------------------
 		// For DEBUG: [COMMAND] to print messages history
 		// ---------------------------------------------------------
-		if strings.HasPrefix(content.Input, "/messages") {
+		// if strings.HasPrefix(content.Input, "/messages") {
 
-			fmt.Println("📝 Messages history / Conversational memory:")
-			for i, message := range conversationalMemory {
-				printableMessage, err := msg.MessageToMap(message)
-				if err != nil {
-					fmt.Printf("Error converting message to map: %v\n", err)
-					continue
-				}
-				fmt.Println("-", i, printableMessage)
-			}
-			continue
+		// 	fmt.Println("📝 Messages history / Conversational memory:")
+		// 	for i, message := range conversationalMemory {
+		// 		printableMessage, err := msg.MessageToMap(message)
+		// 		if err != nil {
+		// 			fmt.Printf("Error converting message to map: %v\n", err)
+		// 			continue
+		// 		}
+		// 		fmt.Println("-", i, printableMessage)
+		// 	}
+		// 	continue
+		// }
+
+		// conversationalMemory = append(conversationalMemory, userMessage)
+
+		// DEBUG:
+		if strings.HasPrefix(content.Input, "/memory") {
+			msg.DisplayHistory(dungeonMasterToolsAgent)
 		}
-
-		conversationalMemory = append(conversationalMemory, userMessage)
 
 		// ---------------------------------------------------------
 		// Get the AGENTS team list
 		// ---------------------------------------------------------
 		if strings.HasPrefix(content.Input, "/agents") {
-			displayAgentsTeam()
+			DisplayAgentsTeam()
 			continue
 		}
 
 		if strings.HasPrefix(content.Input, "/tools") {
-			displayToolsIndex(toolsIndex)
+			DisplayToolsIndex(toolsIndex)
 			continue
 		}
 
@@ -245,13 +251,14 @@ func main() {
 
 			// Create executeFunction with MCP client option
 			// Tool execution callback
-			executeFn := executeFunction(mcpClient, thinkingCtrl)
+			executeFn := ExecuteFunction(mcpClient, thinkingCtrl)
 
 			dungeonMasterMessages := []openai.ChatCompletionMessageParamUnion{
 				dungeonMasterSystemInstructions,
 				userMessage,
 			}
 			// QUESTION: should I keep the last message?
+			// QUESTION: should I reset the messages to only keep the last message + system?
 
 			// TOOLS DETECTION:
 			_, toolCallsResults, assistantMessage, err := selectedAgent.DetectToolCalls(dungeonMasterMessages, executeFn)
@@ -263,22 +270,16 @@ func main() {
 
 			if len(toolCallsResults) > 0 {
 				// IMPORTANT: This is the answer from the [MCP] server
-				displayFirstToolCallResult(toolCallsResults)
+				DisplayMCPToolCallResult(toolCallsResults)
 			}
 
 			// ASSISTANT MESSAGE:
 			// This is the final answer from the agent
 
-			// TODO: improve the formatting of the assistant message
-			formattedMessage := formatAssistantMessage(assistantMessage)
-			ui.Println(ui.Green, formattedMessage)
-			fmt.Println()
-
-			// ui.PrintMarkdown(formattedMessage)
-			// fmt.Println()
+			DisplayDMResponse(assistantMessage)
 
 			// not used but could be useful later
-			conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
+			//conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
 
 		// ---------------------------------------------------------
 		// TALK TO: AGENT:: **GHOST** for [TESTING] only
@@ -311,7 +312,7 @@ func main() {
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			guardAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, guardAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			guardAgentMessages, err := GeneratePromptMessagesWithSimilarities(ctx, &client, guardAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
@@ -344,7 +345,7 @@ func main() {
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			sorcererAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, sorcererAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			sorcererAgentMessages, err := GeneratePromptMessagesWithSimilarities(ctx, &client, sorcererAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
@@ -377,7 +378,7 @@ func main() {
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			merchantAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, merchantAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			merchantAgentMessages, err := GeneratePromptMessagesWithSimilarities(ctx, &client, merchantAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
@@ -410,7 +411,7 @@ func main() {
 			// ---------------------------------------------------------
 			// [RAG] SIMILARITY SEARCH:
 			// ---------------------------------------------------------
-			healerAgentMessages, err := generatePromptMessagesWithSimilarities(ctx, &client, healerAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
+			healerAgentMessages, err := GeneratePromptMessagesWithSimilarities(ctx, &client, healerAgent.GetName(), content.Input, similaritySearchLimit, similaritySearchMaxResults)
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
@@ -440,8 +441,7 @@ func main() {
 	}
 }
 
-
-func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingController) func(string, string) (string, error) {
+func ExecuteFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingController) func(string, string) (string, error) {
 
 	return func(functionName string, arguments string) (string, error) {
 
@@ -513,7 +513,7 @@ func executeFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 	}
 }
 
-func generatePromptMessagesWithSimilarities(ctx context.Context, client *openai.Client, agentName, input string, similarityLimit float64, maxResults int) ([]openai.ChatCompletionMessageParamUnion, error) {
+func GeneratePromptMessagesWithSimilarities(ctx context.Context, client *openai.Client, agentName, input string, similarityLimit float64, maxResults int) ([]openai.ChatCompletionMessageParamUnion, error) {
 	fmt.Printf("🔍 Searching for similar chunks to '%s'\n", input)
 
 	similarities, err := agents.SearchSimilarities(ctx, client, agentName, input, similarityLimit, maxResults)
@@ -541,41 +541,29 @@ func generatePromptMessagesWithSimilarities(ctx context.Context, client *openai.
 	}
 }
 
-func displayFirstToolCallResult(results []string) {
-	fmt.Println(strings.Repeat("-", 3)+"[MCP RESPONSE]"+ strings.Repeat("-", 33))
+func DisplayMCPToolCallResult(results []string) {
+	fmt.Println(strings.Repeat("-", 3) + "[MCP RESPONSE]" + strings.Repeat("-", 33))
 	fmt.Println(results[0])
 	fmt.Println(strings.Repeat("-", 50))
 }
 
-func displayToolsIndex(toolsIndex []openai.ChatCompletionToolUnionParam) {
+func DisplayToolsIndex(toolsIndex []openai.ChatCompletionToolUnionParam) {
 	for _, tool := range toolsIndex {
 		ui.Printf(ui.Magenta, "Tool: %s - %s\n", tool.GetFunction().Name, tool.GetFunction().Description)
 	}
 	fmt.Println()
 }
 
-func displayAgentsTeam() {
+func DisplayAgentsTeam() {
 	for agentId, agent := range agentsTeam {
 		ui.Printf(ui.Cyan, "Agent ID: %s agent name: %s model: %s\n", agentId, agent.GetName(), agent.GetModel())
 	}
 	fmt.Println()
 }
 
-func formatAssistantMessage(message string) string {
-	// Supprimer les espaces en début et fin
-	message = strings.TrimSpace(message)
-	
-	// Remplacer les multiples sauts de ligne par un double saut de ligne
-	re := regexp.MustCompile(`\n\s*\n\s*\n+`)
-	message = re.ReplaceAllString(message, "\n\n")
-	
-	// Nettoyer les espaces multiples en fin de ligne
-	re = regexp.MustCompile(`[ \t]+\n`)
-	message = re.ReplaceAllString(message, "\n")
-	
-	// S'assurer qu'il n'y a pas plus de 2 sauts de ligne consécutifs
-	re = regexp.MustCompile(`\n{3,}`)
-	message = re.ReplaceAllString(message, "\n\n")
-	
-	return message
+func DisplayDMResponse(assistantMessage string) {
+	ui.Println(ui.Green, strings.Repeat("-", 3)+"[DM RESPONSE]"+strings.Repeat("-", 34))
+	fmt.Println(assistantMessage)
+	ui.Println(ui.Green,strings.Repeat("-", 50))
+	fmt.Println()
 }

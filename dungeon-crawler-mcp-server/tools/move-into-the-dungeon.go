@@ -42,14 +42,6 @@ func GetMovePlayerTool() mcp.Tool {
 
 }
 
-// TODO:
-/*
-- generate room name and description with a model
-- add monsters, items, and traps to rooms
-- handle special rooms (entrance, exit)
-
-*/
-
 func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, dungeonAgent mu.Agent) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
@@ -325,24 +317,29 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 			// BEGIN: Create Gold coins, potions, and items ⭐️
 			// ---------------------------------------------------------
-			magicPotionProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("MAGIC_POTION_PROBABILITY", "0.20"))
-			goldCoinsProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("GOLD_COINS_PROBABILITY", "0.20"))
-
-			// 100 x itemProbability % of chance to have an item in the room
 			var hasTreasure, hasMagicPotion bool
 			var regenerationHealth, goldCoins int
 
-			if rand.Float64() < magicPotionProbability {
-				hasMagicPotion = true
-				regenerationHealth = rand.Intn(20) + 5 // between 5 and 24 health points
-				fmt.Println("⏳✳️✳️✳️ adding 🧪POTION [", regenerationHealth, "] at coordinates:", newX, newY)
-			}
+			if !hasMonster && !hasNonPlayerCharacter {
+				magicPotionProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("MAGIC_POTION_PROBABILITY", "0.20"))
+				goldCoinsProbability := helpers.StringToFloat(helpers.GetEnvOrDefault("GOLD_COINS_PROBABILITY", "0.20"))
 
-			if rand.Float64() < goldCoinsProbability {
-				hasTreasure = true
-				goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
-				fmt.Println("⏳✳️✳️✳️ adding ⭐️GOLD COINS [", goldCoins, "] at coordinates:", newX, newY)
-			}
+				// 100 x itemProbability % of chance to have an item in the room
+
+				if rand.Float64() < magicPotionProbability {
+					hasMagicPotion = true
+					regenerationHealth = rand.Intn(20) + 5 // between 5 and 24 health points
+					fmt.Println("⏳✳️✳️✳️ adding 🧪POTION [", regenerationHealth, "] at coordinates:", newX, newY)
+				}
+
+				if !hasMagicPotion {
+					if rand.Float64() < goldCoinsProbability {
+						hasTreasure = true
+						goldCoins = rand.Intn(50) + 10 // between 10 and 59 gold coins
+						fmt.Println("⏳✳️✳️✳️ adding ⭐️GOLD COINS [", goldCoins, "] at coordinates:", newX, newY)
+					}
+				}
+			} 
 
 			// ---------------------------------------------------------
 			// END: Create Gold coins, potions, and items

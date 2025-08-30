@@ -169,6 +169,8 @@ services:
         Use all the provided data to make the adventure, the rooms description... engaging and coherent.
         The response format is done in makrdown, well structured with titles, subtitles, bullet points...
 
+      DUNGEON_MASTER_MODEL_TEMPERATURE: 0.7 # Theoretically 0.0 
+
       # ---------------------------------------------------------
       # Similarity search settings
       # ---------------------------------------------------------
