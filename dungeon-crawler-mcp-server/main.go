@@ -222,6 +222,14 @@ func main() {
 	getDungeonMapToolInstance := tools.GetDungeonMapTool()
 	s.AddTool(getDungeonMapToolInstance, tools.GetDungeonMapToolHandler(&currentPlayer, &dungeon))
 
+	// Collect Gold
+	collectGoldToolInstance := tools.CollectGoldTool()
+	s.AddTool(collectGoldToolInstance, tools.CollectGoldToolHandler(&currentPlayer, &dungeon))
+
+	// Collect Magic Potion
+	collectMagicPotionToolInstance := tools.CollectMagicPotionTool()
+	s.AddTool(collectMagicPotionToolInstance, tools.CollectMagicPotionToolHandler(&currentPlayer, &dungeon))
+
 	// ---------------------------------------------------------
 	// Start the HTTP server
 	// ---------------------------------------------------------
