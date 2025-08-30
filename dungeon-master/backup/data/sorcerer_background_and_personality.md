@@ -1,3 +1,7 @@
+# CHARACTER SHEET
+
+# Human with the Name Elara
+
 ## Kind
 Human
 

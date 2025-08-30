@@ -461,6 +461,46 @@
             "border": "1px solid #199E08",
             "borderRadius": "3px",
             "isWholeLine": false
+        },
+        {
+            "text": "**GHOST**",
+            "color": "#F7F3F3",
+            "backgroundColor": "#6B6D70",
+            "border": "1px solid #6B6D70",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "**GUARD**",
+            "color": "#ffffff",
+            "backgroundColor": "#0062FF",
+            "border": "1px solid #0062FF",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },    
+        {
+            "text": "**SORCERER**",
+            "color": "#ffffff",
+            "backgroundColor": "#D80C8A",
+            "border": "1px solid #D80C8A",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },    
+        {
+            "text": "**MERCHANT**",
+            "color": "#ffffff",
+            "backgroundColor": "#239648",
+            "border": "1px solid #239648",
+            "borderRadius": "3px",
+            "isWholeLine": false
         },  
+        {
+            "text": "**HEALER**",
+            "color": "#ffffff",
+            "backgroundColor": "#B76167",
+            "border": "1px solid #B76167",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                               
     ]
 }
