@@ -19,6 +19,8 @@ FROM alpine:latest
 # RUN apk --no-cache add ca-certificates wget 
 WORKDIR /app
 COPY --from=builder /app/dungeon-master .
-COPY data ./data
+
+# I use volume instead of copying the data
+#COPY data ./data
 
 #ENTRYPOINT ["./dungeon-master"]

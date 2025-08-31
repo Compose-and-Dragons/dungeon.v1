@@ -210,6 +210,9 @@ services:
       HEALER_SYSTEM_INSTRUCTIONS_PATH: ./data/healer_system_instructions.md
       HEALER_CONTEXT_PATH: ./data/healer_background_and_personality.md
 
+    volumes:
+      - ./dungeon-master/data:/app/data
+
     models:
       dungeon-master-model:
         endpoint_var: MODEL_RUNNER_BASE_URL
