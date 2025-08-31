@@ -1,8 +1,15 @@
 # Dungeon v1
+> This is a one player dungeon game.
+
+## Dependencies
+
+### For presenting
+
+#### VSCode settings and extensions
 
 `.vscode` directory is **mandatory**. Some settings and extensions are used to improve the display of documents and source code and to facilitate the presentation.
 
-> This is a one player dungeon game using.
+
 
 ## Projects
 
