@@ -12,5 +12,6 @@ type Player struct {
 	Strength  int      `json:"strength"`
 	Experience int      `json:"experience"`
 	GoldCoins int      `json:"gold_coins"`
+	IsDead   bool     `json:"is_dead"`
 }
 

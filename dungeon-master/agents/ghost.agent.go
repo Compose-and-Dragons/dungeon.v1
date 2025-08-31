@@ -15,6 +15,61 @@ type GhostAgent struct {
 	responseFormat openai.ChatCompletionNewParamsResponseFormatUnion
 }
 
+// AddMessage implements mu.Agent.
+func (g *GhostAgent) AddMessage(message openai.ChatCompletionMessageParamUnion) {
+	panic("unimplemented")
+}
+
+// AddMessages implements mu.Agent.
+func (g *GhostAgent) AddMessages(messages []openai.ChatCompletionMessageParamUnion) {
+	panic("unimplemented")
+}
+
+// GetFirstNMessages implements mu.Agent.
+func (g *GhostAgent) GetFirstNMessages(n int) []openai.ChatCompletionMessageParamUnion {
+	panic("unimplemented")
+}
+
+// GetLastMessage implements mu.Agent.
+func (g *GhostAgent) GetLastMessage() (openai.ChatCompletionMessageParamUnion, bool) {
+	panic("unimplemented")
+}
+
+// GetLastNMessages implements mu.Agent.
+func (g *GhostAgent) GetLastNMessages(n int) []openai.ChatCompletionMessageParamUnion {
+	panic("unimplemented")
+}
+
+// PrependMessage implements mu.Agent.
+func (g *GhostAgent) PrependMessage(message openai.ChatCompletionMessageParamUnion) {
+	panic("unimplemented")
+}
+
+// PrependMessages implements mu.Agent.
+func (g *GhostAgent) PrependMessages(messages []openai.ChatCompletionMessageParamUnion) {
+	panic("unimplemented")
+}
+
+// RemoveFirstMessage implements mu.Agent.
+func (g *GhostAgent) RemoveFirstMessage() {
+	panic("unimplemented")
+}
+
+// RemoveLastMessage implements mu.Agent.
+func (g *GhostAgent) RemoveLastMessage() {
+	panic("unimplemented")
+}
+
+// RemoveLastNMessages implements mu.Agent.
+func (g *GhostAgent) RemoveLastNMessages(n int) {
+	panic("unimplemented")
+}
+
+// ResetMessages implements mu.Agent.
+func (g *GhostAgent) ResetMessages() {
+	panic("unimplemented")
+}
+
 // GetName implements mu.Agent.
 func (g *GhostAgent) GetName() string {
 	return g.name
@@ -119,9 +174,7 @@ func (g *GhostAgent) GetModel() string {
 // SetModel implements mu.Agent.
 func (g *GhostAgent) SetModel(model string) {
 	// No-op for ghost agent
-}	
-
-
+}
 
 // NewFakeAgent creates a new fake agent instance
 func NewGhostAgent(name string) mu.Agent {

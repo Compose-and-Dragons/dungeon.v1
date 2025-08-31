@@ -268,7 +268,15 @@
             "border": "1px solid #2887C2",
             "borderRadius": "3px",
             "isWholeLine": false
-        },                  
+        },  
+        {
+            "text": "[VECTOR STORE]",
+            "color": "#ffffff",
+            "backgroundColor": "#CB0FAF",
+            "border": "1px solid #CB0FAF",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                        
         {
             "text": "TALK TO:",
             "color": "#ffffff",
@@ -285,6 +293,22 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },
+        {
+            "text": "EMBEDDING AGENT:",
+            "color": "#ffffff",
+            "backgroundColor": "#055C3F",
+            "border": "1px solid #055C3F",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "TOOLS AGENT:",
+            "color": "#ffffff",
+            "backgroundColor": "#EB1090",
+            "border": "1px solid #EB1090",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                 
         {
             "text": "AGENTS:",
             "color": "#ffffff",

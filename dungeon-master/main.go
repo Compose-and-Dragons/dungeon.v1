@@ -104,11 +104,6 @@ func main() {
 	instructions := fmt.Sprintf(`Your name is "%s the Dungeon Master".`, dungeonMasterToolsAgentName) + "\n" + helpers.GetEnvOrDefault("DUNGEON_MASTER_SYSTEM_INSTRUCTIONS", dungeonMasterToolsAgentName)
 	dungeonMasterSystemInstructions := openai.SystemMessage(instructions)
 
-	// note used but could be useful later
-	// conversationalMemory := []openai.ChatCompletionMessageParamUnion{
-	// 	dungeonMasterSystemInstructions,
-	// }
-
 	// ---------------------------------------------------------
 	// AGENT: This is the Ghost agent
 	// ---------------------------------------------------------
@@ -201,24 +196,6 @@ func main() {
 			*/
 		}
 
-		// ---------------------------------------------------------
-		// For DEBUG: [COMMAND] to print messages history
-		// ---------------------------------------------------------
-		// if strings.HasPrefix(content.Input, "/messages") {
-
-		// 	fmt.Println("📝 Messages history / Conversational memory:")
-		// 	for i, message := range conversationalMemory {
-		// 		printableMessage, err := msg.MessageToMap(message)
-		// 		if err != nil {
-		// 			fmt.Printf("Error converting message to map: %v\n", err)
-		// 			continue
-		// 		}
-		// 		fmt.Println("-", i, printableMessage)
-		// 	}
-		// 	continue
-		// }
-
-		// conversationalMemory = append(conversationalMemory, userMessage)
 
 		// DEBUG:
 		if strings.HasPrefix(content.Input, "/memory") {
@@ -275,11 +252,7 @@ func main() {
 
 			// ASSISTANT MESSAGE:
 			// This is the final answer from the agent
-
 			DisplayDMResponse(assistantMessage)
-
-			// not used but could be useful later
-			//conversationalMemory = append(conversationalMemory, openai.AssistantMessage(assistantMessage))
 
 		// ---------------------------------------------------------
 		// TALK TO: AGENT:: **GHOST** for [TESTING] only

@@ -230,6 +230,10 @@ func main() {
 	collectMagicPotionToolInstance := tools.CollectMagicPotionTool()
 	s.AddTool(collectMagicPotionToolInstance, tools.CollectMagicPotionToolHandler(&currentPlayer, &dungeon))
 
+	// Fight Monster
+	fightMonsterToolInstance := tools.FightMonsterTool()
+	s.AddTool(fightMonsterToolInstance, tools.FightMonsterToolHandler(&currentPlayer, &dungeon))
+
 	// ---------------------------------------------------------
 	// Start the HTTP server
 	// ---------------------------------------------------------

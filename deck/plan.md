@@ -13,3 +13,9 @@
 
 - Present the full technical architecture of the game
 - Play with the game in CLI
+
+
+principe:
+- Vanilla curl
+- Vanilla Go OpenAI SDK
+- Micro-Agent

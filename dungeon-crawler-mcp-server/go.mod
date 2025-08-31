@@ -60,6 +60,6 @@ require (
 
 require (
 	github.com/mark3labs/mcp-go v0.38.0
-	github.com/micro-agent/micro-agent-go v0.0.8
+	github.com/micro-agent/micro-agent-go v0.0.9
 	github.com/openai/openai-go/v2 v2.1.1
 )

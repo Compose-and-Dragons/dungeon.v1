@@ -113,7 +113,8 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 			// Set the messages to use the room system instruction
 			// IMPORTANT: Reset the previous messages
-			dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
+			//dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
+			dungeonAgent.ResetMessages()
 
 			// TODO: use a stream completion to display it into the logs
 			response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{

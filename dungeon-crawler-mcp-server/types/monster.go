@@ -28,4 +28,5 @@ type Monster struct {
 	// Position   Coordinates `json:"position"`
 	// Experience int    `json:"experience"`
 	// GoldCoins  int    `json:"gold_coins"`
+	IsDead     bool   `json:"is_dead"`
 }
