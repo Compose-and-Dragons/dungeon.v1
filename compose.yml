@@ -171,6 +171,7 @@ services:
       # ---------------------------------------------------------
       SIMILARITY_LIMIT: 0.5
       SIMILARITY_MAX_RESULTS: 2
+      VECTOR_STORES_PATH: ./data
 
       # ---------------------------------------------------------
       # Guard settings
