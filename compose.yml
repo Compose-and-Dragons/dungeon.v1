@@ -9,6 +9,7 @@ services:
     image: docker/mcp-gateway:latest
     ports:
       - 9011:9011
+    use_api_socket: true
     command:
       - --port=9011
       - --transport=streaming
@@ -214,7 +215,8 @@ services:
       # ---------------------------------------------------------
       # End of level Boss settings
       # ---------------------------------------------------------
-      BOSS_AGENT_URL: http://dungeon-end-of-level-boss:8080
+      BOSS_REMOTE_AGENT_URL: http://dungeon-end-of-level-boss:8080
+      
       BOSS_NAME: Shesepankh
       BOSS_RACE: Sphinx
 
@@ -267,7 +269,7 @@ services:
       # ---------------------------------------------------------
       # Boss settings
       # ---------------------------------------------------------
-      BOSS_AGENT_HTTP_PORT: 8080
+      BOSS_REMOTE_AGENT_HTTP_PORT: 8080
       BOSS_MODEL_TEMPERATURE: 0.7
       #BOSS_NAME: Abou el-Hol
       # Le Sphinx de Gizeh
@@ -326,4 +328,5 @@ models:
 
   # For the remote agent
   boss-model:
-    model: hf.co/quantfactory/nemotron-mini-4b-instruct-gguf:q4_k_m
+    #model: hf.co/quantfactory/nemotron-mini-4b-instruct-gguf:q4_k_m
+    model: hf.co/menlo/lucy-gguf:q8_0

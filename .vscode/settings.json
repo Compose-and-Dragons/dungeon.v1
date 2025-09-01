@@ -294,6 +294,22 @@
             "isWholeLine": false
         },
         {
+            "text": "[REMOTE]",
+            "color": "#000000",
+            "backgroundColor": "#0FD3E1",
+            "border": "1px solid #0FD3E1",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
+            "text": "[FAKE]",
+            "color": "#000000",
+            "backgroundColor": "#B0EABD",
+            "border": "1px solid #B0EABD",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },          
+        {
             "text": "EMBEDDING AGENT:",
             "color": "#ffffff",
             "backgroundColor": "#055C3F",
@@ -525,6 +541,14 @@
             "border": "1px solid #B76167",
             "borderRadius": "3px",
             "isWholeLine": false
-        },                               
+        },       
+        {
+            "text": "**BOSS**",
+            "color": "#ffffff",
+            "backgroundColor": "#D71C29",
+            "border": "1px solid #D71C29",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                                  
     ]
 }

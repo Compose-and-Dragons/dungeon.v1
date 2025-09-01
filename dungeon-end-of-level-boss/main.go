@@ -26,7 +26,7 @@ func main() {
 
 	similaritySearchLimit := helpers.StringToFloat(helpers.GetEnvOrDefault("SIMILARITY_LIMIT", "0.5"))
 	similaritySearchMaxResults := helpers.StringToInt(helpers.GetEnvOrDefault("SIMILARITY_MAX_RESULTS", "2"))
-	httpPort := helpers.GetEnvOrDefault("BOSS_AGENT_HTTP_PORT", "8080")
+	httpPort := helpers.GetEnvOrDefault("BOSS_REMOTE_AGENT_HTTP_PORT", "8080")
 
 	client := openai.NewClient(
 		option.WithBaseURL(llmURL),

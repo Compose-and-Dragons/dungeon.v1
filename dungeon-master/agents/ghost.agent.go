@@ -15,6 +15,16 @@ type GhostAgent struct {
 	responseFormat openai.ChatCompletionNewParamsResponseFormatUnion
 }
 
+// NewFakeAgent creates a new fake agent instance
+func NewGhostAgent(name string) mu.Agent {
+	return &GhostAgent{
+		name:     name,
+		messages: []openai.ChatCompletionMessageParamUnion{},
+	}
+}
+
+
+
 // GetDescription implements mu.Agent.
 func (g *GhostAgent) GetDescription() string {
 	panic("unimplemented")
@@ -196,13 +206,6 @@ func (g *GhostAgent) SetModel(model string) {
 	// No-op for ghost agent
 }
 
-// NewFakeAgent creates a new fake agent instance
-func NewGhostAgent(name string) mu.Agent {
-	return &GhostAgent{
-		name:     name,
-		messages: []openai.ChatCompletionMessageParamUnion{},
-	}
-}
 
 // simulateResponse generates a fake AI response based on the input
 func (g *GhostAgent) simulateResponse(userMessage string) string {
