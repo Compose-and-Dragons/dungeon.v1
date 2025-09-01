@@ -130,6 +130,10 @@ github.com/micro-agent/micro-agent-go v0.0.8 h1:JR1c0vi1d49Gcw2Ml7QYn4oxUOtVxhb+
 github.com/micro-agent/micro-agent-go v0.0.8/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
 github.com/micro-agent/micro-agent-go v0.0.9 h1:TdY0QLPgQS9MXBktjexmJRHDq9c8Qh/2EATSQKLRiF4=
 github.com/micro-agent/micro-agent-go v0.0.9/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
+github.com/micro-agent/micro-agent-go v0.1.0 h1:AqykVzJ84xuMhoxxzscf0p+cfEUrMCnz8QRDEG/OulQ=
+github.com/micro-agent/micro-agent-go v0.1.0/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
+github.com/micro-agent/micro-agent-go v0.1.1 h1:Nq6x65sDRGF6jaJd6ubCh2bBl+XSV/jfNq2CWRO2zQ8=
+github.com/micro-agent/micro-agent-go v0.1.1/go.mod h1:jZPDjbooEniLykr8ff7OdF7yImQIkuT1M+eSq6QK4qs=
 github.com/microcosm-cc/bluemonday v1.0.27 h1:MpEUotklkwCSLeH+Qdx1VJgNqLlpY2KXwXFM08ygZfk=
 github.com/microcosm-cc/bluemonday v1.0.27/go.mod h1:jFi9vgW+H7c3V0lb6nR74Ib/DIB5OBs92Dimizgw2cA=
 github.com/mitchellh/hashstructure/v2 v2.0.2 h1:vGKWl0YJqUNxE8d+h8f6NJLcCJrgbhC4NcD46KavDd4=

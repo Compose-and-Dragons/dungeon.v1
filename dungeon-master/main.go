@@ -83,7 +83,6 @@ func main() {
 	dungeonMasterToolsAgentName := helpers.GetEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
 	dungeonMasterModeltemperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MASTER_MODEL_TEMPERATURE", "0.0"))
 
-
 	dungeonMasterToolsAgent, err := mu.NewAgent(ctx, dungeonMasterToolsAgentName,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
@@ -105,7 +104,7 @@ func main() {
 	dungeonMasterSystemInstructions := openai.SystemMessage(instructions)
 
 	// ---------------------------------------------------------
-	// AGENT: This is the Ghost agent
+	// [FAKE] AGENT: This is the Ghost agent
 	// ---------------------------------------------------------
 	// REMARK: Ghost agent is for testing only.
 	// IMPORTANT: keep the name simple in only one word
@@ -133,6 +132,14 @@ func main() {
 	healerAgent := agents.GetHealerAgent(ctx, client)
 
 	// ---------------------------------------------------------
+	// [REMOTE] AGENT: This is the Boss agent
+	// ---------------------------------------------------------
+	bossAgent := agents.NewBossAgent(
+		helpers.GetEnvOrDefault("BOSS_NAME", "Boss"),
+		helpers.GetEnvOrDefault("BOSS_REMOTE_AGENT_URL", "http://localhost:8080/agent/boss"),
+	)
+
+	// ---------------------------------------------------------
 	// AGENTS: Creating the agents team of the dungeon
 	// ---------------------------------------------------------
 	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
@@ -141,6 +148,7 @@ func main() {
 	idSorcererAgent := strings.ToLower(sorcererAgent.GetName())
 	idMerchantAgent := strings.ToLower(merchantAgent.GetName())
 	idHealerAgent := strings.ToLower(healerAgent.GetName())
+	idBossAgent := strings.ToLower(bossAgent.GetName())
 
 	agentsTeam = map[string]mu.Agent{
 		idDungeonMasterToolsAgent: dungeonMasterToolsAgent,
@@ -149,6 +157,7 @@ func main() {
 		idSorcererAgent:           sorcererAgent,
 		idMerchantAgent:           merchantAgent,
 		idHealerAgent:             healerAgent,
+		idBossAgent:               bossAgent,
 	}
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
@@ -195,7 +204,6 @@ func main() {
 				- The loop condition is evaluated normally
 			*/
 		}
-
 
 		// DEBUG:
 		if strings.HasPrefix(content.Input, "/memory") {
@@ -408,6 +416,28 @@ func main() {
 			fmt.Println()
 			fmt.Println()
 
+		// ---------------------------------------------------------
+		// TALK TO: AGENT:: **BOSS**
+		// ---------------------------------------------------------
+		case bossAgent.GetName():
+			ui.Println(ui.Red, "<", selectedAgent.GetName(), "speaking...>")
+
+			bossAgentMessages := []openai.ChatCompletionMessageParamUnion{
+				openai.UserMessage(content.Input),
+			}
+
+			_, err = selectedAgent.RunStream(bossAgentMessages, func(content string) error {
+				fmt.Print(content)
+				return nil
+			})
+
+			if err != nil {
+				ui.Println(ui.Red, "Error:", err)
+			}
+
+			fmt.Println()
+			fmt.Println()
+
 		default:
 			ui.Printf(ui.Cyan, "\n🤖 %s is thinking...\n", selectedAgent.GetName())
 		}
@@ -537,6 +567,6 @@ func DisplayAgentsTeam() {
 func DisplayDMResponse(assistantMessage string) {
 	ui.Println(ui.Green, strings.Repeat("-", 3)+"[DM RESPONSE]"+strings.Repeat("-", 34))
 	fmt.Println(assistantMessage)
-	ui.Println(ui.Green,strings.Repeat("-", 50))
+	ui.Println(ui.Green, strings.Repeat("-", 50))
 	fmt.Println()
 }
