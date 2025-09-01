@@ -438,7 +438,6 @@ Current Position: (2,1) - The Whispering Shadows
 ---[DM RESPONSE]----------------------------------
 The dungeon map has been generated, and here it is:
 
-```
     0       1       2       3       
   ┌───────┬───────┬───────┬───────┐
 3 │ ???   │ ???   │ ???   │ ???   │
@@ -457,7 +456,7 @@ The dungeon map has been generated, and here it is:
   │ [E]   │       │       │       │
   │  ✓    │       │       │       │
   └───────┴───────┴───────┴───────┘
-```
+
 
 Legend:
 - [@] - Player (Bob the Warrior)
