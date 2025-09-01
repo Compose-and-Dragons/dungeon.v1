@@ -1,88 +1,88 @@
 # Compose and Dragons
 
-## VSCode Setup
+## Setup de VSCode
 
-The `.vscode` folder is **mandatory**. Certain settings and extensions are used to improve document and source code display and facilitate presentation.
+Le dossier `.vscode` est **obligatoire**. Certains réglages et extensions sont utilisés pour améliorer l'affichage des documents et du code source et pour faciliter la présentation.
 
-## Launching the Docker Compose Project
+## Lancement du projet Docker Compose
 
-At the project root, run the following command to start the Docker containers:
+À la racine du projet, lancer la commande suivante pour démarrer les conteneurs Docker :
 ```bash
 docker compose up --build -d
 docker compose logs -f mcp-dungeon mcp-gateway dungeon-end-of-level-boss
 ```
-> Or use `build-start-dungeon.sh`
+> Ou utiliser `build-start-dungeon.sh`
 
-### What is being launched?
+### Qu'est-ce qui est lancé ?
 
 ```bash
 docker compose ps --services
 ```
 
-- `mcp-dungeon` (project: `dungeon-crawler-mcp-server`): the custom MCP server for the dungeon game. (transport used: Streamable HTTP)
-  - The server is started automatically
-- `mcp-gateway`: the MCP Gateway server that allows connection to the `mcp-dungeon` MCP server and potentially other MCP servers.
-  - The gateway is started automatically
-- `dungeon-end-of-level-boss` (project: `dungeon-end-of-level-boss`): a **"functional"** "independent" AI agent that uses 2 technical agents (1 for chat completion, the other for RAG).
-  - This is an "End-of-level Boss" NPC, named **"Shesepankh"** who will be used at the dungeon exit.
-  - The agent configuration data is in the `dungeon-end-of-level-boss/data` folder
-  - The agent is started automatically: on first startup, the agent will build the vector store in a JSON file from the configuration data. This may take a moment. It will then be instantaneous on subsequent startups.
-- `dungeon-master` (project: `dungeon-master`): it is composed of **multiple** **"functional"** AI agents:
-  - **"Zephyr"**: can be considered the "dungeon master" who manages the game state and interacts with the player.
-    - The container is started but the `dungeon-master` program is **not** launched automatically.
-    - It will detect player commands and call other **"functional"** agents if necessary.
-    - It will use MCP Tools from the `mcp-dungeon` MCP server to respond to player actions.
-    - It uses 1 technical agent (1 for chat completion & tool call detection).
-  - The other **"functional"** agents (NPCs) are invoked by "Zephyr" **on demand** from the player.
-    - **"Galdor"**: an NPC Merchant
-    - **"Elara"**: an NPC Sorceress
-    - **"Thrain"**: an NPC Guardian
-    - **"Liora"**: an NPC Healer
-    - Each of them uses 2 technical agents (1 for chat completion, the other for RAG).
-    - ✋👻 *there is also a "Ghost agent" which is a fake AI agent for testing purposes - no utility for gameplay*.
+- `mcp-dungeon` (projet: `dungeon-crawler-mcp-server`) : le serveur MCP personnalisé pour le jeu de donjon. (transport utilise: Streamable HTTP)
+  - Le serveur est lancé automatiquement
+- `mcp-gateway` : le serveur MCP Gateway qui permet de se connecter au serveur MCP `mcp-dungeon` et potentiellement à d'autres serveurs MCP.
+  - La gateway est lancée automatiquement
+- `dungeon-end-of-level-boss` (projet: `dungeon-end-of-level-boss`) : un agent d'IA **"fonctionnel"** "indépendant" qui utilise 2 agents techniques (1 pour la complétion de chat, l'autre pour le RAG).
+  - C'est un PNJ "Boss de fin de niveau", nommé **"Shesepankh*"** qui sera utilisé à la sortie du donjon.
+  - Les données de configuration de l'agent sont dans le dossier `dungeon-end-of-level-boss/data`
+  - L'agent est lancé automatiquement: au 1er démarrage, l'agent va construire le vector store dans un fichier JSON à partir des données de configuration. Cela peut prendre un petit moment. Ce sera ensuite instantané aux prochains démarrages.
+- `dungeon-master` (projet: `dungeon-master`) : il est composé de **plusieurs** agents d'IA **"fonctionnels"**:
+  - **"Zephyr"** : on peut considérer que c'est le "maître du donjon" (Dungeon Master) qui gère l'état du jeu et interagit avec le joueur.
+    - Le container est démarré mais le programme `dungeon-master` n'est **pas** lancé automatiquement.
+    - Il va détecter les commandes du joueur et faire appel aux autres agents **"fonctionnels"** si nécessaire.
+    - Il va utiliser les MCP Tools du serveur MCP `mcp-dungeon` pour répondre aux actions du joueur.
+    - Il utilise 1 agent technique (1 pour la complétion de chat & la détection des tool calls).
+  - Les autres agents **"fonctionnels"** (les PNJ) sont invoqués par "Zephyr" **à la demande** du joueur.
+    - **"Galdor"** : un PNJ Marchand
+    - **"Elara"** : une PNJ Sorcière
+    - **"Thrain"** : un PNJ Guardien
+    - **"Liora"** : une PNJ Guérisseuse
+    - Chacun d'eux utilise 2 agents techniques (1 pour la complétion de chat, l'autre pour le RAG).
+    - ✋👻 *il existe aussi un "Ghost agent" qui est un fake d'agent IA à destination de tests - pas d'utilité pour le gameplay*.
 
-### Launching the "Zephyr" agent (the Dungeon Master with user interface)
+### Lancement de l'agent "Zephyr" (le Dungeon Master avec l'interface utilisateur)
 
-To launch the user interface, execute the following command in a new terminal:
+Pour lancer l'inteface utilisateur, il faut exécuter la commande suivante dans un nouveau terminal :
 ```bash
 docker attach $(docker compose ps -q dungeon-master)
 ```
-On first startup, the 4 NPC agents will each build a vector store in a JSON file from configuration data (present in the `dungeon-master/data` folder). This may take a moment. It will then be instantaneous on subsequent startups.
+Au 1er démarrage, les 4 agents PNJ vont chacun construire un vector store dans un fichier JSON à partir des données de configuration (présentes dans le dossier `dungeon-master/data`). Cela peut prendre un petit moment. Ce sera ensuite instantané aux prochains démarrages.
 
-## Game Operation Principle
+## Principe de fonctionnement du jeu
 
-- The dungeon is extremely simple: a 4x4 square. (configurable in the `compose.yml` file)
-- The 4 NPCs as well as the end-level Boss are placed in advance in specific rooms.
-  - This position configuration is done in the `compose.yml` file
-- We use the "Dungeon Crawler" principle (dungeon exploration) with dynamically generated rooms:
-  - Once a room is generated, it is stored in the `mcp-dungeon` MCP server (tool: `store_room`) and will no longer be modified (the player can return to the room).
-  - When generating a room, we can also generate:
-    - objects (potions, gold coins) which are stored in the `mcp-dungeon` MCP server.
-    - enemies (monsters) which are also stored in the `mcp-dungeon` MCP server.
-    - The player can interact with objects and enemies (combat, collect objects, etc.)
-- The player can move in 4 directions (north, south, east, west) and interact with NPCs.
-- The goal of the game is to find and defeat the end-level Boss (**Shesepankh**) who is located in a specific room.
-- **[🚧 not yet implemented (1)]** The player will collect information from NPCs that will be useful during their discussion with **Shesepankh**. The player will therefore need to meet all NPCs and ask them the right questions.
-- **[🚧 not yet implemented (2)]** The player will need to give the collected information to **Shesepankh** for her to agree to let them exit.
+- Le donjon est extrêmement simple: un carré de 4x4. (paramétrable dans le fichier `compose.yml`)
+- Les 4 PMJs ainsi que le Boss de fin de niveau sont placé à l'avance dans des pièces spécifiques.
+  - Ce paramétrage de positions se fait dans le fichier `compose.yml`
+- On utilise le principe du "Dungeon Crawler" (exploration de donjon) avec des pièces générées dynamiquement:
+  - Une fois une pièce générée, elle est stockée dans le serveur MCP `mcp-dungeon` (outil: `store_room`) et ne sera plus modifiée (le joueur peut revenir dans la pièce).
+  - Lors de la génération d'une pièce, on peut aussi génèrer :
+    - objets (potions, pièces d'or) qui sont stockés dans le serveur MCP `mcp-dungeon`.
+    - ennemis (des monstres) qui sont aussi stockés dans le serveur MCP `mcp-dungeon`.
+    - Le joueur peut interagir avec les objets et les ennemis (combat, ramasser des objets, etc.)
+- Le joueur peut se déplacer dans les 4 directions (nord, sud, est, ouest) et interagir avec les PNJs.
+- Le but du jeu est de trouver et vaincre le Boss de fin de niveau (**Shesepankh**) qui se trouve dans une pièce spécifique.
+- **[🚧 pas encore implémenté (1)]** Le joueur va collecter auprès des PNJs des informations qui lui serviront lors de sa discussion avec **Shesepankh**. Il faudra donc que le joueur rencontre tous les PNJs et leur pose les bonnes questions.
+- **[🚧 pas encore implémenté (2)]** Le joueur devra donner les informations collectées à **Shesepankh** pour qu'elle accepte de le laisser sortir.
 
-> - (1): this should be possible with prompts only.
-> - (2): this should be possible with prompts + MCP tool(s).
+> - (1): cela doit pouvoir se faire uniquement à base de prompt.
+> - (2): cela doit pouvoir se faire à base de prompt + MCP tool(s).
 
-## Game Flow
+## Déroulement d'une partie
 
-1. Launch the Docker Compose project (see above)
-2. ⏳ Wait 
-3. Launch the "Zephyr" agent (the Dungeon Master with user interface) (see above)
-4. The game begins, the player is in the starting room (0,0)
+1. Lancer le projet Docker Compose (voir plus haut)
+2. ⏳ Patienter 
+3. Lancer l'agent "Zephyr" (le Dungeon Master avec l'interface utilisateur) (voir plus haut)
+4. Le jeu commence, le joueur se trouve dans la pièce de départ (0,0)
 
-### At game launch (Dungeon Master)
+### Au lancement du jeu (du Dungeon Master)
 
 ```
 docker attach $(docker compose ps -q dungeon-master)
 /app # ./dungeon-master
 ```
 
-**If everything goes well**, you should see a display similar to this:
+**Si tout va bien**, vous devriez avoir un affichage similaire à celui-ci:
 ```
 🌍 LLM URL: http://model-runner.docker.internal/engines/v1/
 🌍 MCP Host: http://mcp-gateway:9011/mcp
@@ -130,12 +130,12 @@ Agent ID: shesepankh agent name: Shesepankh model: Remote Model
 ┃                                                                                                                                                                                                                                                            
 alt+enter / ctrl+j new line • enter submit
 ```
-> - By default the selected agent to converse with you is "Zephyr"
-> - 👋 For now it logs a lot of debug messages (DEBUG level) - to be cleaned up... Or not.
+> - Par défaut l'agent sélectionné pour converser avec vous est "Zephyr"
+> - 👋 Pour le moment ça log un paquet de messages de debug (niveau DEBUG) - à nettoyer... Ou pas.
 
-### Character Creation
+### Création du personnage
 
-You must start by creating a character by entering their name. For example:
+Il faut commencer par créer un personnage en entrant son nom. Par exemple:
 
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>                                                                                                    
@@ -180,9 +180,9 @@ Where would you like to go? Would you like to look around the room or move in a 
 ┃
 ```
 
-### List of Available MCP Tools
+### Liste des outils MCP disponibles
 
-🎉 You can now move around the dungeon! And you have access to several MCP tools to interact with the dungeon:
+🎉 Vous pouvez maintenant vous déplacer dans le donjon ! Et vous avez accès à plusieurs outils MCP pour interagir avec le donjon:
 
 - `collect_gold` - Collect gold coins from the current room if available. Try: "Collect the gold coins"
 - `collect_magic_potion` - Collect magic potions from the current room if available. Try: "Collect the magic potions"
@@ -196,24 +196,25 @@ Where would you like to go? Would you like to look around the room or move in a 
 - `move_player` - Move the player in the dungeon by specifying a cardinal direction. 
 - `speak_to_somebody` - Speak to somebody by name
 
-> You can type the `/tools` command to see the list of available tools.
+
+> Vous pouvez taper la commande `/tools` pour voir la liste des outils disponibles.
 
 #### `get_current_room_info`
 
-**You are at the dungeon entrance, you can start by looking around:**
+**Vous êtes à l'entrée du donjon, vous pouvez commencer par regarder autour de vous:**
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>                                                                                                  
 ┃ give me information about the room      
 ```
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠧ Tools detection.....🟢 get_current_room_info with arguments: {}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]:   
 ```
 
-**Then:**
+**Puis:**
 ```raw
 ⠇ Tools detection.....✅ Tool executed successfully
 ---[MCP RESPONSE]---------------------------------
@@ -255,25 +256,25 @@ What would you like to do next?
 --------------------------------------------------
 ```
 
-> ✋ Plan to be able to show or hide the MCP Response.
+> ✋ Prévoir de pouvoir afficher ou masquer la MCP Response.
 
 #### `move_by_direction`
 
-**You can now move around the dungeon. For example, to go north:**
+**Vous pouvez maintenant vous déplacer dans le donjon. Par exemple, pour aller au nord:**
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>                                                                                                  
 ┃ I want to move to the north 
 ```
-> Theoretically I can even say "I want to go to the north, then to the east, then to the north again" and Zephyr should understand and make the 3 movements. (🐛 fix: Zephyr detects the 3 movements well, performs them but displays the room information of the arrival of the 1st movement. [TODO: to fix - not priority])
+> Théoriquement je peux même dire "I want to go to the north, then to the east, then to the north again" et Zephyr doit comprendre et faire les 3 déplacements. (🐛 fix: Zephyr détecte bien les 3 mouvements, les effectue mais affiche les informations de la pièce d'arrivée du 1er mouvement. [TODO: à fixer - pas prioritaire])
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠧ Tools detection.....🟢 move_player with arguments: {"direction":"north"}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]: 
 ```
 
-**Then:**
+**Puis:**
 ```raw
 ⠦ Tools detection.....✅ Tool executed successfully
 ---[MCP RESPONSE]---------------------------------
@@ -289,25 +290,25 @@ Would you like to **collect the magic potion** or **investigate the pedestal and
 --------------------------------------------------
 ```
 
-You can see that it's possible to collect the magic potion present in the room.
+On peut voir qu'il est possible de ramasser la potion magique présente dans la pièce.
 
 #### `collect_magic_potion`
 
-**To collect the magic potion, just ask for it:**
+**Pour ramasser la potion magique, il suffit de le demander:**
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>
 ┃ I want to collect the magic potion
 ```
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠹ Tools detection.....🟢 collect_magic_potion with arguments: {}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]:                                                          
 ```
 
-**Then:**
-> 👋 In this example, we can see that sometimes the agent suggests other tools, but it's possible to exit the loop
+**Puis:**
+> 👋 Dans cet exemple, on voit que parfois l'agent propose d'autres outils, mais il est possible de sortir de la boucle
 ```raw
 ⠸ Tools detection.....✅ Tool executed successfully
 ⠦ Tools detection.....🟢 collect_gold with arguments: {}
@@ -324,20 +325,20 @@ It seems that there are no gold coins in the current room. Let's check the room 
 
 #### `get_player_info`
 
-**To check your character's status, you can ask for their information:**
+**Pour vérifier l'état de votre personnage, vous pouvez demander ses informations:**
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>
 ┃ Give me information about myself
 ```
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠹ Tools detection.....🟢 get_player_info with arguments: {}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]:                                                                                  
 ```
 
-**Then:**
+**Puis:**
 ```raw
 ⠹ Tools detection.....✅ Tool executed successfully
 ---[MCP RESPONSE]---------------------------------
@@ -365,20 +366,20 @@ You are Bob, a level 1 warrior dwarf. You are currently in room_0_1, located at 
 
 #### `get_dungeon_map`
 
-**To display the dungeon map, you can use the `get_dungeon_map` tool:**
+**Pour afficher la carte du donjon, vous pouvez utiliser l'outil `get_dungeon_map`:**
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>
 ┃ Show me the dungeon map
 ```
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠙ Tools detection.....🟢 get_dungeon_map with arguments: {}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]:   
 ```
 
-**Then:**
+**Puis:**
 ```raw
 ⠹ Tools detection.....✅ Tool executed successfully
 ---[MCP RESPONSE]---------------------------------
@@ -490,26 +491,27 @@ What would you like to do next?
 --------------------------------------------------
 ```
 
+
 **Etc. ...**
 
-### Talking to an NPC
+### Parler avec un PNJ
 
-**[🚧 for now you can invoke a character from anywhere]** TODO: verify that the NPC is in the current room before being able to talk to them.
+**[🚧 pour le moment on peut invoquer un personnage de n'importe où]** TODO: vérifier que le PNJ est dans la pièce courrante avant de pouvoir lui parler.
 
-To talk to an NPC, just address them by name. For example, to talk to the merchant "Galdor":
+Pour parler avec un PNJ, il suffit de lui adresser la parole par son nom. Par exemple, pour parler avec le marchand "Galdor":
 ```raw
 ┃ 🤖 (/bye to exit) [Zephyr]>
 ┃ I want to speak to Galdor
 ```
 
-**Zephyr's response:**
+**Réponse de Zephyr:**
 ```raw
 < Zephyr speaking...>
 ⠸ Tools detection.....🟢 speak_to_somebody with arguments: {"name":"Galdor"}
 Do you want to execute this function? (y)es (n)o (a)bort (y/n/a) [y]:     
 ```
 
-**Then:**
+**Puis:**
 ```raw
 ---[MCP RESPONSE]---------------------------------
 {"result": "😃 You speak to {"name":"Galdor"}. They greet you warmly and are eager to assist you on your quest."}
@@ -524,16 +526,16 @@ Galdor is a friendly and helpful character in the dungeon. He has offered to ass
 ┃                                                   
 ```
 
-Now you can converse with "Galdor". To return to "Zephyr", just type the `/dm` command.
+Maintenant vous pouvez converser avec "Galdor". Pour revenir à "Zephyr", il suffit de taper la commande `/dm`.
 
 ```raw
 ┃ 🙂 (/bye to exit /dm to go back to the DM) [Galdor]>                                                                                                  
 ┃ Hello, I'm Bob, tell me something about your family   
 ```
 
-> The agent will perform similarity searches in its vector store to answer the question. This allows providing a lot of information to the model without overloading the prompt/context.
+> L'agent va faire des recherche de similarités dans son vector store pour répondre à la question. Cela permet de fournir beaucoup d'information au modèle sans surcharger le prompt/contexte.
 
-**Galdor's response:**
+**Réponse de Galdor:**
 
 ```raw
 < Galdor speaking...>
