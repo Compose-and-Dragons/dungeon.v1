@@ -211,6 +211,13 @@ services:
       HEALER_SYSTEM_INSTRUCTIONS_PATH: ./data/healer_system_instructions.md
       HEALER_CONTEXT_PATH: ./data/healer_background_and_personality.md
 
+      # ---------------------------------------------------------
+      # End of level Boss settings
+      # ---------------------------------------------------------
+      BOSS_AGENT_URL: http://dungeon-end-of-level-boss:8080
+      BOSS_NAME: Shesepankh
+      BOSS_RACE: Sphinx
+
     volumes:
       - ./dungeon-master/data:/app/data
 
@@ -246,7 +253,48 @@ services:
     depends_on:
       mcp-gateway:
         condition: service_started
+      dungeon-end-of-level-boss:
+        condition: service_started
 
+  dungeon-end-of-level-boss:
+    build:
+      context: dungeon-end-of-level-boss
+      dockerfile: Dockerfile
+    ports:
+      - 8888:8080 # Map port 8080 to host port 8888
+    environment:
+      MCP_HOST: http://mcp-gateway:9011/mcp
+      # ---------------------------------------------------------
+      # Boss settings
+      # ---------------------------------------------------------
+      BOSS_AGENT_HTTP_PORT: 8080
+      BOSS_MODEL_TEMPERATURE: 0.7
+      #BOSS_NAME: Abou el-Hol
+      # Le Sphinx de Gizeh
+      BOSS_NAME: Shesepankh
+      BOSS_RACE: Sphinx
+      BOSS_DESCRIPTION: An ancient and wise Sphinx who guards the exit of the dungeon. Known for posing riddles to those who seek passage.
+      BOSS_SYSTEM_INSTRUCTIONS_PATH: ./data/boss_system_instructions.md
+      BOSS_CONTEXT_PATH: ./data/boss_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Similarity search settings
+      # ---------------------------------------------------------
+      SIMILARITY_LIMIT: 0.5
+      SIMILARITY_MAX_RESULTS: 2
+      VECTOR_STORES_PATH: ./data
+
+    volumes:
+      - ./dungeon-end-of-level-boss/data:/app/data
+
+    models:
+      boss-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: BOSS_MODEL
+
+      embedding-model:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
 
 models:
   dungeon-model:

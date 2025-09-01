@@ -1,4 +1,4 @@
-J’ai besoin en anglais du background et d’une personnalité pour Liora sur ce modèle là que tu vas adapter: 
+J’ai besoin en anglais du background et d’une personnalité pour Shesepankh sur ce modèle là que tu vas adapter: 
 # CHARACTER SHEET
 
 # Character Sheet: Ethan
@@ -35,3 +35,5 @@ Ethan is a fierce and determined warrior, but he is also a kind and compassionat
 
 ## Quote
 "Valor is not the ability to do the impossible, but the ability to do the possible."
+
+Enregistre le document au format markdown dans /dungeon-end-of-level-boss/data/boss_background_and_personality.md
