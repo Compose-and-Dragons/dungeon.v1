@@ -28,6 +28,7 @@
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor"
     },
+    "markdown.marp.html": "all"  ,
     "[dockerfile]": {
         "editor.fontSize": 14,
     },

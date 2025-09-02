@@ -3,4 +3,7 @@ marp: true
 theme: default
 paginate: true
 ---
-# 🐳🧠 Docker Model Runner
+# What is a GenAI App?
+
+
+

@@ -1,0 +1,15 @@
+montrer comment influer sur le comportement d'un petit modèle
+
+✋ conversational memory
+
+contexte
+paramètres
+
+ex: commencer par essayer "quel est ton nom"
+
+
+Ensuite pour aller plus loin, il y aura d'autres techniques (ce seront d'autres chapitres)
+- RAG
+- Function calling (expliquer les problématiques)
+- MCP - qu'est-ce que MCP, pourquoi, etc ...
+- ...
