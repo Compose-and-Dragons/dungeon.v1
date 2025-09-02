@@ -208,6 +208,7 @@ func main() {
 		// DEBUG:
 		if strings.HasPrefix(content.Input, "/memory") {
 			msg.DisplayHistory(dungeonMasterToolsAgent)
+			continue
 		}
 
 		// ---------------------------------------------------------
