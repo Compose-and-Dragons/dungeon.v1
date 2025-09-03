@@ -55,6 +55,14 @@
             "isWholeLine": false
         },
         {
+            "text": "TO BE REMOVED",
+            "color": "#ffffff",
+            "backgroundColor": "#031E4A",
+            "border": "1px solid #031E4A",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
             "text": "REF:",
             "color": "#000000",
             "backgroundColor": "#E5AADE",
