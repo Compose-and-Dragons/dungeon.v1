@@ -1,57 +1,3 @@
-x-common-variables: &common-variables
-  # ---------------------------------------------------------
-  # Non-Player Characters (NPC) settings
-  # ---------------------------------------------------------
-  # roomID := fmt.Sprintf("room_%d_%d", newX, newY)
-
-  # ---------------------------------------------------------
-  # Merchant settings
-  # ---------------------------------------------------------
-  MERCHANT_ROOM: room_1_1
-  # Merchant name and race
-  MERCHANT_NAME: Galdor
-  MERCHANT_RACE: Dwarf
-  
-  MERCHANT_MODEL_TEMPERATURE: 0.7
-  MERCHANT_SYSTEM_INSTRUCTIONS_PATH: ./data/merchant_system_instructions.md
-  MERCHANT_CONTEXT_PATH: ./data/merchant_background_and_personality.md
-
-  # ---------------------------------------------------------
-  # Guard settings
-  # ---------------------------------------------------------
-  GUARD_ROOM: room_0_2
-  # provisory guard name and race
-  GUARD_NAME: Thrain
-  GUARD_RACE: Elf
-  
-  GUARD_MODEL_TEMPERATURE: 0.7
-  GUARD_SYSTEM_INSTRUCTIONS_PATH: ./data/guard_system_instructions.md
-  GUARD_CONTEXT_PATH: ./data/guard_background_and_personality.md
-
-  # ---------------------------------------------------------
-  # Sorcerer settings
-  # ---------------------------------------------------------
-  SORCERER_ROOM: room_2_0
-  # provisory sorcerer name and race
-  SORCERER_NAME: Elara
-  SORCERER_RACE: Human  
-  
-  SORCERER_MODEL_TEMPERATURE: 0.7
-  SORCERER_SYSTEM_INSTRUCTIONS_PATH: ./data/sorcerer_system_instructions.md
-  SORCERER_CONTEXT_PATH: ./data/sorcerer_background_and_personality.md
-  
-  # ---------------------------------------------------------
-  # Healer settings
-  # ---------------------------------------------------------
-  HEALER_ROOM: room_2_1
-  # provisory healer name and race
-  HEALER_NAME: Liora
-  HEALER_RACE: Half-Elf
-
-  HEALER_MODEL_TEMPERATURE: 0.7
-  HEALER_SYSTEM_INSTRUCTIONS_PATH: ./data/healer_system_instructions.md
-  HEALER_CONTEXT_PATH: ./data/healer_background_and_personality.md
-  
 services:
   # ---------------------------------------------------------
   # Usage:
@@ -85,7 +31,6 @@ services:
       context: dungeon-crawler-mcp-server
       dockerfile: Dockerfile
     environment:
-      <<: *common-variables
       MCP_HTTP_PORT: 6060
 
       # ---------------------------------------------------------
@@ -148,6 +93,30 @@ services:
       MONSTER_PROBABILITY: 0.5
 
       # ---------------------------------------------------------
+      # Non-Player Characters (NPC) settings
+      # ---------------------------------------------------------
+      # roomID := fmt.Sprintf("room_%d_%d", newX, newY)
+      MERCHANT_ROOM: room_1_1
+      # provisory merchant name and race
+      MERCHANT_NAME: Galdor
+      MERCHANT_RACE: Dwarf
+
+      GUARD_ROOM: room_0_2
+      # provisory guard name and race
+      GUARD_NAME: Thrain
+      GUARD_RACE: Elf
+
+      SORCERER_ROOM: room_2_0
+      # provisory sorcerer name and race
+      SORCERER_NAME: Elara
+      SORCERER_RACE: Human
+
+      HEALER_ROOM: room_2_1
+      # provisory healer name and race
+      HEALER_NAME: Liora
+      HEALER_RACE: Half-Elf
+
+      # ---------------------------------------------------------
       # Player settings
       # ---------------------------------------------------------
       PLAYER_INITIAL_HEALTH: 100
@@ -180,7 +149,6 @@ services:
     stdin_open: true   # Keep stdin open
     
     environment:
-      <<: *common-variables
       MCP_HOST: http://mcp-gateway:9011/mcp
       TERM: xterm-256color
       # ---------------------------------------------------------
@@ -207,6 +175,43 @@ services:
       SIMILARITY_MAX_RESULTS: 2
       VECTOR_STORES_PATH: ./data
 
+      # ---------------------------------------------------------
+      # Guard settings
+      # ---------------------------------------------------------
+      #NON_PLAYER_CHARACTER_MODEL: ai/qwen2.5:1.5B-F16
+      GUARD_MODEL_TEMPERATURE: 0.7
+      GUARD_NAME: Thrain
+      GUARD_RACE: Elf
+      GUARD_SYSTEM_INSTRUCTIONS_PATH: ./data/guard_system_instructions.md
+      GUARD_CONTEXT_PATH: ./data/guard_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Sorcerer settings
+      # ---------------------------------------------------------
+      #SORCERER_MODEL: hf.co/menlo/lucy-gguf:q8_0
+      SORCERER_MODEL_TEMPERATURE: 0.7
+      SORCERER_NAME: Elara
+      SORCERER_RACE: Human  
+      SORCERER_SYSTEM_INSTRUCTIONS_PATH: ./data/sorcerer_system_instructions.md
+      SORCERER_CONTEXT_PATH: ./data/sorcerer_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Merchant settings
+      # ---------------------------------------------------------
+      MERCHANT_MODEL_TEMPERATURE: 0.7
+      MERCHANT_NAME: Galdor
+      MERCHANT_RACE: Dwarf
+      MERCHANT_SYSTEM_INSTRUCTIONS_PATH: ./data/merchant_system_instructions.md
+      MERCHANT_CONTEXT_PATH: ./data/merchant_background_and_personality.md
+
+      # ---------------------------------------------------------
+      # Healer settings
+      # ---------------------------------------------------------
+      HEALER_MODEL_TEMPERATURE: 0.7
+      HEALER_NAME: Liora
+      HEALER_RACE: Half-Elf
+      HEALER_SYSTEM_INSTRUCTIONS_PATH: ./data/healer_system_instructions.md
+      HEALER_CONTEXT_PATH: ./data/healer_background_and_personality.md
 
       # ---------------------------------------------------------
       # End of level Boss settings

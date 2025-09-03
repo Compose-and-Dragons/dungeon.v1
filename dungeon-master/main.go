@@ -479,15 +479,67 @@ func ExecuteFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 					return "", fmt.Errorf("failed to parse arguments: %v", err)
 				}
 
-				checkIfTheAgentExistInTheTeam := agentsTeam[strings.ToLower(argumentsStructured.Name)]
-
-				if checkIfTheAgentExistInTheTeam == nil {
+				invokedAgent := agentsTeam[strings.ToLower(argumentsStructured.Name)]
+				if invokedAgent == nil {
 					return fmt.Sprintf(`{"result": "😕 There is no NPC named %s"}`, argumentsStructured.Name), nil
-				} else {
-					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
 				}
-				// Use the /dm command to go back to the Dungeon Master
-				return fmt.Sprintf(`{"result": "😃 You speak to %s. They greet you warmly and are eager to assist you on your quest."}`, arguments), nil
+				// NOTE: SPECIAL CASE: Ghost agent is always available
+				if strings.EqualFold(invokedAgent.GetName(), "Casper") {
+					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
+					return fmt.Sprintf(`{"result": "😃 You speak to %s."}`, arguments), nil
+				}
+				// THIS IS FOR TEST: IMPORTANT: TODO: TO BE REMOVED NOTE: SPECIAL CASE: Shesepankh agent is always available
+				if strings.EqualFold(invokedAgent.GetName(), "Shesepankh") {
+					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
+					return fmt.Sprintf(`{"result": "😃 You speak to %s."}`, arguments), nil
+				}
+
+
+				// ===================================================================================
+				// IMPORTANT: check the position of the agent in the dungeon and the player position
+				// NOTE: make a direct call to the MCP server to invoke a tool
+				// ===================================================================================
+				if mcpClient != nil {
+					ctx := context.Background()
+					result, err := mcpClient.CallTool(ctx, "is_player_in_same_room_as_npc", arguments)
+					if err != nil {
+						fmt.Println("🔴 Error calling tool is_player_in_same_room_as_npc:", err)
+						return fmt.Sprintf(`{"result": "😕 You cannot speak to %s. (%s)"}`, argumentsStructured.Name, err.Error()), nil
+
+					}
+					if len(result.Content) > 0 {
+						var toolResponse struct {
+							InSameRoom bool   `json:"in_same_room"`
+							PlayerRoom string `json:"player_room_id"`
+							NPCRoom    string `json:"npc_room_id,omitempty"`
+							Message    string `json:"message"`
+						}
+						err = json.Unmarshal([]byte(result.Content[0].(mcp.TextContent).Text), &toolResponse)
+						if err != nil {
+							fmt.Println("🔴 Error unmarshaling tool response:", err)
+							return fmt.Sprintf(`{"result": "😕 You cannot speak to %s. (%s)"}`, argumentsStructured.Name, err.Error()), nil
+						}
+						if !toolResponse.InSameRoom {
+							return fmt.Sprintf(`{"result": "😕 You cannot speak to %s because you are not in the same room."}`, argumentsStructured.Name), nil
+						}
+
+						// NOTE: the player is in the same room as the NPC
+						// Check if the agent exist in the team
+						// invokedAgent := agentsTeam[strings.ToLower(argumentsStructured.Name)]
+
+						// if invokedAgent == nil {
+						// 	return fmt.Sprintf(`{"result": "😕 There is no NPC named %s"}`, argumentsStructured.Name), nil
+						// } else {
+						// 	selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
+						// }
+						selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
+						// Use the /dm command to go back to the Dungeon Master
+						return fmt.Sprintf(`{"result": "😃 You speak to %s. They greet you warmly and are eager to assist you on your quest."}`, arguments), nil
+
+					}
+
+				}
+				return fmt.Sprintf(`{"result": "😕 You cannot speak to %s. (%s)"}`, argumentsStructured.Name, "unable to connect to the MCP Server"), nil
 
 			// ---------------------------------------------------------
 			// [MCP] TOOL CALLS: implementation
