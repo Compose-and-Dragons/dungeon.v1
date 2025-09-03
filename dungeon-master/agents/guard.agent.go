@@ -72,6 +72,5 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 		fmt.Println("🔶 Error creating sorcerer agent, creating ghost agent instead:", err)
 		return NewGhostAgent("[Ghost] " + name)
 	}
-
 	return chatAgent
 }

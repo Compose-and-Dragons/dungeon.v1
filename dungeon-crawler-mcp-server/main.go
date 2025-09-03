@@ -234,6 +234,11 @@ func main() {
 	fightMonsterToolInstance := tools.FightMonsterTool()
 	s.AddTool(fightMonsterToolInstance, tools.FightMonsterToolHandler(&currentPlayer, &dungeon))
 
+	// Check if Player is in the same room as an NPC
+	isPlayerInSameRoomAsNPCToolInstance := tools.IsPlayerInSameRoomAsNPCTool()
+	s.AddTool(isPlayerInSameRoomAsNPCToolInstance, tools.IsPlayerInSameRoomAsNPCToolHandler(&currentPlayer, &dungeon))
+
+
 	// ---------------------------------------------------------
 	// Start the HTTP server
 	// ---------------------------------------------------------

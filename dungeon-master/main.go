@@ -478,6 +478,7 @@ func ExecuteFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 				if err != nil {
 					return "", fmt.Errorf("failed to parse arguments: %v", err)
 				}
+				// TODO: check the position of the agent in the dungeon and the player position
 
 				checkIfTheAgentExistInTheTeam := agentsTeam[strings.ToLower(argumentsStructured.Name)]
 
