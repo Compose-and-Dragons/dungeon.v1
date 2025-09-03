@@ -1,4 +1,4 @@
-module chat-stream-completion
+module 1-what-is-your-name
 
 go 1.24.0
 

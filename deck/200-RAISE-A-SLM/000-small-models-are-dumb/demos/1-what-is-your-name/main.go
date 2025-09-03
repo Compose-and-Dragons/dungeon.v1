@@ -12,7 +12,7 @@ import (
 func main() {
 	// Docker Model Runner Chat base URL
 	baseURL := "http://localhost:12434/engines/llama.cpp/v1/"
-	model := "ai/qwen2.5:latest"
+	model := "ai/qwen2.5:0.5B-F16"
 
 	client := openai.NewClient(
 		option.WithBaseURL(baseURL),
@@ -23,20 +23,26 @@ func main() {
 
 	messages := []openai.ChatCompletionMessageParamUnion{
 		openai.SystemMessage("You are an expert of medieval role playing games."),
-		openai.UserMessage("[Brief] What is a dungeon crawler game?"),
+		openai.UserMessage("What is your name?"),
 	}
 
 	param := openai.ChatCompletionNewParams{
 		Messages:    messages,
 		Model:       model,
-		Temperature: openai.Opt(0.0),
+		Temperature: openai.Opt(0.8),
 	}
 
-	completion, err := client.Chat.Completions.New(ctx, param)
+	stream := client.Chat.Completions.NewStreaming(ctx, param)
 
-	if err != nil {
+	for stream.Next() {
+		chunk := stream.Current()
+		// Stream each chunk as it arrives
+		if len(chunk.Choices) > 0 && chunk.Choices[0].Delta.Content != "" {
+			fmt.Print(chunk.Choices[0].Delta.Content)
+		}
+	}
+
+	if err := stream.Err(); err != nil {
 		log.Fatalln("😡:", err)
 	}
-	fmt.Println(completion.Choices[0].Message.Content)
-
 }

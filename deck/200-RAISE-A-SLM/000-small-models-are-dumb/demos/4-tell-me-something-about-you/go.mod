@@ -1,4 +1,4 @@
-module chat-stream-completion
+module 4-tell-me-something-about-you
 
 go 1.24.0
 

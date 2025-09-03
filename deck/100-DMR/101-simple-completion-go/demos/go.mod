@@ -2,8 +2,6 @@ module chat-completion
 
 go 1.24.0
 
-require github.com/openai/openai-go v0.1.0-beta.9
-
 require (
 	github.com/openai/openai-go/v2 v2.1.1
 	github.com/tidwall/gjson v1.18.0 // indirect
