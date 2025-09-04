@@ -278,6 +278,14 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },  
+         {
+            "text": "SIMILARITIES:",
+            "color": "#ffffff",
+            "backgroundColor": "#2887C2",
+            "border": "1px solid #2887C2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },          
         {
             "text": "[VECTOR STORE]",
             "color": "#ffffff",
@@ -423,6 +431,25 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },
+
+        {
+            "text": "CHAT COMPLETION:",
+            "color": "#ffffff",
+            "backgroundColor": "#B91F5F",
+            "border": "1px solid #B91F5F",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+
+        {
+            "text": "EMBEDDING COMPLETION:",
+            "color": "#ffffff",
+            "backgroundColor": "#E51D70",
+            "border": "1px solid #E51D70",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+
         {
             "text": "SYSTEM MESSAGE:",
             "color": "#ffffff",
