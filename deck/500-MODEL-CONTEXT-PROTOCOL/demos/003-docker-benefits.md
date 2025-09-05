@@ -4,7 +4,7 @@ theme: default
 paginate: true
 ---
 
-## Why Provide MCP Servers with Docker?
+## Why Provide MCP Servers with 🐳 Docker?
 
 - **Isolated environments** for secure tool execution
 - **Consistent deployment** across different systems
