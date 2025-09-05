@@ -1,0 +1,141 @@
+<mxfile host="app.diagrams.net" modified="2025-01-09T12:00:00.000Z" agent="Claude Code" etag="12345" version="1.0.0">
+  <diagram name="MCP Server Architecture" id="mcp-server-flow">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="MCP Server - Dungeon Characters Selection" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="370" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Client -->
+        <mxCell id="client" value="Client Application&#xa;(Claude, etc.)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="150" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- HTTP Request Arrow -->
+        <mxCell id="http-request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="client" target="http-server">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="http-label" value="HTTP POST to /mcp&#xa;(port 9090)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="260" y="125" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- HTTP Server -->
+        <mxCell id="http-server" value="HTTP Server&#xa;(StreamableHTTPServer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- MCP Server -->
+        <mxCell id="mcp-server" value="MCP Server&#xa;(&quot;mcp-dd&quot; v0.0.0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="640" y="120" width="140" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Connection between HTTP and MCP Server -->
+        <mxCell id="server-connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="http-server" target="mcp-server">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Tools Section -->
+        <mxCell id="tools-title" value="Available Tools" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="240" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Tool 1 -->
+        <mxCell id="tool1" value="choose_character_by_species&#xa;&#xa;Input: species_name&#xa;[Human, Orc, Elf, Dwarf]&#xa;&#xa;Returns character name" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="300" y="290" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Tool 2 -->
+        <mxCell id="tool2" value="detect_real_topic_in_user_message&#xa;&#xa;Input: topic_name&#xa;[justice, war, combat, magic, &#xa;poetry, craftsmanship, forge]&#xa;&#xa;Returns character name" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="520" y="290" width="220" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Tool connections -->
+        <mxCell id="tool1-connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="mcp-server" target="tool1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tool2-connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="mcp-server" target="tool2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Character Mapping -->
+        <mxCell id="mapping-title" value="Character Mapping Logic" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="440" width="180" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Species Mapping -->
+        <mxCell id="species-mapping" value="Species → Character:&#xa;• Human → elara&#xa;• Dwarf → galdor&#xa;• Elf → thrain&#xa;• Half-elf → liora&#xa;• Default → zephyr" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" vertex="1" parent="1">
+          <mxGeometry x="260" y="480" width="160" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Topic Mapping -->
+        <mxCell id="topic-mapping" value="Topic → Character:&#xa;• food, gold → galdor&#xa;• war, weapons, fight → thrain&#xa;• magic, poetry, art → elara&#xa;• medicine, health, potion → liora&#xa;• Default → zephyr" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;" vertex="1" parent="1">
+          <mxGeometry x="460" y="480" width="200" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Mapping connections -->
+        <mxCell id="species-map-connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="tool1" target="species-mapping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="topic-map-connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="tool2" target="topic-mapping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Response Flow -->
+        <mxCell id="response-title" value="Response Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="440" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Response -->
+        <mxCell id="response" value="Returns:&#xa;Character Name&#xa;(string)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="800" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Response arrow -->
+        <mxCell id="response-arrow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="topic-mapping" target="response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-title" value="Component Types" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="680" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend1" value="Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend2" value="HTTP Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="180" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend3" value="MCP Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend4" value="Tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend5" value="Logic/Data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="480" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend6" value="Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="710" width="80" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Flow Description -->
+        <mxCell id="flow-desc" value="Flow: Client sends HTTP request → HTTP Server routes to MCP Server → Tools process input → Character mapping logic determines response → Returns character name" style="text;html=1;strokeColor=none;fillColor=#f0f0f0;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="640" width="600" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

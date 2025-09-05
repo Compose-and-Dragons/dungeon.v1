@@ -1,0 +1,79 @@
+<mxfile host="65bd71144e">
+    <diagram name="LLM-MCP-Workflow" id="workflow">
+        <mxGraphModel dx="1326" dy="494" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="LLM Uses MCP Tools Workflow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="20" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="User Request:&#xa;&quot;I want to speak to an elf&#xa;about magic and a dwarf&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="80" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="init" value="1. Initialize Clients&#xa;• OpenAI Client (local model)&#xa;• MCP Client (HTTP transport)&#xa;• List available MCP tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="80" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="convert" value="2. Convert MCP Tools&#xa;to OpenAI Format&#xa;&#xa;ConvertMCPToolsToOpenAITools()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="80" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="llm" value="3. LLM Chat Completion&#xa;• Send user message&#xa;• Include converted tools&#xa;• Parallel tool calls enabled" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="80" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="extract" value="4. Extract Tool Calls&#xa;from LLM Response&#xa;&#xa;Parse function names &amp; args" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="execute" value="5. Execute MCP Tools&#xa;For each tool call:&#xa;• Parse JSON arguments&#xa;• Call mcpClient.CallTool()&#xa;• Display response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcpserver" value="MCP Server&#xa;(HTTP)&#xa;&#xa;Provides tools for&#xa;character interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="output" value="Output:&#xa;Tool responses displayed&#xa;(character dialogues)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="user" target="init" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="250" y="120" as="sourcePoint"/>
+                        <mxPoint x="300" y="70" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="init" target="convert" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="520" y="120" as="sourcePoint"/>
+                        <mxPoint x="570" y="70" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="convert" target="llm" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="770" y="120" as="sourcePoint"/>
+                        <mxPoint x="820" y="70" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="llm" target="extract" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="890" y="180" as="sourcePoint"/>
+                        <mxPoint x="890" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" source="extract" target="execute" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="780" y="260" as="sourcePoint"/>
+                        <mxPoint x="750" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" source="execute" target="mcpserver" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="550" y="260" as="sourcePoint"/>
+                        <mxPoint x="480" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" source="mcpserver" target="output" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="260" as="sourcePoint"/>
+                        <mxPoint x="230" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
