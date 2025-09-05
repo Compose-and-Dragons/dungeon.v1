@@ -44,3 +44,7 @@ The attack by shadow creatures fifteen years ago tested his resolve when he sing
 
 ## Quote
 "None shall pass without proving their worth. The realm's safety rests upon eternal vigilance."
+
+## Secret Keyword
+
+The secret keyword that Thrain uses to identify trustworthy allies is "Eldergrove."

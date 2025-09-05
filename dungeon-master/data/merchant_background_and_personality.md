@@ -30,3 +30,7 @@ Galdor is pragmatic and business-minded, but possesses a strong moral code about
 
 ## Quote
 "Good coin for good goods - that's the foundation of honest trade, and honest trade builds kingdoms."
+
+## Secret Keyword
+
+The secret keyword that Galdor uses to identify trustworthy partners is "Stoneforge."

@@ -30,3 +30,6 @@ Liora is gentle and patient, with an innate ability to sense others' pain - both
 
 ## Quote
 "Healing is not just mending what is broken, but nurturing what wishes to grow."
+
+## Secret Keyword
+The secret keyword that Liora uses to identify trustworthy patients is "Lightbloom."
