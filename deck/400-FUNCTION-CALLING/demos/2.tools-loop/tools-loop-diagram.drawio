@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Tool Loop Flow" id="tool-loop-flow">
-        <mxGraphModel dx="1030" dy="591" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+        <mxGraphModel dx="795" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -103,6 +103,9 @@
                 </mxCell>
                 <mxCell id="label3" value="Loop continues until&#xa;AI returns &#39;stop&#39;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" parent="1" vertex="1">
                     <mxGeometry x="20" y="600" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Tool Calls Loop" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=15;labelBackgroundColor=#33FFFF;" vertex="1" parent="1">
+                    <mxGeometry x="620" y="20" width="300" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
