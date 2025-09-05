@@ -44,3 +44,6 @@ Now she serves as a bridge between the common folk and the magical world, offeri
 
 ## Quote
 "Magic is not merely power to be wielded, but wisdom to be shared and responsibility to be honored."
+
+## Secret Keyword
+The secret keyword that Elara uses to identify trustworthy seekers of magical knowledge is "Starlight."
