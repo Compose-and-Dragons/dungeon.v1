@@ -249,8 +249,8 @@
         {
             "text": "TOOLS:",
             "color": "#ffffff",
-            "backgroundColor": "#D10E89",
-            "border": "1px solid #D10E89",
+            "backgroundColor": "#320321",
+            "border": "1px solid #320321",
             "borderRadius": "3px",
             "isWholeLine": false
         },

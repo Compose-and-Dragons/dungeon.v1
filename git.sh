@@ -21,7 +21,7 @@ case $1 in
     ;;
 
   # 🧩: jigsaw
-  jigsaw|example|examples|demo)
+  jigsaw|example|examples|demo|demos)
     message="Introduce new example(s)"
     emoji="🧩"
     ;;
