@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -47,6 +48,10 @@ func main() {
 
 	// Create a custom mux to handle both MCP and health endpoints
 	mux := http.NewServeMux()
+
+	// Add healthcheck endpoint
+	mux.HandleFunc("/health", healthCheckHandler)
+
 	// Add MCP endpoint
 	httpServer := server.NewStreamableHTTPServer(s,
 		server.WithEndpointPath("/mcp"),
@@ -108,4 +113,14 @@ func detectTheRealTopicInUserMessageHandler(ctx context.Context, request mcp.Cal
 		}
 	}
 	return mcp.NewToolResultText(content), nil
+}
+
+func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	w.WriteHeader(http.StatusOK)
+	response := map[string]any{
+		"status":           "healthy",
+	}
+	json.NewEncoder(w).Encode(response)
 }

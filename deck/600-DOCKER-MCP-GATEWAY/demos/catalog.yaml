@@ -1,0 +1,11 @@
+registry:
+  mcp-talk-to-somebody:
+    remote:
+      url: "http://mcp-talk-to-somebody:9090/mcp"
+      transport_type: http
+
+  mcp-roll-dices:
+    remote:
+      url: "http://mcp-roll-dices:9090/mcp"
+      transport_type: http
+  
