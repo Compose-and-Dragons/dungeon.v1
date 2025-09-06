@@ -427,10 +427,45 @@ func main() {
 				openai.UserMessage(content.Input),
 			}
 
-			_, err = selectedAgent.RunStream(bossAgentMessages, func(content string) error {
+			answer, err := selectedAgent.RunStream(bossAgentMessages, func(content string) error {
 				fmt.Print(content)
 				return nil
 			})
+
+			// IMPORTANT: Check if the player has defeated the boss
+			// TODO: FIND A BETTER WAY TO HANDLE THIS (like a tool call?)
+			// You lose 😢
+			if strings.Contains(strings.ToLower(answer), "you are trapped") {
+				ui.Println(ui.Red, "\n💀 You have been defeated by the Boss! Game Over! 💀")
+				ui.Println(ui.Red, "👹 The Boss reigns supreme in the dungeon! 👹")
+				ui.Println(ui.Red, "🎲 Better luck next time! 🎲")
+
+				// [DIRECT CALL TO MCP]
+				result, err := mcpClient.CallTool(ctx, "get_player_info", "{}")
+				if err == nil && len(result.Content) > 0 {
+					playerInfo := result.Content[0].(mcp.TextContent).Text
+					ui.Println(ui.Red, "📝 Your player information:\n", playerInfo)
+				}
+
+				continue
+				//break
+			}
+			// You win 🎉
+			if strings.Contains(strings.ToLower(answer), "you are free") {
+				ui.Println(ui.Green, "\n💀 You have defeated the Boss! Congratulations, brave adventurer! 💀")
+				ui.Println(ui.Green, "👑 You are now the new ruler of the dungeon! 👑")
+				ui.Println(ui.Green, "🎉 Thanks for playing! 🎉")
+
+				// [DIRECT CALL TO MCP]
+				result, err := mcpClient.CallTool(ctx, "get_player_info", "{}")
+				if err == nil && len(result.Content) > 0 {
+					playerInfo := result.Content[0].(mcp.TextContent).Text
+					ui.Println(ui.Green, "📝 Your player information:\n", playerInfo)
+				}
+
+				continue
+				//break
+			}
 
 			if err != nil {
 				ui.Println(ui.Red, "Error:", err)
@@ -488,20 +523,24 @@ func ExecuteFunction(mcpClient *tools.MCPClient, thinkingCtrl *ui.ThinkingContro
 					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
 					return fmt.Sprintf(`{"result": "😃 You speak to %s."}`, arguments), nil
 				}
-				// THIS IS FOR TEST: IMPORTANT: TODO: TO BE REMOVED NOTE: SPECIAL CASE: Shesepankh agent is always available
+
+				// THIS IS FOR TEST: IMPORTANT: TODO: TO BE REMOVED NOTE:
+				// SPECIAL CASE: Shesepankh agent is always available
 				if strings.EqualFold(invokedAgent.GetName(), "Shesepankh") {
 					selectedAgent = agentsTeam[strings.ToLower(argumentsStructured.Name)]
 					return fmt.Sprintf(`{"result": "😃 You speak to %s."}`, arguments), nil
 				}
 
-
 				// ===================================================================================
 				// IMPORTANT: check the position of the agent in the dungeon and the player position
-				// NOTE: make a direct call to the MCP server to invoke a tool
+				// NOTE: make a **direct call** to the MCP server to invoke a tool
 				// ===================================================================================
 				if mcpClient != nil {
 					ctx := context.Background()
+
+					// [DIRECT CALL TO MCP]
 					result, err := mcpClient.CallTool(ctx, "is_player_in_same_room_as_npc", arguments)
+
 					if err != nil {
 						fmt.Println("🔴 Error calling tool is_player_in_same_room_as_npc:", err)
 						return fmt.Sprintf(`{"result": "😕 You cannot speak to %s. (%s)"}`, argumentsStructured.Name, err.Error()), nil

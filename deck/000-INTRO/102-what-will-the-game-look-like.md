@@ -9,6 +9,6 @@ theme: default
 </style>
 ## What will the game look like?
 
-- Text mode / TUI
+- ✋ <span class="dodgerblue">**Text mode only**</span> / TUI
 
 

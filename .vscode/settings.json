@@ -413,7 +413,15 @@
             "border": "1px solid #7305D2",
             "borderRadius": "3px",
             "isWholeLine": false
-        },        
+        },  
+        {
+            "text": "[DIRECT CALL TO MCP]",
+            "color": "#000000",
+            "backgroundColor": "#3CE783",
+            "border": "1px solid #3CE783",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                      
         {
             "text": "TOOL CALLS:",
             "color": "#ffffff",

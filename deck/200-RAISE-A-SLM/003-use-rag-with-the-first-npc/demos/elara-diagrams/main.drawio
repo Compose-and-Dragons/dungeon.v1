@@ -1,0 +1,112 @@
+<mxfile host="65bd71144e">
+    <diagram name="Elara Sorcerer Agent Architecture" id="elara-sorcerer-architecture">
+        <mxGraphModel dx="690" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="main-container" value="main() Function - Interactive Chat Loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;arcSize=5;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="1120" height="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-section" value="Initialization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="100" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="context-config" value="Context &amp; Configuration&#xa;ctx := context.Background()&#xa;llmURL: MODEL_RUNNER_BASE_URL&#xa;similaritySearchLimit: SIMILARITY_LIMIT&#xa;similaritySearchMaxResults: SIMILARITY_MAX_RESULTS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="160" width="300" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="openai-client" value="OpenAI Client Setup&#xa;Base URL: llmURL&#xa;API Key: empty" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="100" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="sorcerer-agent" value="Sorcerer Agent Creation&#xa;agents.GetSorcererAgent(ctx, client)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="180" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-loop" value="Interactive Chat Loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="300" width="1000" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-input" value="User Input Processing&#xa;ui.SimplePrompt()&#xa;Prompt: [AgentName]&gt;&#xa;Input: content.Input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="360" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="command-processing" value="Command Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="360" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="bye-command" value="/bye Command&#xa;Exit Application&#xa;Print goodbye message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="420" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="memory-command" value="/memory Command&#xa;Display Agent History&#xa;msg.DisplayHistory()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="440" y="420" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-processing" value="RAG Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="360" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-function" value="GeneratePromptMessagesWithSimilarities()&#xa;- agentName: sorcererAgent.GetName()&#xa;- input: content.Input&#xa;- similaritySearchLimit&#xa;- similaritySearchMaxResults" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="420" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-response" value="Agent Response Generation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="360" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="streaming-response" value="sorcererAgent.RunStream()&#xa;- Enhanced messages with RAG&#xa;- Stream callback: fmt.Print(content)&#xa;- Updates agent memory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="420" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-details-section" value="GeneratePromptMessagesWithSimilarities Function" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="580" width="960" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="search-step" value="Similarity Search&#xa;agents.SearchSimilarities()&#xa;- ctx, client&#xa;- agentName, input&#xa;- similarityLimit, maxResults" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="640" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="context-building" value="Context Building&#xa;If similarities found:&#xa;- Build context message&#xa;- Create system message&#xa;- Add user message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="640" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="message-return" value="Message Array Return&#xa;Return ChatCompletionMessageParamUnion[]&#xa;- System message (context) if similarities&#xa;- User message (input)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="640" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="error-handling" value="Error Handling&#xa;- Similarity search errors&#xa;- Agent response errors&#xa;- UI error display" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8d7da;strokeColor=#d1ecf1;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="780" y="640" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="loop-continuation" value="Loop Continuation&#xa;Print newlines&#xa;Continue to next iteration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="640" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="init-section" target="context-config" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="context-config" target="openai-client" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="openai-client" target="sorcerer-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="main-loop" target="user-input" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="user-input" target="command-processing" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="command-processing" target="bye-command" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="command-processing" target="memory-command" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="command-processing" target="rag-processing" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-processing" target="rag-function" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-processing" target="agent-response" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agent-response" target="streaming-response" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-details-section" target="search-step" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="search-step" target="context-building" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="context-building" target="message-return" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
