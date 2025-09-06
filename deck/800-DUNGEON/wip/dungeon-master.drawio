@@ -1,0 +1,103 @@
+<mxfile host="65bd71144e">
+    <diagram name="Dungeon Master Architecture" id="dungeon-master-main">
+        <mxGraphModel dx="968" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="main-app" value="Main Application&#xa;(dungeon-master/main.go)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="40" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="config-block" value="Configuration&#xa;- Environment Variables&#xa;- LLM URL&#xa;- MCP Host&#xa;- Model Settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="140" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="openai-client" value="OpenAI Client&#xa;- LLM Communication&#xa;- Chat Completion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="140" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcp-client" value="MCP Client&#xa;- Tool Communication&#xa;- External Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="140" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="tools-system" value="Tools System&#xa;- MCP Tools&#xa;- speak_to_somebody&#xa;- Tool Execution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="140" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="agents-team" value="Agents Team" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="280" width="600" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="dm-agent" value="Dungeon Master&#xa;Agent&#xa;- Tool Detection&#xa;- System Instructions&#xa;- Main Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#ff6666;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="ghost-agent" value="Ghost Agent&#xa;(Casper)&#xa;- Test Agent&#xa;- Simple Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9966cc;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="guard-agent" value="Guard Agent&#xa;- RAG Enabled&#xa;- Similarity Search&#xa;- Memory History" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#66cc66;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="sorcerer-agent" value="Sorcerer Agent&#xa;- RAG Enabled&#xa;- Similarity Search&#xa;- Memory History" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccccff;strokeColor=#6666cc;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="merchant-agent" value="Merchant Agent&#xa;- RAG Enabled&#xa;- Similarity Search&#xa;- Memory History" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffcc;strokeColor=#cccc00;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="healer-agent" value="Healer Agent&#xa;- RAG Enabled&#xa;- Similarity Search&#xa;- Memory History" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffccff;strokeColor=#cc66cc;" parent="1" vertex="1">
+                    <mxGeometry x="780" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="boss-agent" value="Boss Agent&#xa;- Remote Agent&#xa;- HTTP Endpoint&#xa;- External Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ff9999;strokeColor=#cc3333;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="360" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="game-loop" value="Main Game Loop&#xa;- User Input Processing&#xa;- Command Handling&#xa;- Agent Selection&#xa;- Response Generation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d0d0d0;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="500" width="400" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-system" value="RAG System&#xa;- Similarity Search&#xa;- Context Enhancement&#xa;- Knowledge Retrieval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#0066cc;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="500" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="command-system" value="Command System&#xa;- /bye - Exit&#xa;- /dm - Back to DM&#xa;- /agents - List agents&#xa;- /tools - List tools&#xa;- /memory - Show history" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffeecc;strokeColor=#cc9900;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="500" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="function-executor" value="Function Executor&lt;br&gt;- Tool Confirmation&lt;br&gt;- MCP Tool Calls&lt;br&gt;- &lt;b&gt;speak_to_somebody&lt;/b&gt;&lt;br&gt;- Room Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f8ff;strokeColor=#4169e1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="640" width="400" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="main-app" target="config-block" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="main-app" target="openai-client" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="main-app" target="mcp-client" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="main-app" target="tools-system" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="dm-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="ghost-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="guard-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="sorcerer-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="merchant-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="healer-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agents-team" target="boss-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="game-loop" target="function-executor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-system" target="game-loop" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="command-system" target="game-loop" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

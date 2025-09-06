@@ -1,0 +1,103 @@
+<mxfile host="65bd71144e">
+    <diagram name="End-of-Level Boss Agent Architecture" id="boss-agent-architecture">
+        <mxGraphModel dx="827" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="main-container" value="main() Function" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;arcSize=3;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="1120" height="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="config-setup" value="Configuration Setup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="100" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="env-vars" value="Environment Variables&#xa;LLM_URL: MODEL_RUNNER_BASE_URL&#xa;MCP_HOST: http://localhost:9011/mcp&#xa;SIMILARITY_LIMIT: 0.5&#xa;SIMILARITY_MAX_RESULTS: 2&#xa;HTTP_PORT: 8080" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="160" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="openai-setup" value="OpenAI Client Setup&#xa;Base URL: llmURL&#xa;API Key: empty" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="100" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="boss-agent" value="Boss Agent Creation&#xa;agents.GetBossAgent(ctx, client)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="180" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-card" value="A2A Agent Card Setup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="100" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent-card-details" value="AgentCard Properties&#xa;- Name: bossAgent.GetName()&#xa;- Description: bossAgent.GetDescription()&#xa;- URL: http://localhost:port&#xa;- Version: 1.0.0&#xa;- Skills: [ask_for_something]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="160" width="200" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="streaming-callback" value="Agent Streaming Callback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="320" width="640" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-processing" value="Task Request Processing&#xa;1. Extract user message&#xa;2. Check skill metadata&#xa;3. Generate user prompt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="380" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-process" value="RAG Similarity Search&#xa;GeneratePromptMessagesWithSimilarities()&#xa;- Search similar chunks&#xa;- Apply similarity limit&#xa;- Return context messages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="380" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="streaming-response" value="Streaming Response&#xa;bossAgent.RunStream()&#xa;- Stream content to client&#xa;- Print to console&#xa;- Handle errors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6ccff;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="380" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2a-server" value="A2A Server Setup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="100" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="server-details" value="A2A Server Configuration&#xa;NewA2AServerWithStreaming()&#xa;- Port: httpPort&#xa;- AgentCard: agentCard&#xa;- Callback: agentStreamCallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="160" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="server-start" value="Server Start&#xa;a2aServer.Start()&#xa;Listen on port 8080" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="260" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-function" value="GeneratePromptMessagesWithSimilarities Function" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="520" width="640" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-step1" value="Search Similarities&#xa;agents.SearchSimilarities()&#xa;- agentName, input&#xa;- similarityLimit&#xa;- maxResults" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="580" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-step2" value="Process Results&#xa;If similarities found:&#xa;- Build context message&#xa;- Add system message&#xa;- Add user message" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="580" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="rag-step3" value="Return Messages&#xa;Return ChatCompletionMessageParamUnion[]&#xa;- System message (context)&#xa;- User message (input)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="580" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="debug-feature" value="Debug Feature&#xa;If userPrompt starts with &#39;/debug&#39;&#xa;Display message history" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="380" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="config-setup" target="env-vars" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="env-vars" target="openai-setup" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="openai-setup" target="boss-agent" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="agent-card" target="agent-card-details" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="streaming-callback" target="task-processing" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="task-processing" target="rag-process" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-process" target="streaming-response" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="a2a-server" target="server-details" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="server-details" target="server-start" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-function" target="rag-step1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-step1" target="rag-step2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="rag-step2" target="rag-step3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
