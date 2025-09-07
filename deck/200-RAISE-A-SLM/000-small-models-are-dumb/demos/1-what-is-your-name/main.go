@@ -29,7 +29,9 @@ func main() {
 	param := openai.ChatCompletionNewParams{
 		Messages:    messages,
 		Model:       model,
-		Temperature: openai.Opt(0.8),
+		//Temperature: openai.Opt(0.8),
+		Temperature: openai.Opt(0.0),
+
 	}
 
 	stream := client.Chat.Completions.NewStreaming(ctx, param)

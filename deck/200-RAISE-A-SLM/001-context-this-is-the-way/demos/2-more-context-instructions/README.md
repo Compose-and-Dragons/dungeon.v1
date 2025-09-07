@@ -11,7 +11,6 @@ What can you tell me about my name?
 ...
 
 Tell me something about your profile
-Tell me something about your profile
 
 ... 
 

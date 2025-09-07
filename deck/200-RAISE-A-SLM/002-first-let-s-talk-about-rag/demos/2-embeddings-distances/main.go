@@ -69,8 +69,8 @@ func main() {
 	// Search for similarities
 	// -------------------------------------------------
 	// USER MESSAGE:
-	userQuestion := "Where are the dragons?"
-	//userQuestion := "What can be found in the pond?"
+	//userQuestion := "Where are the dragons?"
+	userQuestion := "What can be found in the pond?"
 	//userQuestion := "Which creatures swim?"
 
 	fmt.Println("⏳ Searching for similarities...")

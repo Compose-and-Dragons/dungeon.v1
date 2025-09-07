@@ -17,6 +17,7 @@ func main() {
 	// Docker Model Runner Chat base URL
 	baseURL := "http://localhost:12434/engines/llama.cpp/v1/"
 	model := "ai/qwen2.5:0.5B-F16"
+	//model := "ai/qwen2.5:1.5B-F16"
 
 	client := openai.NewClient(
 		option.WithBaseURL(baseURL),
