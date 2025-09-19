@@ -2,6 +2,7 @@ package data
 
 import "github.com/openai/openai-go/v2"
 
+// NOTE: the LLM will use this schema to format its response
 func GetRoomSchema() openai.ResponseFormatJSONSchemaJSONSchemaParam {
 	schema := map[string]any{
 		"type": "object",

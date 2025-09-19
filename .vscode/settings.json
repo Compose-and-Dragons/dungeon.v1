@@ -9,6 +9,8 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
     "workbench.tree.indent": 20,
+    //"workbench.activityBar.location": "top",
+    "workbench.editor.showTabs": "multiple",
     "window.zoomLevel": 0.0,
     "[markdown]": {
         "editor.unicodeHighlight.ambiguousCharacters": false,

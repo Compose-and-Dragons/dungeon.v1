@@ -11,6 +11,10 @@ import (
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
 )
 
+// This code defines the tool for creating a new player in the dungeon game
+// It allows creating a character with a name, class and race
+// The player is placed at the dungeon entrance with initial stats
+
 func CreatePlayerTool() mcp.Tool {
 	return mcp.NewTool("create_player",
 		mcp.WithDescription(`Create a new player. Try: "I'm Bob, the Dwarf Warrior."`),
