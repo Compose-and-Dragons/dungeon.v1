@@ -14,7 +14,7 @@ GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build
 EOF
 
 #FROM scratch
-FROM alpine:latest
+FROM alpine:3.22.1
 # for health check
 # RUN apk --no-cache add ca-certificates wget 
 WORKDIR /app
