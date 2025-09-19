@@ -32,7 +32,7 @@ flowchart TD
     MCPTools --> OtherTools[Other Tools...]:::tool
     OtherTools --> OtherHandlers[Other Handlers...]:::handler
 
-    OtherTools -->|one| AddOtherToolsToServer(<a href="/dungeon-crawler-mcp-server/main.go#L177">Add Other Tools to MCP server</a>):::process
+    OtherTools --> AddOtherToolsToServer(<a href="/dungeon-crawler-mcp-server/main.go#L177">Add Other Tools to MCP server</a>):::process
     OtherHandlers --> AddOtherToolsToServer
 
     EntranceRoom --> StartServer(<a href="/dungeon-crawler-mcp-server/main.go#L216">Start MCP server</a>):::final
