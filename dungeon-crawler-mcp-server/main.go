@@ -23,7 +23,7 @@ import (
 func main() {
 
 	// ---------------------------------------------------------
-	// Create MCP server
+	// NOTE: Create MCP server
 	// ---------------------------------------------------------
 	s := server.NewMCPServer(
 		"dungeon-mcp-server",
@@ -40,7 +40,7 @@ func main() {
 	fmt.Println("🌍 Model Runner Base URL:", baseURL)
 	dungeonModel := helpers.GetEnvOrDefault("DUNGEON_MODEL", "ai/qwen2.5:1.5B-F16")
 	fmt.Println("🧠 Dungeon Model:", dungeonModel)
-	// Initialize OpenAI client
+	// NOTE: Initialize OpenAI client
 	client := openai.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey(""),
@@ -48,26 +48,7 @@ func main() {
 
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MODEL_TEMPERATURE", "0.7"))
 
-	// schema := map[string]any{
-	// 	"type": "object",
-	// 	"properties": map[string]any{
-	// 		"name": map[string]any{
-	// 			"type": "string",
-	// 		},
-	// 		"description": map[string]any{
-	// 			"type": "string",
-	// 		},
-	// 	},
-	// 	"required": []string{"name", "description"},
-	// }
-
-	// schemaParam := openai.ResponseFormatJSONSchemaJSONSchemaParam{
-	// 	Name:        "room_info",
-	// 	Description: openai.String("name and description of the room"),
-	// 	Schema:      schema,
-	// 	Strict:      openai.Bool(true),
-	// }
-
+	// NOTE: Agent Creation
 	dungeonAgent, err := mu.NewAgent(ctx, "dungeon-agent",
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
@@ -87,6 +68,8 @@ func main() {
 	// ---------------------------------------------------------
 	// Game initialisation
 	// ---------------------------------------------------------
+
+	// NOTE: Initialize the Player struct
 	currentPlayer := types.Player{
 		Name: "Unknown",
 	}
@@ -106,6 +89,7 @@ func main() {
 
 	fmt.Println("🏰 Dungeon Size:", width, "x", height)
 
+	// NOTE: Initialize the Dungeon struct 
 	dungeon := types.Dungeon{
 		Name:        dungeonName,
 		Description: dungeonDescription,
@@ -121,13 +105,12 @@ func main() {
 			Y: exitY,
 		},
 	}
-	// TODO:
+
 	// make the dungeon settings configurable via env vars or a config file
 	fmt.Println("🚪 Dungeon Entrance Coords:", dungeon.EntranceCoords)
 	fmt.Println("🚪 Dungeon Exit Coords:", dungeon.ExitCoords)
 
 	// Create the entrance room of the dungeon
-	// TODO: generate room name and description with a model
 
 	// ---------------------------------------------------------
 	// BEGIN: Generate the entrance room with the dungeon agent
@@ -143,13 +126,6 @@ func main() {
 		fmt.Println("🔴 Error generating room:", err)
 		return
 	}
-
-	// following the schema response is a JSON String
-	// {
-	//   "room_info": {
-	//     "name": "Dungeon Entrance",
-	//     "description": "The dark and foreboding entrance to the dungeon."
-	//   }
 
 	fmt.Println("📝 Dungeon Entrance Room Response:", response)
 
@@ -189,11 +165,9 @@ func main() {
 	// ---------------------------------------------------------
 	// TOOLS:
 	// ---------------------------------------------------------
-	// TODO:
-	// - add dungeon map tool
-	// - add look around tool or get current room info tool
 	// ---------------------------------------------------------
 	// Register tools and their handlers
+	// 🤚 These tools will be used by the dungeon-master program
 	// ---------------------------------------------------------
 	// Create Player
 	createPlayerToolInstance := tools.CreatePlayerTool()
@@ -238,9 +212,8 @@ func main() {
 	isPlayerInSameRoomAsNPCToolInstance := tools.IsPlayerInSameRoomAsNPCTool()
 	s.AddTool(isPlayerInSameRoomAsNPCToolInstance, tools.IsPlayerInSameRoomAsNPCToolHandler(&currentPlayer, &dungeon))
 
-
 	// ---------------------------------------------------------
-	// Start the HTTP server
+	// NOTE: Start the HTTP server
 	// ---------------------------------------------------------
 	httpPort := helpers.GetEnvOrDefault("MCP_HTTP_PORT", "9090")
 	fmt.Println("🌍 MCP HTTP Port:", httpPort)

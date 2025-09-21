@@ -63,16 +63,26 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 			return mcp.NewToolResultText(message), nil
 		}
 
-		// Initialize random seed
-		rand.Seed(time.Now().UnixNano())
+		// Fight logic/rules
+		// COMBAT RULES:
+		// 1. Both player and monster roll 2d6 (two six-sided dice)
+		// 2. Add strength stat to the dice roll total
+		// 3. Higher total wins the combat turn
+		// 4. Winner deals damage equal to the difference between totals
+		// 5. Combat continues until one combatant reaches 0 health
+		// 6. If player wins: gains 10-30 XP and 5-20 gold coins
+		// 7. If rolls are tied: no damage is dealt to either combatant
+
+		// Initialize random generator
+		r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 		// Combat turn: roll 2d6 for both player and monster
-		playerRoll1 := rand.Intn(6) + 1
-		playerRoll2 := rand.Intn(6) + 1
+		playerRoll1 := r.Intn(6) + 1
+		playerRoll2 := r.Intn(6) + 1
 		playerTotal := playerRoll1 + playerRoll2 + player.Strength
 
-		monsterRoll1 := rand.Intn(6) + 1
-		monsterRoll2 := rand.Intn(6) + 1
+		monsterRoll1 := r.Intn(6) + 1
+		monsterRoll2 := r.Intn(6) + 1
 		monsterTotal := monsterRoll1 + monsterRoll2 + monster.Strength
 
 		message := "⚔️ **COMBAT TURN**\n"
@@ -94,11 +104,12 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 				monster.IsDead = true
 				
 				// Player gains experience and gold
-				expGained := 10 + rand.Intn(21) // 10-30 experience
-				goldGained := 5 + rand.Intn(16) // 5-20 gold
+				expGained := 10 + r.Intn(21) // 10-30 experience
+				goldGained := 5 + r.Intn(16) // 5-20 gold
 				player.Experience += expGained
 				player.GoldCoins += goldGained
 				
+				// NOTE: you win! 🎉
 				message += fmt.Sprintf("💀 %s is defeated!\n", monster.Name)
 				message += fmt.Sprintf("⭐ You gain %d experience and %d gold coins!\n", expGained, goldGained)
 				
@@ -117,6 +128,7 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 			if player.Health <= 0 {
 				player.Health = 0
 				player.IsDead = true
+				// NOTE: you are dead! ☠️
 				message += "💀 You have been defeated! You are now dead.\n"
 			} else {
 				message += fmt.Sprintf("❤️ You have %d health remaining.\n", player.Health)

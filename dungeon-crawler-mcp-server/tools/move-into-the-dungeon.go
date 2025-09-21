@@ -19,7 +19,9 @@ import (
 func GetMoveIntoTheDungeonTool() mcp.Tool {
 
 	moveByDirection := mcp.NewTool("move_by_direction",
+		// DESCRIPTION:
 		mcp.WithDescription(`Move the player in a specified direction (north, south, east, west). Try "move by north".`),
+		// PARAMETER:
 		mcp.WithString("direction",
 			mcp.Required(),
 			mcp.Description("The direction to move in. Must be one of: north, south, east, west"),
@@ -32,7 +34,9 @@ func GetMoveIntoTheDungeonTool() mcp.Tool {
 func GetMovePlayerTool() mcp.Tool {
 
 	movePlayer := mcp.NewTool("move_player",
+		// DESCRIPTION:
 		mcp.WithDescription(`Move the player in the dungeon by specifying a cardinal direction. This is the primary navigation tool for exploring rooms. Usage: "move player north" or "go east".`),
+		// PARAMETER:
 		mcp.WithString("direction",
 			mcp.Required(),
 			mcp.Description("Cardinal direction to move the player. MUST be exactly one of these values: 'north', 'south', 'east', 'west' (lowercase only)"),
@@ -45,6 +49,7 @@ func GetMovePlayerTool() mcp.Tool {
 func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, dungeonAgent mu.Agent) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+
 		if player.Name == "Unknown" {
 			message := "✋ No player exists. Please create a player first."
 			fmt.Println(message)
@@ -97,6 +102,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			}
 		}
 
+		// IMPORTANT: if the room doesn't exist, create it
 		if currentRoom == nil {
 			// NOTE: it's a new room, create it => generate room name and description with a model
 			fmt.Println("⏳✳️✳️✳️ Creating a ROOM at coordinates:", newX, newY)
@@ -113,10 +119,8 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 			// Set the messages to use the room system instruction
 			// IMPORTANT: Reset the previous messages
-			//dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
 			dungeonAgent.ResetMessages()
 
-			// TODO: use a stream completion to display it into the logs
 			response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
 				openai.SystemMessage(dungeonAgentRoomSystemInstruction),
 				openai.UserMessage("Create a new dungeon room with a name and a short description."),
@@ -126,7 +130,6 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 			if err != nil {
 				fmt.Println("🔴 Error generating room:", err)
-				// TODO: handle error better => generate a default room
 				return mcp.NewToolResultText(""), err
 
 			}
@@ -139,7 +142,6 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			err = json.Unmarshal([]byte(response), &roomResponse)
 			if err != nil {
 				fmt.Println("🔴 Error unmarshaling room response:", err)
-				// TODO: handle error better => generate a default room
 				return mcp.NewToolResultText(""), err
 			}
 			fmt.Println("👋🏰 Room:", roomResponse)
@@ -148,29 +150,16 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// END: of Generate the room with the dungeon agent
 			// ---------------------------------------------------------
 
-			// newRoom := types.Room{
-			// 	ID:          roomID,
-			// 	Name:        fmt.Sprintf("Room at (%d, %d)", newX, newY),
-			// 	Description: fmt.Sprintf("You are in a room at coordinates (%d, %d).", newX, newY),
-			// 	Coordinates: types.Coordinates{X: newX, Y: newY},
-			// 	Visited:     true,
-			// 	IsEntrance:  newX == dungeon.EntranceCoords.X && newY == dungeon.EntranceCoords.Y,
-			// 	IsExit:      newX == dungeon.ExitCoords.X && newY == dungeon.ExitCoords.Y,
-			// }
-
 			// Add NPCs, monsters, and items based on probabilities of appearance
 
 			// ---------------------------------------------------------
 			// BEGIN: Create NPC 🧙‍♂️
 			// ---------------------------------------------------------
 
-			// QUESTION: comment un tool peut déclencher un autre tool ?
-			// NOTE: sinon cela dit qu'il y a un NPC dans la pièce
-			// et le joueur peut utiliser le tool "talk_to_npc" pour interagir avec lui
-
 			var hasNonPlayerCharacter bool
 			var nonPlayerCharacter types.NonPlayerCharacter
 
+			// IMPORTANT: the values come from the compose file
 			merchantRoom := helpers.GetEnvOrDefault("MERCHANT_ROOM", "room_1_1")
 			guardRoom := helpers.GetEnvOrDefault("GUARD_ROOM", "room_0_2")
 			sorcererRoom := helpers.GetEnvOrDefault("SORCERER_ROOM", "room_2_0")
@@ -231,7 +220,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 			// ---------------------------------------------------------
 
 			// ---------------------------------------------------------
-			// BEGIN: Create Monster 👹
+			// BEGIN: Create Monster 👹 IMPORTANT: with dungeonAgent
 			// ---------------------------------------------------------
 			var monster types.Monster
 			var hasMonster bool
@@ -246,9 +235,6 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 				},
 			})
 
-			// NOTE:
-			// TODO: create a monster with a model
-
 			// 100 x monsterProbability % of chance to have a monster in the room
 			// except if there is already a NPC in the room
 			if rand.Float64() < monsterProbability && !hasNonPlayerCharacter {
@@ -258,6 +244,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 				// IMPORTANT: Reset the previous messages
 				dungeonAgent.SetMessages([]openai.ChatCompletionMessageParamUnion{})
 
+				// NOTE: run the completion to get the monster
 				response, err := dungeonAgent.Run([]openai.ChatCompletionMessageParamUnion{
 					openai.SystemMessage(dungeonAgentMonsterSystemInstruction),
 					openai.UserMessage("Create a new monster with a name and a short description."),
@@ -265,7 +252,6 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 				if err != nil {
 					fmt.Println("🔴 Error generating monster:", err)
-					// TODO: handle error better => generate a default monster
 					return mcp.NewToolResultText(""), err
 
 				}
@@ -275,26 +261,9 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 				err = json.Unmarshal([]byte(response), &monsterResponse)
 				if err != nil {
 					fmt.Println("🔴 Error unmarshaling monster response:", err)
-					// TODO: handle error better => generate a default monster
 					return mcp.NewToolResultText(""), err
 				}
 				fmt.Println("👋👹 Monster:", monsterResponse)
-
-				// monsterTypes := []types.Kind{
-				// 	types.Skeleton,
-				// 	types.Zombie,
-				// 	types.Goblin,
-				// 	types.Orc,
-				// 	types.Troll,
-				// 	types.Dragon,
-				// 	types.Werewolf,
-				// 	types.Vampire,
-				// }
-				// monsterType := monsterTypes[rand.Intn(len(monsterTypes))]
-
-				// monsterName := fmt.Sprintf("%s #%d", monsterType, rand.Intn(1000))
-				// monsterHealth := rand.Intn(20) + 10 // between 10 and 29 health points
-				// monsterAttack := rand.Intn(5) + 1   // between 1 and 5 attack points
 
 				monster = types.Monster{
 					Kind:        monsterResponse.Kind,
