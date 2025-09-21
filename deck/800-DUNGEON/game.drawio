@@ -1,0 +1,211 @@
+<mxfile host="65bd71144e">
+    <diagram id="j3gjDNa29-LcTCSZ3D_6" name="Page-1">
+        <mxGraphModel dx="1006" dy="768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="72" value="Docker Agentic Compose" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry width="1040" height="770" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Dungeon MCP Server" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="17" y="60" width="220" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="MCP Tools" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;" parent="2" vertex="1">
+                    <mxGeometry x="20" y="40" width="180" height="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;div style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(9, 94, 9); font-weight: bold;&quot;&gt;&lt;font&gt;create_player&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="30" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="&lt;div style=&quot;background-color: rgb(255, 255, 255); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre; color: rgb(0, 0, 0);&quot;&gt;&lt;b&gt;fight_monster&lt;/b&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="60" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="&lt;b style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;collect_gold&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="90" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;collect_magic_potion&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="120" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;get_room_info&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="150" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;get_player_info&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry y="180" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;get_dungeon_info&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry y="210" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;get_dungeon_map&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry y="240" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;move_into_the_dungeon&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry y="270" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="&lt;b style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(63, 63, 63);&quot;&gt;...&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="3">
+                    <mxGeometry y="300" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" value="Dungeon [&lt;span style=&quot;background-color: light-dark(rgb(255, 255, 101), rgb(237, 237, 237));&quot;&gt;FUNCTIONAL&lt;/span&gt; AGENT]" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" vertex="1" parent="2">
+                    <mxGeometry x="20" y="380" width="180" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="Chat AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="83">
+                    <mxGeometry x="30" y="22" width="140" height="148" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;rounded=0;glass=0;" vertex="1" parent="31">
+                    <mxGeometry x="15" y="55" width="110" height="51" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Docker MCP Gateway" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="313" y="35" width="200" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="endArrow=classic;startArrow=classic;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;rounded=1;edgeStyle=elbowEdgeStyle;" parent="1" source="2" target="11" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="430" y="370" as="sourcePoint"/>
+                        <mxPoint x="480" y="320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="13" value="Dungeon Master [&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: light-dark(rgb(255, 255, 101), rgb(50, 50, 0));&quot;&gt;FUNCTIONAL&lt;/span&gt;&amp;nbsp;&lt;/span&gt;AGENT]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="162" width="259" height="209" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="MCP Client" style="swimlane;whiteSpace=wrap;html=1;" parent="13" vertex="1">
+                    <mxGeometry x="20" y="40" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="Tool AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="13">
+                    <mxGeometry x="20" y="109" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="46">
+                    <mxGeometry x="20" y="31" width="130" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="NPC&amp;nbsp;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;[&lt;span style=&quot;background-color: rgb(255, 255, 102);&quot;&gt;FUNCTIONAL&lt;/span&gt; AGENT]&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="13">
+                    <mxGeometry x="-29" y="261" width="199" height="219" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="Chat AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="34">
+                    <mxGeometry x="11" y="39" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="37">
+                    <mxGeometry x="20" y="31" width="130" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="Embedding AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="34">
+                    <mxGeometry x="11" y="128" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="43">
+                    <mxGeometry x="20" y="31" width="130" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.442;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;startArrow=oval;startFill=1;" edge="1" parent="13" source="13" target="34">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=classic;startFill=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="15" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="280" y="260" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="580" y="190"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" value="Docker Model Runner" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="706" y="276" width="200" height="169" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="SLM" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="20" vertex="1">
+                    <mxGeometry x="30" y="70" width="40" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="SLM" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="20" vertex="1">
+                    <mxGeometry x="80" y="70" width="40" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="SLM" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="20" vertex="1">
+                    <mxGeometry x="130" y="70" width="40" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="" style="endArrow=classic;startArrow=classic;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=elbowEdgeStyle;elbow=vertical;" edge="1" parent="1" source="20" target="33">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="70" y="680" as="sourcePoint"/>
+                        <mxPoint x="120" y="630" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="460" y="760"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="48" value="NPC Sorcerer" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="160" y="677" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="57" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="53" target="34">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="NPC Healer" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="677" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="54" target="34">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="NPC Merchant" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="677" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" style="edgeStyle=none;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="55" target="34">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="NPC Sorcerer" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="580" y="678" width="130" height="69" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="48" target="34">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="450" y="640" as="sourcePoint"/>
+                        <mxPoint x="300" y="670" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="60" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;endFill=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="38" target="20">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="640" y="400" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="590" y="460"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="61" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;endArrow=classic;endFill=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="44" target="20">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="650" y="421" as="targetPoint"/>
+                        <mxPoint x="436" y="554" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="630" y="520"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="62" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="47" target="20">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="64" value="End of Level Boss&amp;nbsp;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;[&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 102);&quot;&gt;FUNCTIONAL&lt;/span&gt;&amp;nbsp;&lt;/span&gt;AGENT]&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;backgroundOutline=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="32" width="280" height="219" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="Chat AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="64">
+                    <mxGeometry x="57" y="39" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="65">
+                    <mxGeometry x="20" y="31" width="130" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="67" value="Embedding AI agent" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="64">
+                    <mxGeometry x="57" y="128" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="68" value="Engine Client" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="67">
+                    <mxGeometry x="20" y="31" width="130" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="69" style="edgeStyle=elbowEdgeStyle;html=1;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=oval;startFill=1;" edge="1" parent="1" source="13" target="64">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="590" y="280" as="sourcePoint"/>
+                        <mxPoint x="630" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="71" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;startArrow=classic;startFill=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="65" target="20">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="940" y="272" as="targetPoint"/>
+                        <mxPoint x="1007" y="150" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="1000" y="260"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="70" style="edgeStyle=elbowEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;startArrow=classic;startFill=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="67" target="20">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="840" y="310" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="980" y="250"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

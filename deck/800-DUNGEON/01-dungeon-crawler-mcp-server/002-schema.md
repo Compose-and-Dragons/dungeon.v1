@@ -1,4 +1,4 @@
-# Dungeon Crawler MCP Server Schema
+# Dungeon Crawler MCP Server
 
 ```mermaid
 flowchart TD
@@ -30,7 +30,7 @@ flowchart TD
     CreatePlayerTool --> AddClientToolToServer
 
     MCPTools --> OtherTools[Other Tools...]:::tool
-    OtherTools --> OtherHandlers[Other Handlers...]:::handler
+    OtherTools --> OtherHandlers[<a href="002-schema-tools-handlers.md">Other Handlers...<a>]:::handler
 
     OtherTools --> AddOtherToolsToServer(<a href="/dungeon-crawler-mcp-server/main.go#L177">Add Other Tools to MCP server</a>):::process
     OtherHandlers --> AddOtherToolsToServer

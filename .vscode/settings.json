@@ -49,6 +49,38 @@
     },
     "todohighlight.keywords": [
         {
+            "text": "dungeonAgent ",
+            "color": "#000000",
+            "backgroundColor": "#E2F0F2",
+            "border": "1px solid #E2F0F2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },   
+        {
+            "text": "dungeonAgent.",
+            "color": "#000000",
+            "backgroundColor": "#E2F0F2",
+            "border": "1px solid #E2F0F2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },     
+        {
+            "text": "playerTotal := playerRoll1 + playerRoll2 + player.Strength",
+            "color": "#000000",
+            "backgroundColor": "#E2F0F2",
+            "border": "1px solid #E2F0F2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "monsterTotal := monsterRoll1 + monsterRoll2 + monster.Strength",
+            "color": "#000000",
+            "backgroundColor": "#E2F0F2",
+            "border": "1px solid #E2F0F2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                                  
+        {
             "text": "NOTE:",
             "color": "#ffffff",
             "backgroundColor": "#0062FF",
@@ -264,6 +296,30 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },   
+        {
+            "text": "DESCRIPTION:",
+            "color": "#ffffff",
+            "backgroundColor": "#4D81D3",
+            "border": "1px solid #4D81D3",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "PARAMETERS:",
+            "color": "#ffffff",
+            "backgroundColor": "#458C5D",
+            "border": "1px solid #458C5D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+        {
+            "text": "PARAMETER:",
+            "color": "#ffffff",
+            "backgroundColor": "#458C5D",
+            "border": "1px solid #458C5D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                            
         {
             "text": "[RAG]",
             "color": "#ffffff",

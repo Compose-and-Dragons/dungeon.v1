@@ -17,7 +17,10 @@ import (
 
 func CreatePlayerTool() mcp.Tool {
 	return mcp.NewTool("create_player",
+		// DESCRIPTION:
 		mcp.WithDescription(`Create a new player. Try: "I'm Bob, the Dwarf Warrior."`),
+
+		// PARAMETERS: name, class, race
 		mcp.WithString("name",
 			mcp.Required(),
 			mcp.Description("the name of the player"),
