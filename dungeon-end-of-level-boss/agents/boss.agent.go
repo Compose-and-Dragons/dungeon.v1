@@ -35,7 +35,7 @@ func createBossAgent(ctx context.Context, client openai.Client) mu.Agent {
 	// [RAG]  Initialize the vector store for the agent
 	errEmbedding := GenerateEmbeddings(ctx, &client, name, helpers.GetEnvOrDefault("BOSS_CONTEXT_PATH", ""))
 	if errEmbedding != nil {
-		fmt.Println("🔶 Error generating embeddings for sorcerer agent:", errEmbedding)
+		fmt.Println("🔶 Error generating embeddings for boss agent:", errEmbedding)
 	}
 
 	// ---------------------------------------------------------
