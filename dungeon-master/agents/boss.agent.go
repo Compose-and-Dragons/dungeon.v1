@@ -160,7 +160,7 @@ func (b *BossAgent) Run(Messages []openai.ChatCompletionMessageParamUnion) (stri
 
 // RunStream implements mu.Agent.
 func (b *BossAgent) RunStream(Messages []openai.ChatCompletionMessageParamUnion, callBack func(content string) error) (string, error) {
-
+	// NOTE: do not send all messages (history), only the last one
 	lastMessage := Messages[len(Messages)-1]
 
 	// Create a task request

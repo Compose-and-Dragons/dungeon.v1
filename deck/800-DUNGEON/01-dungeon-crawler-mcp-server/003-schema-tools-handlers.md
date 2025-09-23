@@ -1,5 +1,8 @@
 # Dungeon Crawler MCP Server: (most important) Handlers of the game
 
+⬅️ **Back to:** [Dungeon MCP Server Schema](./002-schema-dungeon-mcp-server.md)
+
+
 ```mermaid
 flowchart TD
     MCPServer -->|Define tools & handlers| MCPTools[<a href="/dungeon-crawler-mcp-server/main.go#L166">MCP Tools</a>]:::tools

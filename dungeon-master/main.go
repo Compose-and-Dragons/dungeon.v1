@@ -243,8 +243,8 @@ func main() {
 				dungeonMasterSystemInstructions,
 				userMessage,
 			}
-			// QUESTION: should I keep the last message?
-			// QUESTION: should I reset the messages to only keep the last message + system?
+			
+			
 
 			// TOOLS DETECTION:
 			_, toolCallsResults, assistantMessage, err := selectedAgent.DetectToolCalls(dungeonMasterMessages, executeFn)
