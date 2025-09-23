@@ -30,7 +30,7 @@ flowchart TD
     CreatePlayerTool --> AddClientToolToServer
 
     MCPTools --> OtherTools[Other Tools...]:::tool
-    OtherTools --> OtherHandlers[<a href="002-schema-tools-handlers.md">Other Handlers...<a>]:::handler
+    OtherTools --> OtherHandlers[<a href="003-schema-tools-handlers.md">Other Handlers...<a>]:::handler
 
     OtherTools --> AddOtherToolsToServer(<a href="/dungeon-crawler-mcp-server/main.go#L177">Add Other Tools to MCP server</a>):::process
     OtherHandlers --> AddOtherToolsToServer
