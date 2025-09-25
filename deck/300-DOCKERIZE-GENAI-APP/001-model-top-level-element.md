@@ -16,6 +16,8 @@ Define and tune your models for your containerized app
   * `context_size`: maximum token context size for the model
   * `runtime_flags`: raw flags passed to the inference runtime such as temperature, verbose mode...
 
+---
+## How to define models
 ```yaml
 models:
   # simple definition
