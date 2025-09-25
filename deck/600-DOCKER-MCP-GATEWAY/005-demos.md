@@ -10,8 +10,8 @@ paginate: true
 </style>
 # 🚀 Demos
 
-- Create a 2nd MCP server
+- Create a MCP server to roll dices and another one to choose which NPC to chat with
 - Setup the two MCP servers & the Docker MCP Gateway
-- Tests
-- Connect an <span class="dodgerblue">**"µ🕵️‍♂️ agent"**</span> to the MCP Gateway
+- Tests them with MCP inspector tool
+- Connect an <span class="dodgerblue">**"µ🕵️‍♂️ agent"**</span> to the MCP Gateway and use MCP servers tools
 
