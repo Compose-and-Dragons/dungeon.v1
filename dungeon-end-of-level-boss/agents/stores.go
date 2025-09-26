@@ -34,94 +34,99 @@ func GenerateEmbeddings(ctx context.Context, client *openai.Client, name string,
 	// [VECTOR STORE] Loading or creating the vector store
 	// ---------------------------------------------------------
 	err := store.Load(jsonStoreFilePath)
-	if err != nil {
-		// ---------------------------------------------------------
-		// BEGIN: If the file does not exist, create a new vector store
-		// ---------------------------------------------------------
-		if os.IsNotExist(err) {
-			fmt.Println("🔶 No existing vector store found, starting fresh:", err)
-
-			ui.Println(ui.Green, strings.Repeat("─", 80))
-			ui.Println(ui.Green, "🚧 Generating embeddings for agent:", name)
-			ui.Println(ui.Green, strings.Repeat("─", 80))
-
-			// EMBEDDING AGENT: Create an embedding agent to generate embeddings
-			embeddingAgent, err := mu.NewAgent(ctx, "vector-agent",
-				mu.WithClient(*client),
-				mu.WithEmbeddingParams(
-					openai.EmbeddingNewParams{
-						Model: helpers.GetEnvOrDefault("EMBEDDING_MODEL", "ai/mxbai-embed-large:latest"),
-					},
-				),
-			)
-			if err != nil {
-				fmt.Println("🔶 Error creating embedding agent", err)
-				return err
-			}
-
-			fmt.Println("✅ Embedding agent created successfully")
-
-			if contextInstructionsContentPath == "" {
-				fmt.Println("🔶 No context path provided, using default instructions.")
-				return fmt.Errorf("no context path provided")
-			}
-
-			// Read the content of the file at contextInstructionsContentPath
-			contextInstructionsContent, err := helpers.ReadTextFile(contextInstructionsContentPath)
-			if err != nil {
-				fmt.Println("🔶 Error reading the file, using default instructions:", err)
-				return err
-			}
-
-			// CHUNKS: Split the content into chunks for embedding
-			chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
-
-			for idx, chunk := range chunks {
-				fmt.Println("🔶 Chunk", idx, ":", chunk)
-				embeddingVector, err := embeddingAgent.GenerateEmbeddingVector(chunk)
-				if err != nil {
-					return err
-				}
-				_, errSave := store.Save(rag.VectorRecord{
-					Prompt:    chunk,
-					Embedding: embeddingVector,
-				})
-
-				if errSave != nil {
-					fmt.Println("🔴 When saving the vector", errSave)
-					return errSave
-				}
-				fmt.Println("✅ Chunk", idx, "saved with embedding:", len(embeddingVector))
-			}
-			fmt.Println("📝 Total records in the vector store:", len(store.Records))
-
-			// [RAG] Save the vector store to a file
-			err = store.Persist(jsonStoreFilePath)
-			if err != nil {
-				fmt.Println("🔶 Error saving vector store:", err)
-				return err
-			}
-			fmt.Println("✅ Vector store saved to", jsonStoreFilePath)
-			fmt.Println("💾 Vector store initialized with", len(store.Records), "records.")
-
-			ui.Println(ui.Green, strings.Repeat("─", 80))
-			fmt.Println()
-
-			return nil
-			// ---------------------------------------------------------
-			// END: If the file does not exist, create a new vector store
-			// ---------------------------------------------------------
-		} else {
-			fmt.Println("🔶 Error loading vector store:", err)
-			return err
-		}
-
-	} else {
+	if err == nil {
 		fmt.Println("✅ Vector store loaded successfully with", len(store.Records), "records")
 		return nil // If the store is loaded successfully, no need to regenerate embeddings
-
 	}
 
+	// return the error if different from a non-existing vector store
+	if !os.IsNotExist(err) {
+		fmt.Println("🔶 Error loading vector store:", err)
+		return err
+	}
+
+	// ---------------------------------------------------------
+	// BEGIN: If the file does not exist, create a new vector store
+	// ---------------------------------------------------------
+	fmt.Println("🔶 No existing vector store found, starting fresh:", err)
+
+	ui.Println(ui.Green, strings.Repeat("─", 80))
+	ui.Println(ui.Green, "🚧 Generating embeddings for agent:", name)
+	ui.Println(ui.Green, strings.Repeat("─", 80))
+
+	// EMBEDDING AGENT: Create an embedding agent to generate embeddings
+	embeddingAgent, err := mu.NewAgent(ctx, "vector-agent",
+		mu.WithClient(*client),
+		mu.WithEmbeddingParams(
+			openai.EmbeddingNewParams{
+				Model: helpers.GetEnvOrDefault("EMBEDDING_MODEL", "ai/mxbai-embed-large:latest"),
+			},
+		),
+	)
+	if err != nil {
+		fmt.Println("🔶 Error creating embedding agent", err)
+		return err
+	}
+
+	fmt.Println("✅ Embedding agent created successfully")
+
+	if contextInstructionsContentPath == "" {
+		fmt.Println("🔶 No context path provided, using default instructions.")
+		return fmt.Errorf("no context path provided")
+	}
+
+	// Read the content of the file at contextInstructionsContentPath
+	contextInstructionsContent, err := helpers.ReadTextFile(contextInstructionsContentPath)
+	if err != nil {
+		fmt.Println("🔶 Error reading the file, using default instructions:", err)
+		return err
+	}
+
+	// CHUNKS: Split the content into chunks for embedding
+	if err = splitAndSaveChunk(contextInstructionsContent, embeddingAgent, store); err != nil {
+		return err
+	}
+
+	// [RAG] Save the vector store to a file
+	if err = store.Persist(jsonStoreFilePath); err != nil {
+		fmt.Println("🔶 Error saving vector store:", err)
+		return err
+	}
+	fmt.Println("✅ Vector store saved to", jsonStoreFilePath)
+	fmt.Println("💾 Vector store initialized with", len(store.Records), "records.")
+
+	ui.Println(ui.Green, strings.Repeat("─", 80))
+	fmt.Println()
+
+	return nil
+	// ---------------------------------------------------------
+	// END: If the file does not exist, create a new vector store
+	// ---------------------------------------------------------
+
+}
+
+// Split the content into chunks for the embedding and save them
+func splitAndSaveChunk(contextInstructionsContent string, embeddingAgent mu.Agent, store rag.MemoryVectorStore) error {
+	chunks := rag.SplitMarkdownBySections(contextInstructionsContent)
+
+	for idx, chunk := range chunks {
+		fmt.Println("🔶 Chunk", idx, ":", chunk)
+		embeddingVector, err := embeddingAgent.GenerateEmbeddingVector(chunk)
+		if err != nil {
+			return err
+		}
+		if _, errSave := store.Save(rag.VectorRecord{
+			Prompt:    chunk,
+			Embedding: embeddingVector,
+		}); errSave != nil {
+			fmt.Println("🔴 When saving the vector", errSave)
+			return errSave
+		}
+
+		fmt.Println("✅ Chunk", idx, "saved with embedding:", len(embeddingVector))
+	}
+	fmt.Println("📝 Total records in the vector store:", len(store.Records))
+	return nil
 }
 
 // SearchSimilarities searches for similar content in the agent's vector store
