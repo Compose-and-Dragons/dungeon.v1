@@ -24,9 +24,9 @@ flowchart TD
     MCPServer -->|Define tools & handlers| MCPTools[<a href="/dungeon-crawler-mcp-server/main.go#L166">MCP Tools</a>]:::tools
 
     MCPTools --> CreatePlayerTool(<a href="/dungeon-crawler-mcp-server/tools/create-player.go#L18">create-player tool</a>):::tool
-    CreatePlayerTool -->|tools.CreatePlayerToolHandler| PlayerHandler(<a href="/dungeon-crawler-mcp-server/tools/create-player.go#L36">CreatePlayerToolHandler</a>):::handler
+    CreatePlayerTool -->|tools.CreatePlayerToolHandler| PlayerHandler(<a href="/dungeon-crawler-mcp-server/tools/create-player.go#L39">CreatePlayerToolHandler</a>):::handler
 
-    PlayerHandler --> AddClientToolToServer[<a href="/dungeon-crawler-mcp-server/main.go#L174">Add tool to MCP server</a>]:::process
+    PlayerHandler --> AddClientToolToServer[<a href="/dungeon-crawler-mcp-server/main.go#L173">Add tool to MCP server</a>]:::process
     CreatePlayerTool --> AddClientToolToServer
 
     MCPTools --> OtherTools[Other Tools...]:::tool

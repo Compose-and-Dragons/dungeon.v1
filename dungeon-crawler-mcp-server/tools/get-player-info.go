@@ -4,7 +4,6 @@ import (
 	"context"
 	"dungeon-mcp-server/types"
 	"encoding/json"
-	"fmt"
 
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -17,10 +16,8 @@ func GetPlayerInformationTool() mcp.Tool {
 
 func GetPlayerInformationToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		if callToolResult, err := checkPlayerExists(player); err != nil {
+			return callToolResult, err
 		}
 
 		playerJSON, err := json.MarshalIndent(*player, "", "  ")

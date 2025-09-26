@@ -18,12 +18,10 @@ func FightMonsterTool() mcp.Tool {
 
 func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		
+
 		// Check if player exists
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		if result, err := checkPlayerExists(player); err != nil {
+			return result, err
 		}
 
 		// Check if player is dead
@@ -34,18 +32,9 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 		}
 
 		// Find current room
-		var currentRoom *types.Room
-		for i := range dungeon.Rooms {
-			if dungeon.Rooms[i].ID == player.RoomID {
-				currentRoom = &dungeon.Rooms[i]
-				break
-			}
-		}
-
-		if currentRoom == nil {
-			message := "❌ Player is not in any room."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("player not in any room")
+		currentRoom, callToolResult, err := checkPlayerIsInARoom(player, dungeon)
+		if err != nil {
+			return callToolResult, err
 		}
 
 		// Check if there's a monster in the room
@@ -86,9 +75,9 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 		monsterTotal := monsterRoll1 + monsterRoll2 + monster.Strength
 
 		message := "⚔️ **COMBAT TURN**\n"
-		message += fmt.Sprintf("🎲 %s rolls: %d + %d + %d (strength) = %d\n", 
+		message += fmt.Sprintf("🎲 %s rolls: %d + %d + %d (strength) = %d\n",
 			player.Name, playerRoll1, playerRoll2, player.Strength, playerTotal)
-		message += fmt.Sprintf("🎲 %s rolls: %d + %d + %d (strength) = %d\n", 
+		message += fmt.Sprintf("🎲 %s rolls: %d + %d + %d (strength) = %d\n",
 			monster.Name, monsterRoll1, monsterRoll2, monster.Strength, monsterTotal)
 
 		// Determine winner of this turn
@@ -96,23 +85,23 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 			// Player wins this turn
 			damage := playerTotal - monsterTotal
 			monster.Health -= damage
-			message += fmt.Sprintf("✅ %s wins this turn! %s takes %d damage.\n", 
+			message += fmt.Sprintf("✅ %s wins this turn! %s takes %d damage.\n",
 				player.Name, monster.Name, damage)
-			
+
 			if monster.Health <= 0 {
 				monster.Health = 0
 				monster.IsDead = true
-				
+
 				// Player gains experience and gold
 				expGained := 10 + r.Intn(21) // 10-30 experience
 				goldGained := 5 + r.Intn(16) // 5-20 gold
 				player.Experience += expGained
 				player.GoldCoins += goldGained
-				
+
 				// NOTE: you win! 🎉
 				message += fmt.Sprintf("💀 %s is defeated!\n", monster.Name)
 				message += fmt.Sprintf("⭐ You gain %d experience and %d gold coins!\n", expGained, goldGained)
-				
+
 				// Update room status since monster is dead
 				currentRoom.HasMonster = false
 			} else {
@@ -122,9 +111,9 @@ func FightMonsterToolHandler(player *types.Player, dungeon *types.Dungeon) func(
 			// Monster wins this turn
 			damage := monsterTotal - playerTotal
 			player.Health -= damage
-			message += fmt.Sprintf("💥 %s wins this turn! You take %d damage.\n", 
+			message += fmt.Sprintf("💥 %s wins this turn! You take %d damage.\n",
 				monster.Name, damage)
-			
+
 			if player.Health <= 0 {
 				player.Health = 0
 				player.IsDead = true

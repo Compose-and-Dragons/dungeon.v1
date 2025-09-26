@@ -20,10 +20,8 @@ func GetDungeonMapTool() mcp.Tool {
 func GetDungeonMapToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		if callToolResult, err := checkPlayerExists(player); err != nil {
+			return callToolResult, err
 		}
 		// NOTE: generate the ASCII map
 		asciiMap := generateASCIIMap(player, dungeon)
@@ -41,7 +39,7 @@ type RoomInfo struct {
 THE SQUARE DUNGEON OF COMPOSE-AND-DRAGONS
 =========================================
 
-    0       1       2       3       
+    0       1       2       3
   ┌───────┬───────┬───────┬───────┐
 3 │ ???   │ ???   │ ???   │ ???   │
   │       │       │       │       │

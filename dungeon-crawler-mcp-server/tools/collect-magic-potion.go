@@ -16,24 +16,13 @@ func CollectMagicPotionTool() mcp.Tool {
 
 func CollectMagicPotionToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		if result, err := checkPlayerExists(player); err != nil {
+			return result, err
 		}
 
-		var currentRoom *types.Room
-		for i := range dungeon.Rooms {
-			if dungeon.Rooms[i].ID == player.RoomID {
-				currentRoom = &dungeon.Rooms[i]
-				break
-			}
-		}
-
-		if currentRoom == nil {
-			message := "❌ Player is not in any room."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("player not in any room")
+		currentRoom, callToolResult, err := checkPlayerIsInARoom(player, dungeon)
+		if err != nil {
+			return callToolResult, err
 		}
 
 		if !currentRoom.HasMagicPotion || currentRoom.RegenerationHealth <= 0 {
@@ -47,7 +36,7 @@ func CollectMagicPotionToolHandler(player *types.Player, dungeon *types.Dungeon)
 		currentRoom.HasMagicPotion = false
 		currentRoom.RegenerationHealth = 0
 
-		message := fmt.Sprintf("🧪 You collected a magic potion from %s! You gained %d health points. Your current health: %d", 
+		message := fmt.Sprintf("🧪 You collected a magic potion from %s! You gained %d health points. Your current health: %d",
 			currentRoom.Name, collectedPotion, player.Health)
 		fmt.Println(message)
 		return mcp.NewToolResultText(message), nil

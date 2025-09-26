@@ -16,25 +16,14 @@ func CollectGoldTool() mcp.Tool {
 
 func CollectGoldToolHandler(player *types.Player, dungeon *types.Dungeon) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+
+		if result, err := checkPlayerExists(player); err != nil {
+			return result, err
 		}
 
-		var currentRoom *types.Room
-		for i := range dungeon.Rooms {
-			if dungeon.Rooms[i].ID == player.RoomID {
-				currentRoom = &dungeon.Rooms[i]
-				break
-			}
-		}
-
-		if currentRoom == nil {
-			message := "❌ Player is not in any room."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("player not in any room")
+		currentRoom, callToolResult, err := checkPlayerIsInARoom(player, dungeon)
+		if err != nil {
+			return callToolResult, err
 		}
 
 		if currentRoom.GoldCoins <= 0 {
@@ -47,7 +36,7 @@ func CollectGoldToolHandler(player *types.Player, dungeon *types.Dungeon) func(c
 		player.GoldCoins += collectedGold
 		currentRoom.GoldCoins = 0
 
-		message := fmt.Sprintf("💰 You collected %d gold coins from %s! Your total gold coins: %d", 
+		message := fmt.Sprintf("💰 You collected %d gold coins from %s! Your total gold coins: %d",
 			collectedGold, currentRoom.Name, player.GoldCoins)
 		fmt.Println(message)
 		return mcp.NewToolResultText(message), nil

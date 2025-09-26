@@ -10,15 +10,15 @@ The RAG (Retrieval-Augmented Generation) system enhances the End-of-Level Boss w
 flowchart TD
     RAGSystem[Boss RAG System]:::main
     RAGSystem --> VectorStore[Vector Store Initialization & Management<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L17'>stores.go:17</a>]:::store
-    RAGSystem --> EmbeddingGeneration[Embedding Generation<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L70'>stores.go:70</a>]:::embedding
+    RAGSystem --> EmbeddingGeneration[Embedding Generation<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L78'>stores.go:78</a>]:::embedding
     RAGSystem --> SimilaritySearch[Similarity Search]:::search
     RAGSystem --> ContextIntegration[Context Integration<br/><a href='/dungeon-end-of-level-boss/main.go#L128'>main.go:128-135</a>]:::integration
 
-    EmbeddingGeneration --> ChunkSplitting["Markdown Section Splitting<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L77'>stores.go:77</a>"]:::splitting
-    EmbeddingGeneration --> VectorCreation["Vector Embedding Creation<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L81'>stores.go:81-84</a>"]:::vectors
+    EmbeddingGeneration --> ChunkSplitting["Markdown Section Splitting<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L110'>stores.go:110</a>"]:::splitting
+    EmbeddingGeneration --> VectorCreation["Vector Embedding Creation<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L118'>stores.go:118-121</a>"]:::vectors
 
-    SimilaritySearch --> QueryEmbedding["Query Embedding<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L146'>stores.go:146-149</a>"]:::query
-    SimilaritySearch --> TopNSearch["Top-N Similarity Search<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L153'>stores.go:153</a>"]:::topn
+    SimilaritySearch --> QueryEmbedding["Query Embedding<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L151'>stores.go:151-154</a>"]:::query
+    SimilaritySearch --> TopNSearch["Top-N Similarity Search<br/><a href='/dungeon-end-of-level-boss/agents/stores.go#L158'>stores.go:158</a>"]:::topn
 
 
 
