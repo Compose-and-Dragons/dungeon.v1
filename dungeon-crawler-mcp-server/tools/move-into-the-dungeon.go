@@ -50,10 +50,8 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 
-		if player.Name == "Unknown" {
-			message := "✋ No player exists. Please create a player first."
-			fmt.Println(message)
-			return mcp.NewToolResultText(message), fmt.Errorf("no player exists")
+		if mcpCallToolResult, err := checkPlayerExists(player); err != nil {
+			return mcpCallToolResult, err
 		}
 
 		args := request.GetArguments()
@@ -309,7 +307,7 @@ func MoveByDirectionToolHandler(player *types.Player, dungeon *types.Dungeon, du
 						fmt.Println("⏳✳️✳️✳️ adding ⭐️GOLD COINS [", goldCoins, "] at coordinates:", newX, newY)
 					}
 				}
-			} 
+			}
 
 			// ---------------------------------------------------------
 			// END: Create Gold coins, potions, and items

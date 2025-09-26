@@ -12,8 +12,8 @@ import (
 	"dungeon-mcp-server/types"
 
 	"github.com/mark3labs/mcp-go/server"
-	"github.com/micro-agent/micro-agent-go/agent/mu"
 	"github.com/micro-agent/micro-agent-go/agent/helpers"
+	"github.com/micro-agent/micro-agent-go/agent/mu"
 
 	"github.com/openai/openai-go/v2"
 	"github.com/openai/openai-go/v2/option"
@@ -89,7 +89,7 @@ func main() {
 
 	fmt.Println("🏰 Dungeon Size:", width, "x", height)
 
-	// NOTE: Initialize the Dungeon struct 
+	// NOTE: Initialize the Dungeon struct
 	dungeon := types.Dungeon{
 		Name:        dungeonName,
 		Description: dungeonDescription,
@@ -133,8 +133,7 @@ func main() {
 		Name        string `json:"name"`
 		Description string `json:"description"`
 	}
-	err = json.Unmarshal([]byte(response), &roomResponse)
-	if err != nil {
+	if err = json.Unmarshal([]byte(response), &roomResponse); err != nil {
 		fmt.Println("Error unmarshaling room response:", err)
 		return
 	}
@@ -158,7 +157,7 @@ func main() {
 		HasMonster:            false,
 		HasNonPlayerCharacter: false,
 		HasTreasure:           false,
-		HasMagicPotion: 	  false,
+		HasMagicPotion:        false,
 	}
 	dungeon.Rooms = append(dungeon.Rooms, entranceRoom)
 
