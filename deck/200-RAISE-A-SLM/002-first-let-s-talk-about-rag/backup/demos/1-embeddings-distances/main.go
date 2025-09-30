@@ -67,7 +67,6 @@ func main() {
 				embeddingsResponse.Data[0].Embedding,
 				embeddingsFromUserQuestion.Data[0].Embedding,
 			)
-			// NOTE: a cosine similarity > 0.65 is considered a good match
 			fmt.Println("🔗 Cosine similarity with ", chunk, "=", cosineSimilarity, IsGoodCosineSimilarity(cosineSimilarity))
 		}
 	}

@@ -52,14 +52,14 @@ func main() {
 	)
 
 	// -------------------------------------------------
-	// Create a [VECTOR STORE]
+	// Create a vector store
 	// -------------------------------------------------
 	store := rag.MemoryVectorStore{
 		Records: make(map[string]rag.VectorRecord),
 	}
 
 	// -------------------------------------------------
-	// STEP 1: Create and save the embeddings from the CHUNKS:
+	// STEP 1: Create and save the embeddings from the chunks
 	// -------------------------------------------------
 	fmt.Println("⏳ Creating the embeddings...")
 
@@ -95,11 +95,11 @@ func main() {
 	// USER MESSAGE:
 	userQuestion := "Tell me something about the dragons"
 
-	fmt.Println("⏳ Searching for similarities for:", userQuestion, "...")
+	fmt.Println("⏳ Searching for similarities...")
 
 	// -------------------------------------------------
 	// STEP 2: EMBEDDING COMPLETION:
-	// Create EMBEDDINGS: from the USER MESSAGE:
+	// Create embedding from the user question
 	// -------------------------------------------------
 	embeddingsResponse, err := client.Embeddings.New(ctx, openai.EmbeddingNewParams{
 		Input: openai.EmbeddingNewParamsInputUnion{
@@ -154,7 +154,6 @@ func main() {
 		Temperature: openai.Opt(0.8),
 	}
 
-	// [COMPLETION]
 	stream := client.Chat.Completions.NewStreaming(ctx, param)
 
 	for stream.Next() {

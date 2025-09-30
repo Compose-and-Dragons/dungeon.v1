@@ -3,4 +3,8 @@ marp: true
 theme: default
 paginate: true
 ---
-# Embedding Models?
+
+## Generate embeddings with **models**
+> Embedding Models:
+> - `ai/granite-embedding-multilingual:latest`
+> - `ai/mxbai-embed-large:latest`

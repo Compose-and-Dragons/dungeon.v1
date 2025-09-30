@@ -36,6 +36,7 @@ func main() {
 	}
 
 	// NOTE: initialize the messages slice with a system message to set the behavior of the assistant
+	// MEMORY:
 	messages := []openai.ChatCompletionMessageParamUnion{
 		openai.SystemMessage(string(systemInstructions)),
 		openai.SystemMessage(string(backgroundAndPersonality)),
@@ -56,7 +57,7 @@ func main() {
 			continue
 		}
 
-		// NOTE: append the user message to the messages slice
+		// NOTE: append the USER MESSAGE: to the messages slice
 		messages = append(messages, openai.UserMessage(userMessage))
 
 		// Keep the context of the conversation by appending the user message
@@ -91,7 +92,7 @@ func main() {
 			log.Fatalln("😡:", err)
 		}
 
-		// NOTE: Append the assistant's response to the messages slice
+		// NOTE: Append the ASSISTANT MESSAGE: (response) to the messages slice
 		messages = append(messages, openai.AssistantMessage(answer))
 
 		fmt.Println("\n\n", strings.Repeat("-", 80))

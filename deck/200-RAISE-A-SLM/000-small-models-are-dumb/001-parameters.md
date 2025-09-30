@@ -3,19 +3,23 @@ marp: true
 theme: default
 paginate: true
 ---
-
 <style>
 .dodgerblue {
   color: dodgerblue;
 }
+.indianred {
+  color: indianred;
+}
+.forestgreen {
+  color: forestgreen;
+}
 </style>
 ## Parameters 📊
 
-- **Weights and Biases**: Numerical values learned during training that determine how neurons connect and activate in the neural network
-- **Model Capacity**: More parameters = ability to capture more complexity in data, but also require more computational resources
-- **Size Impact**: Parameter count directly affects model file size, memory usage, and inference speed
-- **Scale Examples**: GPT-3 has 175B parameters, Llama 2 7B has 7B, <span class="dodgerblue">**while small models have just millions**</span>
-- **Trade-offs**: Higher parameter counts improve capability but increase hardware requirements and processing time
+
+- **Model Capacity**: More parameters = <span class="dodgerblue">**ability to capture more complexity in data**</span>, but also require <span class="indianred">**more computational resources**</span>
+- **Size Impact**: Parameter count directly affects model file size, <span class="indianred">**memory usage**</span>, and <span class="indianred">**inference speed**</span>
+- **Trade-offs**: Higher parameter counts <span class="dodgerblue">**improve capability**</span> but <span class="indianred">increase hardware requirements</span> and <span class="indianred">**processing time**</span>
 
 
 <!--
