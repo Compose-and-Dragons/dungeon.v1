@@ -33,7 +33,12 @@ func main() {
 			fmt.Println("👋 Bye!")
 			break
 		}
-
+		/* NOTE:
+		   - Hello I'm Philippe
+		   - Who are you?
+		   - My buddy is Guillaume
+		   - Who is my buddy?
+		*/
 		messages := []openai.ChatCompletionMessageParamUnion{
 			openai.SystemMessage(`
 			You are an expert of medieval role playing games
@@ -45,7 +50,7 @@ func main() {
 		param := openai.ChatCompletionNewParams{
 			Messages:    messages,
 			Model:       model,
-			Temperature: openai.Opt(1.8),
+			Temperature: openai.Opt(1.8), // 🔥🔥🔥
 			TopP:        openai.Opt(0.9),
 		}
 

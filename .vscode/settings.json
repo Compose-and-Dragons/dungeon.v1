@@ -393,6 +393,14 @@
             "isWholeLine": false
         },  
         {
+            "text": "EMBEDDINGS:",
+            "color": "#ffffff",
+            "backgroundColor": "#055C3F",
+            "border": "1px solid #055C3F",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
             "text": "TOOLS AGENT:",
             "color": "#ffffff",
             "backgroundColor": "#EB1090",
