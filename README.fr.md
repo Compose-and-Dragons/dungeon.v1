@@ -45,7 +45,7 @@ docker compose ps --services
 
 Pour lancer l'inteface utilisateur, il faut exécuter la commande suivante dans un nouveau terminal :
 ```bash
-docker attach $(docker compose ps -q dungeon-master)
+docker compose attach dungeon-master
 ```
 Au 1er démarrage, les 4 agents PNJ vont chacun construire un vector store dans un fichier JSON à partir des données de configuration (présentes dans le dossier `dungeon-master/data`). Cela peut prendre un petit moment. Ce sera ensuite instantané aux prochains démarrages.
 
@@ -78,7 +78,7 @@ Au 1er démarrage, les 4 agents PNJ vont chacun construire un vector store dans 
 ### Au lancement du jeu (du Dungeon Master)
 
 ```
-docker attach $(docker compose ps -q dungeon-master)
+docker compose attach dungeon-master
 /app # ./dungeon-master
 ```
 
