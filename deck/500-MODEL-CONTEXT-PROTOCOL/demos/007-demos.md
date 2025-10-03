@@ -15,3 +15,4 @@ paginate: true
 - Connect it to an LLM
 - Preview of the <span class="dodgerblue">**Dungeon Crawler MCP Server**</span> 🔥🏰
 
+[← Previous](006-key-takeaways.md) | [Next →](../../600-DOCKER-MCP-GATEWAY/000-docker-mcp-gateway.md)

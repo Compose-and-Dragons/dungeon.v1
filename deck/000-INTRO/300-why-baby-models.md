@@ -24,3 +24,5 @@ sinon il mélangera tout et ne sait plus où donner de la tête
 
 pour les demos penser a faire jouer les temperatures sur les modèles
 -->
+
+[← Previous](200-genai-app.md) | [Next →](../100-DMR/000-docker-model-runner/000-docker-model-runer.md)

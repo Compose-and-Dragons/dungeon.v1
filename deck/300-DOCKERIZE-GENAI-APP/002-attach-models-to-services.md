@@ -94,3 +94,5 @@ flowchart LR
     style PreviousPhase fill:#DDA0DD
     style ContinueComposeUP fill:#FFB6C1
 </div>
+
+[← Previous](001-model-top-level-element.md) | [Next →](../400-FUNCTION-CALLING/000-function-calling.md)

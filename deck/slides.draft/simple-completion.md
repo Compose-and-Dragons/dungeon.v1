@@ -43,3 +43,5 @@ completion, err := client.Chat.Completions.New(ctx, param)
 
 fmt.Println(completion.Choices[0].Message.Content)
 ```
+
+[← Previous](model-context-protocol.md) | [Next →](why-rag-is-important-for-slms.md)

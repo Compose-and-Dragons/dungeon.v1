@@ -11,3 +11,5 @@ paginate: true
 ### 2. Give me the list of your goals and aspirations in life
 
 > Sometimes this demo fails 🤞
+
+[← Previous](../2-more-context-instructions/002-system-instructions.md) | [Next →](../4-conclusion/004-strengths-and-weaknesses.md)

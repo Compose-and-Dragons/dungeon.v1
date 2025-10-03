@@ -51,3 +51,5 @@ JSON_RESULT=$(curl --silent ${BASE_URL}/chat/completions \
 CONTENT=$(echo "${JSON_RESULT}" | jq -r '.choices[0].message.content')
 echo "${CONTENT}"
 ```
+
+[← Previous](000-prompt-chat-completion.md) | [Next →](../101-simple-completion-go/101-dmr-chat-completion-openai-go.md)

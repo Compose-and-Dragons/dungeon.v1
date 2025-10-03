@@ -12,3 +12,5 @@ paginate: true
   - Determine the arguments to pass
   - Generate structured function calls (JSON format)
 - ✋ **The LLM must support `tools`**
+
+[← Previous](000-function-calling.md) | [Next →](002-how-it-works.md)

@@ -42,3 +42,5 @@ completion, err := client.Chat.Completions.New(ctx, param)
 
 fmt.Println(completion.Choices[0].Message.Content)
 ```
+
+[← Previous](../100-simple-completion-curl/001-dmr-chat-completion-curl.md) | [Next →](../102-stream-completion-curl/102-dmr-chat-stream-completion-curl.md)

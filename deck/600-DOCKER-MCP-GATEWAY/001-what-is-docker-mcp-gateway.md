@@ -11,3 +11,5 @@ paginate: true
   - https://github.com/docker/mcp-gateway
 - Provides a **standardized interface** for AI applications to interact with external tools and services
 - Implements a **gateway pattern**: AI Client → MCP Gateway → MCP Servers
+
+[← Previous](000-docker-mcp-gateway.md) | [Next →](002-key-features-architecture.md)

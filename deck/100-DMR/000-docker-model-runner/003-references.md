@@ -9,3 +9,5 @@ paginate: true
 - GitHub repo: [https://github.com/docker/model-runner](https://github.com/docker/model-runner)
 - Introducing Docker Model Runner: [https://www.docker.com/blog/introducing-docker-model-runner/](https://www.docker.com/blog/introducing-docker-model-runner/)
 - A Quickstart Guide to Model Runner: [https://www.docker.com/blog/run-llms-locally/](https://www.docker.com/blog/run-llms-locally/)
+
+[← Previous](002-models.md) | [Next →](../100-simple-completion-curl/000-prompt-chat-completion.md)

@@ -15,3 +15,4 @@ paginate: true
 >  d. `/memory`
 ### 2. Give me the list of your goals and aspirations in life
 
+[← Previous](000-micro-agent-lib.md) | [Next →](002-fight-weaknesses.md)

@@ -23,3 +23,4 @@ paginate: true
   - **Similar** elements are <span class="forestgreen">**close**</span>
   - **Different** elements are <span class="indianred">**distant**</span>
 
+[← Previous](000.1-what-is-rag.md) | [Next →](001.1-what-means-embedding.md)

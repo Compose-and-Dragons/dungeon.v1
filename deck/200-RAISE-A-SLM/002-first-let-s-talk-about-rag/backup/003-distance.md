@@ -18,12 +18,4 @@ paginate: true
 
 <img src="imgs/cosine.svg" width="50%" height="50%">
 
-
-
-
-
-
-
-
-
-
+[← Previous](002-embedding-models.md) | [Next →](../../003-use-rag-with-the-first-npc/000-micro-agent-lib.md)

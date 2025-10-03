@@ -26,3 +26,5 @@ Expliquer
 - **Better focus**
 - **Less data to load**
 -->
+
+[← Previous](../003.1-distance.md) | [Next →](001-what-means-embedding.md)

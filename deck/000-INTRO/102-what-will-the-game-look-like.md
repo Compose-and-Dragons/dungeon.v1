@@ -11,4 +11,4 @@ theme: default
 
 - ✋ <span class="dodgerblue">**Text mode only**</span> / TUI
 
-
+[← Previous](101-intro-and-objectives.md) | [Next →](110-AGENDA.md)

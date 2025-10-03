@@ -33,3 +33,5 @@ models:
       - "0.1"
       - "--verbose-prompt"
 ```
+
+[← Previous](000-agentic-compose.md) | [Next →](002-attach-models-to-services.md)

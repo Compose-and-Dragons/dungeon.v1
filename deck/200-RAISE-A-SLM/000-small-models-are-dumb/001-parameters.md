@@ -44,3 +44,5 @@ Les paramètres d'un modèle sont les valeurs numériques (poids et biais) que
   - Le temps d'inférence
   - Les ressources nécessaires pour l'utiliser
 -->
+
+[← Previous](000-small-models-are-dumb.md) | [Next →](002-temperature.md)

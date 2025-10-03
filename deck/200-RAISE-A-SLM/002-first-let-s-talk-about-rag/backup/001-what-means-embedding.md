@@ -30,3 +30,5 @@ Giving "coordinates" to data to place them in a mathematical space where:
 <!--
 mathematical representation of the semantic meaning of a text
 -->>
+
+[← Previous](000-what-is-rag.md) | [Next →](002-embedding-models.md)
