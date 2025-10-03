@@ -45,7 +45,7 @@ docker compose ps --services
 
 To launch the user interface, execute the following command in a new terminal:
 ```bash
-docker attach $(docker compose ps -q dungeon-master)
+docker compose attach dungeon-master
 ```
 On first startup, the 4 NPC agents will each build a vector store in a JSON file from configuration data (present in the `dungeon-master/data` folder). This may take a moment. It will then be instantaneous on subsequent startups.
 
@@ -78,7 +78,7 @@ On first startup, the 4 NPC agents will each build a vector store in a JSON file
 ### At game launch (Dungeon Master)
 
 ```
-docker attach $(docker compose ps -q dungeon-master)
+docker compose attach dungeon-master
 /app # ./dungeon-master
 ```
 
