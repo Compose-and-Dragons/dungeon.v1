@@ -20,4 +20,4 @@ theme: default
 - 👿 End of Level Boss & <span class="dodgerblue">**🤖 Remote Agent**</span>
 - 🏰 Dungeon & <span class="dodgerblue">**📡 MCP server**</span>
 
-
+[← Previous](102-what-will-the-game-look-like.md) | [Next →](200-genai-app.md)

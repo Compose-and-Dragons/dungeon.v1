@@ -11,3 +11,5 @@ paginate: true
 - **Easy scaling** and resource management
 - **Simplified distribution** - package tools with their dependencies
 - **Security benefits** - sandboxed execution of potentially risky operations
+
+[← Previous](002-transport-modes.md) | [Next →](004-use-it-with-docker-desktop.md)

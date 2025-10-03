@@ -37,3 +37,5 @@ La quantization d'un modèle est une technique qui consiste à réduire la
   modernes (comme GPTQ, GGML) maintiennent généralement de bonnes
   performances.
 -->
+
+[← Previous](../002-temperature.md) | [Next →](../../001-context-this-is-the-way/demos/0-bot-draft/000-personality-and-soul.md)

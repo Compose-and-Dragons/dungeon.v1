@@ -33,3 +33,4 @@ paginate: true
 - A Python version?
 - A web interface?
 
+[← Previous](../800-DUNGEON/03-dungeon-end-of-level-boss/001-initialize.md) | [Next →](002-thank-you.md)

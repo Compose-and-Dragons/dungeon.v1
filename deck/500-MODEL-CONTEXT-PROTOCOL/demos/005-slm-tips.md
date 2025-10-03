@@ -11,3 +11,5 @@ paginate: true
 - **Error handling** - provide meaningful feedback for failures
 - **Context management** - be mindful of token limitations
 - **Progressive disclosure** - break complex tasks into smaller steps
+
+[← Previous](004-use-it-with-docker-desktop.md) | [Next →](006-key-takeaways.md)

@@ -7,4 +7,4 @@ paginate: true
 > Remote agent with A2A protocol. 
 > The "final challenge" in the dungeon game.
 
-
+[← Previous](../02-dungeon-master/001-initialize.md) | [Next →](../../900-KEY-TAKEAWAYS/001-initialize.md)

@@ -10,4 +10,4 @@ paginate: true
 
 ![LLM Prompt Schema](./llm-prompt-schema.drawio.png)
 
-
+[← Previous](../000-docker-model-runner/003-references.md) | [Next →](001-dmr-chat-completion-curl.md)

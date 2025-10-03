@@ -20,3 +20,5 @@ paginate: true
 
 
 Each transport mode enables different deployment scenarios and use cases.
+
+[← Previous](001-what-is-mcp.md) | [Next →](003-docker-benefits.md)

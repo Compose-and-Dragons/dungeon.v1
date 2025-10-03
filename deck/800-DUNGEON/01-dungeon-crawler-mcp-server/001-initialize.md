@@ -30,3 +30,4 @@ paginate: true
 - `GetDungeonMapToolHandler`
 - `FightMonsterToolHandler`
 
+[← Previous](../001-initialize.md) | [Next →](../02-dungeon-master/001-initialize.md)

@@ -10,3 +10,5 @@ paginate: true
 - Docker enhances MCP server deployment and security
 - SLMs require careful tool design and clear instructions
 - The protocol opens new possibilities for AI applications
+
+[← Previous](005-slm-tips.md) | [Next →](007-demos.md)

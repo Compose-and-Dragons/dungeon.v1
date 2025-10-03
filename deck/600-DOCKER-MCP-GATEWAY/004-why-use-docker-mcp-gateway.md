@@ -11,3 +11,5 @@ paginate: true
 - **Handling authentication and security**: Keep secrets out of environment variables using Docker Desktop's secrets management.
 - **Supports dynamic tool discovery** and configuration. Each MCP client (eg VS Code, Cursor, Claude Desktop, etc.) connects to the same Gateway configuration, ensuring consistency across different clients.
 - **Enables OAuth flows** for MCPs that require OAuth access token service connections.
+
+[← Previous](003-security-isolation-benefits.md) | [Next →](005-demos.md)

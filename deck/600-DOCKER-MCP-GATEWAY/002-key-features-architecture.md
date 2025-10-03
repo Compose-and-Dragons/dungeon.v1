@@ -13,3 +13,5 @@ paginate: true
 - 📋 Server Catalog: Manage and configure multiple MCP catalogs.
 - 🔍 Dynamic Discovery: Automatic tool, prompt, and resource discovery from running servers.
 - 📊 Monitoring: Built-in logging and call tracing capabilities.
+
+[← Previous](001-what-is-docker-mcp-gateway.md) | [Next →](003-security-isolation-benefits.md)

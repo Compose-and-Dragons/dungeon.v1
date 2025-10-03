@@ -12,3 +12,5 @@ paginate: true
 <!--
 
 -->
+
+[← Previous](agentic-compose.md) | [Next →](docker-mcp-gateway.md)

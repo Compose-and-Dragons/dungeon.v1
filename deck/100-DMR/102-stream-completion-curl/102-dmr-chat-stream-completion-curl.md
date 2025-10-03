@@ -51,3 +51,5 @@ curl --no-buffer --silent ${BASE_URL}/chat/completions \
         fi
     done      
 ```
+
+[← Previous](../101-simple-completion-go/101-dmr-chat-completion-openai-go.md) | [Next →](../103-stream-completion-go/000-dmr-chat-stream-completion-openai-go.md)

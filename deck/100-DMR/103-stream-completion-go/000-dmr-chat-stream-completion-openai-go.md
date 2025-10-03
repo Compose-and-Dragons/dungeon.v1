@@ -19,3 +19,5 @@ for stream.Next() {
     }
 }
 ```
+
+[← Previous](../102-stream-completion-curl/102-dmr-chat-stream-completion-curl.md) | [Next →](../../200-RAISE-A-SLM/000-small-models-are-dumb/000-small-models-are-dumb.md)

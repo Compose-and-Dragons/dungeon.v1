@@ -13,3 +13,5 @@ paginate: true
 - Clear, detailed function descriptions
 - Precise parameter specifications
 - Well-structured tool definitions guide the LLM's prompt construction
+
+[← Previous](002-how-it-works.md) | [Next →](004-ressources.md)

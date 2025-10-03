@@ -11,3 +11,5 @@ paginate: true
 <!--
 
 -->
+
+[← Previous](simple-completion.md)
