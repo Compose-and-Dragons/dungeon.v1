@@ -12,4 +12,5 @@ paginate: true
 -->
 ---
 ## Models format
-
+ * OCI artifacts
+ * GGUF (GPT-Generated Unified Format) 

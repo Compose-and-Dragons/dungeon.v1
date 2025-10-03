@@ -7,8 +7,8 @@ paginate: true
 
 
 ---
-## Docker Model Runner (DMR)?
-
+## Docker Model Runner (DMR)
+Easy manage, run, and deploy AI models using Docker.
 
 <!--
 
