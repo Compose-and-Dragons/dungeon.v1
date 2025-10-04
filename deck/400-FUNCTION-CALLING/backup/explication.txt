@@ -1,0 +1,38 @@
+=== EXPLICATION EN FRANÇAIS ===
+
+Ce code Go démontre un système d'appel de fonctions en boucle avec un modèle d'IA local.
+
+Le programme connecte un client OpenAI à un serveur de modèle local et définit deux outils :
+- cast_spell : lance un sort magique sur une cible
+- bardic_inspiration : accorde de l'inspiration bardique à un allié
+
+L'utilisateur pose une question demandant plusieurs actions (lancer des sorts et accorder de l'inspiration).
+
+Le programme entre dans une boucle de conversation qui :
+1. Envoie la requête au modèle d'IA avec les outils disponibles
+2. Si l'IA répond "tool_calls", il exécute séquentiellement chaque fonction demandée
+3. Ajoute les résultats à l'historique de conversation pour que l'IA les utilise
+4. Continue jusqu'à ce que l'IA réponde "stop" (quand elle a fini toutes les tâches)
+5. L'IA génère alors un rapport final avec emojis basé sur tous les résultats
+
+Le paramètre ParallelToolCalls est défini à false pour forcer l'exécution séquentielle des outils. L'historique des messages conserve toute la conversation (requête utilisateur, appels d'outils, résultats, messages assistants) permettant à l'IA de maintenir le contexte et de générer une réponse finale cohérente.
+
+
+=== EXPLANATION IN ENGLISH ===
+
+This Go code demonstrates a loop-based function calling system with a local AI model.
+
+The program connects an OpenAI client to a local model server and defines two tools:
+- cast_spell: casts a magical spell on a target
+- bardic_inspiration: grants bardic inspiration to an ally
+
+The user asks a question requesting multiple actions (casting spells and granting inspiration).
+
+The program enters a conversation loop that:
+1. Sends the request to the AI model with available tools
+2. If the AI responds "tool_calls", it sequentially executes each requested function
+3. Adds results to the conversation history for the AI to use
+4. Continues until the AI responds "stop" (when it has completed all tasks)
+5. The AI then generates a final report with emojis based on all results
+
+The ParallelToolCalls parameter is set to false to force sequential tool execution. The message history maintains the entire conversation (user request, tool calls, results, assistant messages) allowing the AI to maintain context and generate a coherent final response.

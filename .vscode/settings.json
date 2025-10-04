@@ -433,6 +433,14 @@
             "isWholeLine": false
         },  
         {
+            "text": "[FINISH REASON]",
+            "color": "#FFFFFF",
+            "backgroundColor": "#099631",
+            "border": "1px solid #099631",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },          
+        {
             "text": "MEMORY:",
             "color": "#FFFFFF",
             "backgroundColor": "#B416BD",
@@ -441,6 +449,38 @@
             "isWholeLine": false
         },  
         {
+            "text": "CONVERSATION HISTORY:",
+            "color": "#FFFFFF",
+            "backgroundColor": "#B416BD",
+            "border": "1px solid #B416BD",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "MEMORY AGENT:",
+            "color": "#FFFFFF",
+            "backgroundColor": "#B416BD",
+            "border": "1px solid #B416BD",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[TOOL CALLS]",
+            "color": "#ffffff",
+            "backgroundColor": "#E3141B",
+            "border": "1px solid #E3141B",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+        {
+            "text": "[TOOL CALL RESULT]",
+            "color": "#ffffff",
+            "backgroundColor": "#08B271",
+            "border": "1px solid #08B271",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
             "text": "[COMMAND]",
             "color": "#07E32C",
             "backgroundColor": "#18191A",
@@ -448,6 +488,14 @@
             "borderRadius": "3px",
             "isWholeLine": false
         },  
+        {
+            "text": "[EXEC FUNCTION]",
+            "color": "#07E32C",
+            "backgroundColor": "#18191A",
+            "border": "1px solid #18191A",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },          
         {
             "text": "[TESTING]",
             "color": "#000000",
