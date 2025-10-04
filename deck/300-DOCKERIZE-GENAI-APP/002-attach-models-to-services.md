@@ -26,7 +26,7 @@ services:
 ```
 ---
 ## Customize Env variables
-- By default, Compose send variables with names `[SERVICE]_MODEL` & `[SERVICE]_URL` to containers
+- By default, Compose send variables with names `[MODEL]_MODEL` & `[MODEL]_URL` to containers
 - You can override those values to use the one you want with `model_var` & `endpoint_var`
 
 ---
@@ -84,7 +84,7 @@ flowchart LR
 flowchart LR
     PreviousPhase[["⏮️ From Phase 2"]] --> PrepareEnvForService[Set env variables for service containers]
     PrepareEnvForService --> CheckCustomEnv{"Custom env variables?"}
-    CheckCustomEnv -->|No| SetDefaultEnv["Set [SERVICE]_MODEL & [SERVICE]_URL"]
+    CheckCustomEnv -->|No| SetDefaultEnv["Set [MODEL]_MODEL & [MODEL]_URL"]
     CheckCustomEnv -->|Yes| SetCustomEnv["Use model_var & endpoint_var to set env var"]
     SetDefaultEnv --> PassEnvsToContainers[Pass env variables to containers]
     SetCustomEnv --> PassEnvsToContainers

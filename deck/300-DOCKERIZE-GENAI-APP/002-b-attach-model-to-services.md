@@ -13,7 +13,7 @@ flowchart TD
     ConfigureModels --> SendInfoCompose[Send back model name and url to Compose]
     SendInfoCompose --> PrepareEnvForService[Set env variables for service containers]
     PrepareEnvForService --> CheckCustomEnv{"Custom env variables?"}
-    CheckCustomEnv --> |No| SetDefaultEnv["Set [SERVICE]_MODEL & [SERVICE]_URL"]
+    CheckCustomEnv --> |No| SetDefaultEnv["Set [MODEL]_MODEL & [MODEL]_URL"]
     CheckCustomEnv --> |Yes| SetCustomEnv["Use model_var & endpoint_var to set env var"]
     SetDefaultEnv --> PassEnvsToContainers[Pass env variables to containers]
     SetCustomEnv --> PassEnvsToContainers
