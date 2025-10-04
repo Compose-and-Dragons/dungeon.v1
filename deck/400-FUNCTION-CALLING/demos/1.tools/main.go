@@ -23,6 +23,9 @@ func main() {
 		option.WithAPIKey(""),
 	)
 
+	// TOOLS: Define the tools available to the model
+	// Each tool must have a name, description, and parameters schema
+
 	// TOOL:
 	castSpellTool := openai.ChatCompletionFunctionTool(shared.FunctionDefinitionParam{
 		Name:        "cast_spell",

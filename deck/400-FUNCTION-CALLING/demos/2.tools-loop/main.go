@@ -115,7 +115,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		// Step 14: Extract finish reason to determine next action
+		// Step 14: Extract [FINISH REASON] to determine next action
 		finishReason = completion.Choices[0].FinishReason
 
 		// Step 15: Handle AI response based on finish reason
@@ -133,6 +133,7 @@ func main() {
 				// lose context of what it requested.
 				toolCallParams := make([]openai.ChatCompletionMessageToolCallUnionParam, len(detectedToolCalls))
 
+				// Convert the detected TOOL CALLS: (to add them to conversation history)
 				for i, toolCall := range detectedToolCalls {
 					toolCallParams[i] = openai.ChatCompletionMessageToolCallUnionParam{
 						OfFunction: &openai.ChatCompletionMessageFunctionToolCallParam{
@@ -151,6 +152,8 @@ func main() {
 				// for conversation history. This is like saying: "AI said: 'I want to call
 				// these functions with these parameters'". This message will be added to
 				// history before executing tools, so AI remembers what it requested.
+
+				// Add the TOOL CALLS: to an assistant message
 				assistantMessage := openai.ChatCompletionMessageParamUnion{
 					OfAssistant: &openai.ChatCompletionAssistantMessageParam{
 						ToolCalls: toolCallParams,
@@ -158,6 +161,7 @@ func main() {
 				}
 
 				// Step 19: Add the assistant message with tool calls to the conversation history
+				// CONVERSATION HISTORY: Add the ASSISTANT MESSAGE: with the tool calls to conversation history
 				messages = append(messages, assistantMessage)
 
 				// TOOL CALLS:
@@ -169,6 +173,7 @@ func main() {
 					// Step 21: Execute the requested function
 					fmt.Printf("▶️ Executing function: %s with args: %s\n", functionName, functionArgs)
 
+					// [EXEC FUNCTION]
 					resultContent, err := ExecTool(functionName, functionArgs)
 
 					// Step 22: Handle function execution errors
@@ -188,6 +193,8 @@ func main() {
 					// 2) Use results for final response, 3) Decide if more tools needed.
 					// Without this step, AI would have no idea what happened after requesting
 					// tool execution and couldn't generate the requested final report.
+					
+					// CONVERSATION HISTORY: add [TOOL CALL RESULT]
 					messages = append(
 						messages,
 						openai.ToolMessage(
