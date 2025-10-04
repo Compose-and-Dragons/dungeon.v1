@@ -1,7 +1,8 @@
 # Start the Dungeon Crawler MCP Server
 
 ```bash
-cd /dungeon-crawler-mcp-server
+cd dungeon-crawler-mcp-server
+# stop any running containers
 docker compose up --build
 ```
 
