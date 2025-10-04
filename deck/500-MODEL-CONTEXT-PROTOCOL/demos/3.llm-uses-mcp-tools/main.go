@@ -117,7 +117,7 @@ func main() {
 		var args map[string]any
 		args, _ = JsonStringToMap(toolCall.Function.Arguments)
 
-		// NOTE: Call the MCP tool with the arguments
+		// [EXEC FUNCTION]: Call the MCP tool with the arguments
 		request := mcp.CallToolRequest{}
 		request.Params.Name = toolCall.Function.Name
 		request.Params.Arguments = args

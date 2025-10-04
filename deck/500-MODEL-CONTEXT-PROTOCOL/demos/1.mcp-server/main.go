@@ -18,19 +18,20 @@ func main() {
 		"mcp-dd",
 		"0.0.0",
 	)
-	// Add a tool
+	// Add a TOOL:
 	chooseCharacterBySpecies := mcp.NewTool("choose_character_by_species",
 		mcp.WithDescription(`select a species from among these: [Human, Orc, Elf, Dwarf] by saying: I want to talk to a <species_name>.`),
-		mcp.WithString("species_name",
+		mcp.WithString("species_name", // PARAMETER:
 			mcp.Required(),
 			mcp.Description("The species to detect in the user message. The species can be one of the following: [Human, Orc, Elf, Dwarf]."),
 		),
 	)
 	s.AddTool(chooseCharacterBySpecies, chooseCharacterBySpeciesHandler)
 
+	// Add another TOOL:
 	detectTheRealTopicInUserMessage := mcp.NewTool("detect_real_topic_in_user_message",
 		mcp.WithDescription(`select a topic from among these: [justice, war, combat, magic, poetry, craftsmanship, forge] by saying: I have a question about <topic_name>.`),
-		mcp.WithString("topic_name",
+		mcp.WithString("topic_name", // PARAMETER:
 			mcp.Required(),
 			mcp.Description("The topic to detect in the user message. The topic can be one of the following: [justice, war, combat, magic, poetry, craftsmanship, forge]."),
 		),
