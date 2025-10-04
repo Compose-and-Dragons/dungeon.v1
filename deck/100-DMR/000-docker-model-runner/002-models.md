@@ -7,10 +7,7 @@ paginate: true
 
 - On 🐳 Docker Hub
 - On 🤗 Hugging Face
-<!--
 
--->
----
-## Models format
+### Format
  * OCI artifacts
  * GGUF (GPT-Generated Unified Format) 

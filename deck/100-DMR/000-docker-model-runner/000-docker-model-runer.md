@@ -4,11 +4,9 @@ theme: default
 paginate: true
 ---
 # 🐳🧠 Docker Model Runner
+> Easy manage, run, and deploy AI models using Docker.
 
 
----
-## Docker Model Runner (DMR)
-Easy manage, run, and deploy AI models using Docker.
 
 <!--
 
