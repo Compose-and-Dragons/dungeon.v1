@@ -300,6 +300,7 @@ models:
 
   dungeon-master-model:
     model: hf.co/menlo/jan-nano-gguf:q4_k_m
+    #model: hf.co/menlo/lucy-gguf:q8_0
     #model: hf.co/devquasar/quotientai.limbic-tool-use-0.5b-32k-gguf:q4_k_m                                
     
   embedding-model:
