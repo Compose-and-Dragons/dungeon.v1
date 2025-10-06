@@ -21,6 +21,7 @@ services:
       - --verbose
       - --catalog=/mcp/catalog.yaml
       - --servers=mcp-talk-to-somebody
+      - --tools=choose_character_by_species
     configs:
       - source: catalog.yaml
         target: /mcp/catalog.yaml

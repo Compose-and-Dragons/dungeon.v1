@@ -76,7 +76,7 @@ func main() {
 		},
 		// IMPORTANT: try this:
 		//ParallelToolCalls: openai.Bool(false), // default value
-		//ParallelToolCalls: openai.Bool(true), // Sequential tool calls
+		ParallelToolCalls: openai.Bool(true), // Sequential tool calls
 		Tools:             tools,
 		Model:             model,
 		Temperature:       openai.Opt(0.0),

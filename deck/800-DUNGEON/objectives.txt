@@ -1,4 +1,0 @@
- - Explain the lamdscape
- - Show the code
- - Show the Compose file
- - Run it

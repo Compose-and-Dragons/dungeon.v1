@@ -2,7 +2,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Idea intellij light theme",
     "editor.fontSize": 16,
-    "terminal.integrated.fontSize": 17,
+    "terminal.integrated.fontSize": 20,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "editor.detectIndentation": true,
