@@ -2,7 +2,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Idea intellij light theme",
     "editor.fontSize": 16,
-    "terminal.integrated.20": 18,
+    "terminal.integrated.fontSize": 17,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "editor.detectIndentation": true,
@@ -97,6 +97,38 @@
             "isWholeLine": false
         },
         {
+            "text": "[MCP Dungeon Server]",
+            "color": "#ffffff",
+            "backgroundColor": "#BE0ECE",
+            "border": "1px solid #BE0ECE",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },   
+        {
+            "text": "[MCP Client]",
+            "color": "#ffffff",
+            "backgroundColor": "#7D5BDA",
+            "border": "1px solid #7D5BDA",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },   
+        {
+            "text": "[list of tools]",
+            "color": "#000000",
+            "backgroundColor": "#E4E2E8",
+            "border": "1px solid #E4E2E8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "<- important",
+            "color": "#000000",
+            "backgroundColor": "#F0D0B8",
+            "border": "1px solid #F0D0B8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                               
+        {
             "text": "[Streamable HTTP MCP server]",
             "color": "#ffffff",
             "backgroundColor": "#73097D",
@@ -176,6 +208,38 @@
             "borderRadius": "3px",
             "isWholeLine": false
         }, 
+        {
+            "text": "Dungeon Master Agent",
+            "color": "#ffffff",
+            "backgroundColor": "#0B9F21",
+            "border": "1px solid #0B9F21",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "Agents Team of the Dungeon",
+            "color": "#ffffff",
+            "backgroundColor": "#0B9F21",
+            "border": "1px solid #0B9F21",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "Loop to interact with the agents",
+            "color": "#000000",
+            "backgroundColor": "#B7E9BE",
+            "border": "1px solid #B7E9BE",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },   
+        {
+            "text": "Tool execution callback if detected by the agent",
+            "color": "#000000",
+            "backgroundColor": "#B7E9BE",
+            "border": "1px solid #B7E9BE",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                                 
         {
             "text": "Dungeon structure",
             "color": "#ffffff",

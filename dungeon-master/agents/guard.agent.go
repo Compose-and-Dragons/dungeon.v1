@@ -31,7 +31,7 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	model := helpers.GetEnvOrDefault("GUARD_MODEL", "ai/qwen2.5:1.5B-F16")
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("GUARD_MODEL_TEMPERATURE", "0.0"))
 
-	// [RAG]  Initialize the vector store for the agent
+	// [RAG]  Initialize the [Vector Store] (used by the agent to retrieve context == [Similarity Search])
 	errEmbedding := GenerateEmbeddings(ctx, &client, name, helpers.GetEnvOrDefault("GUARD_CONTEXT_PATH", ""))
 	if errEmbedding != nil {
 		fmt.Println("🔶 Error generating embeddings for guard agent:", errEmbedding)
@@ -57,7 +57,7 @@ func createGuardAgent(ctx context.Context, client openai.Client) mu.Agent {
 	} else {
 		systemInstructions = openai.SystemMessage(systemInstructionsContent)
 	}
-
+	// [Agent creation]
 	chatAgent, err := mu.NewAgent(ctx, name,
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{

@@ -42,7 +42,7 @@ func main() {
 		option.WithBaseURL(llmURL),
 		option.WithAPIKey(""),
 	)
-
+	// [MCP Client] to connect to the [MCP Dungeon Server]
 	mcpClient, err := tools.NewStreamableHttpMCPClient(ctx, mcpHost)
 	if err != nil {
 		panic(fmt.Errorf("failed to create MCP client: %v", err))
@@ -51,7 +51,7 @@ func main() {
 	ui.Println(ui.Orange, "MCP Client initialized successfully")
 
 	// ---------------------------------------------------------
-	// TOOLS CATALOG: get the list of tools from the [MCP] client
+	// TOOLS CATALOG: get the [list of tools] from the [MCP Client]
 	// ---------------------------------------------------------
 	toolsIndex := mcpClient.OpenAITools()
 
@@ -78,7 +78,7 @@ func main() {
 	DisplayToolsIndex(toolsIndex)
 
 	// ---------------------------------------------------------
-	// AGENT: This is the Dungeon Master agent using tools
+	// AGENT: This is the Dungeon Master Agent using tools
 	// ---------------------------------------------------------
 	dungeonMasterToolsAgentName := helpers.GetEnvOrDefault("DUNGEON_MASTER_NAME", "Sam")
 	dungeonMasterModeltemperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MASTER_MODEL_TEMPERATURE", "0.0"))
@@ -91,7 +91,7 @@ func main() {
 			ToolChoice: openai.ChatCompletionToolChoiceOptionUnionParam{
 				OfAuto: openai.String("auto"),
 			},
-			Tools:             toolsIndex,
+			Tools:             toolsIndex, // <- important 
 			ParallelToolCalls: openai.Opt(false),
 		}),
 	)
@@ -140,7 +140,7 @@ func main() {
 	)
 
 	// ---------------------------------------------------------
-	// AGENTS: Creating the agents team of the dungeon
+	// AGENTS: Creating the Agents Team of the Dungeon
 	// ---------------------------------------------------------
 	idDungeonMasterToolsAgent := strings.ToLower(dungeonMasterToolsAgentName)
 	idGhostAgent := strings.ToLower(ghostAgentName)
@@ -162,7 +162,7 @@ func main() {
 	selectedAgent = agentsTeam[idDungeonMasterToolsAgent]
 
 	DisplayAgentsTeam()
-
+	// Loop to interact with the agents
 	for {
 		var promptText string
 		if selectedAgent.GetName() == dungeonMasterToolsAgentName {
@@ -236,7 +236,7 @@ func main() {
 			thinkingCtrl.Start(ui.Cyan, "Tools detection.....")
 
 			// Create executeFunction with MCP client option
-			// Tool execution callback
+			// Tool execution callback if detected by the agent
 			executeFn := ExecuteFunction(mcpClient, thinkingCtrl)
 
 			dungeonMasterMessages := []openai.ChatCompletionMessageParamUnion{
@@ -433,7 +433,7 @@ func main() {
 			})
 
 			// IMPORTANT: Check if the player has defeated the boss
-			// TODO: FIND A BETTER WAY TO HANDLE THIS (like a tool call?)
+			// 👀 Look at /dungeon-end-of-level-boss/data/boss_system_instructions.md
 			// You lose 😢
 			if strings.Contains(strings.ToLower(answer), "you are trapped") {
 				ui.Println(ui.Red, "\n💀 You have been defeated by the Boss! Game Over! 💀")
