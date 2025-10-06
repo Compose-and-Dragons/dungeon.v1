@@ -23,7 +23,7 @@ import (
 func main() {
 
 	// ---------------------------------------------------------
-	// NOTE: Create MCP server
+	// NOTE: Create [MCP Server]
 	// ---------------------------------------------------------
 	s := server.NewMCPServer(
 		"dungeon-mcp-server",
@@ -48,7 +48,7 @@ func main() {
 
 	temperature := helpers.StringToFloat(helpers.GetEnvOrDefault("DUNGEON_MODEL_TEMPERATURE", "0.7"))
 
-	// NOTE: Agent Creation
+	// NOTE: [Agent] Creation
 	dungeonAgent, err := mu.NewAgent(ctx, "dungeon-agent",
 		mu.WithClient(client),
 		mu.WithParams(openai.ChatCompletionNewParams{
@@ -89,7 +89,7 @@ func main() {
 
 	fmt.Println("🏰 Dungeon Size:", width, "x", height)
 
-	// NOTE: Initialize the Dungeon struct
+	// NOTE: Initialize the Dungeon structure
 	dungeon := types.Dungeon{
 		Name:        dungeonName,
 		Description: dungeonDescription,
@@ -142,7 +142,7 @@ func main() {
 	// ---------------------------------------------------------
 	// END: of Generate the entrance room with the dungeon agent
 	// ---------------------------------------------------------
-
+	// NOTE: Initialize the Room structure
 	entranceRoom := types.Room{
 		ID:          "room_0_0",
 		Name:        roomResponse.Name,
@@ -162,7 +162,7 @@ func main() {
 	dungeon.Rooms = append(dungeon.Rooms, entranceRoom)
 
 	// ---------------------------------------------------------
-	// TOOLS:
+	// TOOLS Registration
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
 	// Register tools and their handlers
@@ -212,7 +212,7 @@ func main() {
 	s.AddTool(isPlayerInSameRoomAsNPCToolInstance, tools.IsPlayerInSameRoomAsNPCToolHandler(&currentPlayer, &dungeon))
 
 	// ---------------------------------------------------------
-	// NOTE: Start the HTTP server
+	// NOTE: Start the [Streamable HTTP MCP server]
 	// ---------------------------------------------------------
 	httpPort := helpers.GetEnvOrDefault("MCP_HTTP_PORT", "9090")
 	fmt.Println("🌍 MCP HTTP Port:", httpPort)

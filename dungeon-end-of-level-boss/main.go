@@ -32,16 +32,16 @@ func main() {
 		option.WithBaseURL(llmURL),
 		option.WithAPIKey(""),
 	)
-
+	// [End Of Level Boss Agent]
 	bossAgent := agents.GetBossAgent(ctx, client)
-	// RAG in the callback
-
+	// 👀 `GetBossAgent` 
+	// [Agent Card] (for A2A server registration)
 	agentCard := a2a.AgentCard{
 		Name:        bossAgent.GetName(),
 		Description: bossAgent.GetDescription(),
 		URL:         "http://localhost:" + httpPort,
 		Version:     "1.0.0",
-		//Capabilities: map[string]any{},
+		// Define skills of the remote agent
 		Skills: []map[string]any{
 			{
 				"id":          "ask_for_something",
@@ -50,8 +50,8 @@ func main() {
 			},
 		},
 	}
-
-	// Streaming callback (for /stream endpoint)
+	// Call remotely the stream completion method of the agent
+	// [Agent Stream Callback] (for /stream endpoint)
 	agentStreamCallback := func(taskRequest a2a.TaskRequest, streamFunc func(content string) error) error {
 
 		fmt.Printf("🟢 Processing streaming task request: %s\n", taskRequest.ID)
@@ -81,7 +81,7 @@ func main() {
 			ui.Println(ui.Red, "Error:", err)
 		}
 
-		// Use RunStream instead of Run for streaming
+		// Generate a [Streaming Chat Completion]
 		_, err = bossAgent.RunStream(
 			bossAgentMessages,
 			func(content string) error {

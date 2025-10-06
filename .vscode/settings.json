@@ -57,13 +57,21 @@
             "isWholeLine": false
         },   
         {
+            "text": "dungeonAgent,",
+            "color": "#000000",
+            "backgroundColor": "#E2F0F2",
+            "border": "1px solid #E2F0F2",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },           
+        {
             "text": "dungeonAgent.",
             "color": "#000000",
             "backgroundColor": "#E2F0F2",
             "border": "1px solid #E2F0F2",
             "borderRadius": "3px",
             "isWholeLine": false
-        },     
+        },           
         {
             "text": "playerTotal := playerRoll1 + playerRoll2 + player.Strength",
             "color": "#000000",
@@ -79,7 +87,128 @@
             "border": "1px solid #E2F0F2",
             "borderRadius": "3px",
             "isWholeLine": false
-        },                                  
+        }, 
+        {
+            "text": "[MCP Server]",
+            "color": "#ffffff",
+            "backgroundColor": "#BE0ECE",
+            "border": "1px solid #BE0ECE",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+        {
+            "text": "[Streamable HTTP MCP server]",
+            "color": "#ffffff",
+            "backgroundColor": "#73097D",
+            "border": "1px solid #73097D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                
+        {
+            "text": "[Agent]",
+            "color": "#ffffff",
+            "backgroundColor": "#5917E8",
+            "border": "1px solid #5917E8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[Agent creation]",
+            "color": "#ffffff",
+            "backgroundColor": "#5917E8",
+            "border": "1px solid #5917E8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },          
+        {
+            "text": "[End Of Level Boss Agent]",
+            "color": "#ffffff",
+            "backgroundColor": "#5917E8",
+            "border": "1px solid #5917E8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },   
+        {
+            "text": "[Similarity Search]",
+            "color": "#ffffff",
+            "backgroundColor": "#AF378D",
+            "border": "1px solid #AF378D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "[Vector Store]",
+            "color": "#ffffff",
+            "backgroundColor": "#AF378D",
+            "border": "1px solid #AF378D",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },    
+        {
+            "text": "[Agent Card]",
+            "color": "#ffffff",
+            "backgroundColor": "#2D6BD8",
+            "border": "1px solid #2D6BD8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[Agent Stream Callback]",
+            "color": "#ffffff",
+            "backgroundColor": "#2D6BD8",
+            "border": "1px solid #2D6BD8",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },  
+        {
+            "text": "[Streaming Chat Completion]",
+            "color": "#ffffff",
+            "backgroundColor": "#449169",
+            "border": "1px solid #449169",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },                                             
+        {
+            "text": "Game initialisation",
+            "color": "#ffffff",
+            "backgroundColor": "#E65524",
+            "border": "1px solid #E65524",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "Dungeon structure",
+            "color": "#ffffff",
+            "backgroundColor": "#0B9F21",
+            "border": "1px solid #0B9F21",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },
+        {
+            "text": "Room structure",
+            "color": "#ffffff",
+            "backgroundColor": "#0B9F21",
+            "border": "1px solid #0B9F21",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },        
+        {
+            "text": "Generate the entrance room",
+            "color": "#ffffff",
+            "backgroundColor": "#0C4B15",
+            "border": "1px solid #0C4B15",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        }, 
+        {
+            "text": "TOOLS Registration",
+            "color": "#ffffff",
+            "backgroundColor": "#911151",
+            "border": "1px solid #911151",
+            "borderRadius": "3px",
+            "isWholeLine": false
+        },         
+        
         {
             "text": "NOTE:",
             "color": "#ffffff",

@@ -6,10 +6,16 @@ paginate: true
 
 # Who are we?
 
-## 🐻 Guillaume 🇫🇷 42 🇬🇧 12
+## 🐻 Guillaume
+> Staff Software Engineer, Compose Maintainer
 
-## 🐗 Philippe 🇫🇷 56 🇬🇧 10
-> I explain complex things using only 'subject, verb, complement' type sentences
+## 🐗 Philippe
+> Principal Solutions Architect
+  
+</br>
+</br>
+
+> We explain complex things using only 'subject, verb, complement' type sentences
 <!--
 "The benefit: I explain complex things using only 'subject, verb, complement' type sentences"
 -->

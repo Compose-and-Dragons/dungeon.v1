@@ -6,6 +6,7 @@ paginate: true
 
 # Meet Elara
 > The beginnings of an AI Agent
+> And see if we can fight the weaknesses of SLMs 🚀
 <!-- TODO: diagram, workflow, etc ...-->
 
 ### 1. Have a chat to discover the personality and soul of Elara
